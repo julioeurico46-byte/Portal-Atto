@@ -1,0 +1,89 @@
+:root{
+  /* ---- Brand ---- */
+  --atto-yellow:#FFDE00;        /* sampled from the logo artwork */
+  --atto-yellow-press:#E8C900;
+  --atto-yellow-deep:#C9AC00;   /* only for text/icons on light surfaces */
+  --atto-yellow-tint:#FFF6B8;
+  --atto-yellow-wash:#FFFBE3;
+  --atto-black:#000000;         /* wordmark black — pure, not the ink ramp */
+
+  /* ---- Ink / neutral ramp (very slightly cool so yellow stays the warm note) ---- */
+  --ink-1000:#000000;
+  --ink-950:#101012;
+  --ink-900:#1A1A1D;
+  --ink-800:#2A2A2E;
+  --ink-700:#3D3D42;
+  --ink-600:#55555C;
+  --ink-500:#6E6E77;
+  --ink-400:#909099;
+  --ink-300:#B5B5BC;
+  --ink-200:#D6D6DA;
+  --ink-100:#E8E8EB;
+  --ink-50:#F4F4F5;
+  --ink-25:#FAFAFA;
+  --white:#FFFFFF;
+
+  /* ---- Semantic hues (yellow is brand, never status — warning is orange) ---- */
+  --green-600:#12874F; --green-500:#1AA463; --green-100:#DFF3E8; --green-50:#F1FAF5;
+  --orange-600:#B85C00; --orange-500:#E07B00; --orange-100:#FCEBD2; --orange-50:#FEF7ED;
+  --red-600:#C0231A; --red-500:#D9382E; --red-100:#FBE1DE; --red-50:#FEF3F2;
+  --blue-600:#1B54B3; --blue-500:#2568DA; --blue-100:#E2EBFB; --blue-50:#F2F6FE;
+
+  /* ---- Semantic aliases: text ---- */
+  --text-primary:var(--ink-950);
+  --text-secondary:var(--ink-600);
+  --text-muted:var(--ink-400);
+  --text-disabled:var(--ink-300);
+  --text-inverse:var(--white);
+  --text-on-brand:var(--ink-1000);   /* black on yellow — the brand pairing */
+  --text-link:var(--ink-950);
+  --text-link-hover:var(--ink-700);
+  --text-success:var(--green-600);
+  --text-warning:var(--orange-600);
+  --text-danger:var(--red-600);
+  --text-info:var(--blue-600);
+
+  /* ---- Semantic aliases: surfaces ---- */
+  --surface-page:var(--ink-25);
+  --surface-card:var(--white);
+  --surface-raised:var(--white);
+  --surface-sunken:var(--ink-50);
+  --surface-hover:var(--ink-50);
+  --surface-active:var(--ink-100);
+  --surface-inverse:var(--ink-950);
+  --surface-brand:var(--atto-yellow);
+  --surface-brand-soft:var(--atto-yellow-wash);
+  --surface-success:var(--green-50);
+  --surface-warning:var(--orange-50);
+  --surface-danger:var(--red-50);
+  --surface-info:var(--blue-50);
+  --overlay-scrim:rgba(16,16,18,.55);
+
+  /* ---- Semantic aliases: borders ---- */
+  --border-subtle:var(--ink-100);
+  --border-default:var(--ink-200);
+  --border-strong:var(--ink-300);
+  --border-inverse:rgba(255,255,255,.16);
+  --border-brand:var(--atto-yellow);
+  --border-focus:var(--ink-950);
+}
+
+/* Inverse scope — apply to any black panel, footer or hero */
+.atto-inverse{
+  --text-primary:var(--white);
+  --text-secondary:rgba(255,255,255,.72);
+  --text-muted:rgba(255,255,255,.48);
+  --text-link:var(--atto-yellow);
+  --text-link-hover:var(--atto-yellow-tint);
+  --surface-page:var(--ink-950);
+  --surface-card:var(--ink-900);
+  --surface-raised:var(--ink-800);
+  --surface-sunken:var(--ink-1000);
+  --surface-hover:var(--ink-800);
+  --surface-active:var(--ink-700);
+  --border-subtle:rgba(255,255,255,.10);
+  --border-default:rgba(255,255,255,.16);
+  --border-strong:rgba(255,255,255,.28);
+  --border-focus:var(--atto-yellow);
+  color:var(--text-primary);
+}

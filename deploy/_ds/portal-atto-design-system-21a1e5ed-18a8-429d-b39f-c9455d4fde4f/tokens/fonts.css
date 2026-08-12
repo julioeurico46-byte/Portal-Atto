@@ -1,8 +1,0 @@
-/* Portal Atto — webfonts.
-   SUBSTITUTION FLAG: the original logo lettering (light geometric caps in "PORTAL",
-   heavy grotesque in "ATTO") was supplied only as artwork, no font binaries.
-   Archivo (Google Fonts, variable 100–900) is the closest available match:
-   pointed A apex, flat terminals, slightly elliptical O, and it covers both the
-   hairline-caps and the black-display extremes of the lockup in one family.
-   Replace this file with @font-face rules if the real brand fonts arrive. */
-@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=JetBrains+Mono:wght@400;500;700&display=swap");

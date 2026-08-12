@@ -1,0 +1,31 @@
+:root{
+  --space-0:0px;
+  --space-1:2px;
+  --space-2:4px;
+  --space-3:6px;
+  --space-4:8px;
+  --space-5:12px;
+  --space-6:16px;
+  --space-7:20px;
+  --space-8:24px;
+  --space-9:32px;
+  --space-10:40px;
+  --space-11:48px;
+  --space-12:64px;
+  --space-13:80px;
+  --space-14:96px;
+  --space-15:128px;
+
+  /* component rhythm */
+  --gap-inline:8px;      /* icon ↔ label */
+  --gap-tight:12px;      /* fields in a row */
+  --gap-default:16px;    /* card contents */
+  --gap-section:32px;    /* blocks inside a screen */
+  --gap-band:80px;       /* marketing bands */
+
+  --pad-control-y:10px;  --pad-control-x:14px;   /* md control */
+  --pad-control-y-sm:6px; --pad-control-x-sm:10px;
+  --pad-control-y-lg:14px; --pad-control-x-lg:20px;
+  --pad-card:20px;
+  --pad-panel:24px;
+}

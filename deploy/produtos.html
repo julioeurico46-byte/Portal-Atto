@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Produtos — Portal Atto</title>
+<meta name="description" content="Todos os itens registrados em ata, um por um: mobiliário escolar, pedagógico, espumado, uniformes, inclusão e tecnologia.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="assets/brand/logo-mark.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Produtos — Portal Atto">
+<meta property="og:description" content="Todos os itens registrados em ata, um por um: mobiliário escolar, pedagógico, espumado, uniformes, inclusão e tecnologia.">
+<meta property="og:image" content="assets/brand/logo-lockup-black.png">
+<meta property="og:locale" content="pt_BR">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/fonts.css">
+  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/radius.css">
+  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/elevation.css">
+  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/motion.css">
+  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/layout.css">
+  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/base.css">
+  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/styles.css">
+  <script src="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/_ds_bundle.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { margin: 0; overflow-x: hidden; background: var(--white); color: var(--text-primary); font: var(--type-body); -webkit-font-smoothing: antialiased; }
+    a { color: var(--text-link); text-decoration: none; }
+    a:hover { color: var(--text-link-hover); }
+    .atto-inverse a { color: var(--atto-yellow); }
+    .atto-inverse a:hover { color: var(--atto-yellow-tint); }
+    img { display: block; max-width: 100%; }
+  </style>
+</helmet>
+
+<div>
+
+  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: rgba(255,255,255,.86); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-subtle)">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 10px clamp(16px, 4vw, 32px); height: 72px; display: flex; align-items: center; gap: clamp(12px, 3vw, 40px); flex-wrap: nowrap">
+      <a href="index.html" style="display: flex; align-items: center; flex: 0 0 auto">
+        <img src="assets/brand/logo-lockup-black.png" alt="Portal Atto" style="height: 30px; width: auto">
+      </a>
+      <nav style="{{ navEstilo }}">
+        <a href="index.html" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Home</a>
+        <a href="index.html#atas" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Atas de registro</a>
+        <a href="produtos.html" style="font: var(--type-label); color: var(--ink-950)">Produtos</a>
+        <a href="quem-somos.html" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Quem somos</a>
+        <a href="index.html#contato" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Contato</a>
+      </nav>
+      <div style="flex: 1 1 auto"></div>
+      <button type="button" onClick="{{ alternarMenu }}" aria-label="Abrir menu" aria-expanded="{{ menuAberto }}" style="{{ estiloBotaoMenu }}">
+        <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Icon" name="menu" size="20" hint-size="20px,20px"></x-import>
+      </button>
+      <div style="flex: 0 0 auto; display: flex; gap: 12px; align-items: center">
+        <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Button" variant="primary" size="sm" icon-right="arrow-right" href="index.html#contato" hint-size="auto,36px">Solicitar projeto</x-import>
+      </div>
+    </div>
+    <sc-if value="{{ menuAberto }}" hint-placeholder-val="{{ false }}">
+      <div style="background: var(--white); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm)">
+        <div style="max-width: 1280px; margin: 0 auto; padding: 8px clamp(16px, 4vw, 32px) 16px; display: flex; flex-direction: column">
+          <a href="index.html" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Home</a>
+          <a href="index.html#atas" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Atas de registro</a>
+          <a href="produtos.html" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Produtos</a>
+          <a href="quem-somos.html" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Quem somos</a>
+          <a href="index.html#contato" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0">Contato</a>
+        </div>
+      </div>
+    </sc-if>
+  </header>
+
+  <section style="padding: 152px 0 56px; background: var(--ink-25); border-bottom: 1px solid var(--border-subtle)">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
+      <p style="font: var(--type-body-sm); color: var(--ink-500); margin: 0 0 20px"><a href="index.html" style="color: var(--ink-500)">Início</a> · Produtos</p>
+      <h1 style="font: var(--type-display-md); font-size: clamp(28px, 4.6vw, 44px); letter-spacing: var(--tracking-heading); margin: 0; max-width: 20ch; text-wrap: balance">Todos os itens registrados, um por um</h1>
+      <p style="font: var(--type-body-lg); color: var(--text-secondary); margin: 20px 0 0; max-width: 62ch; text-wrap: pretty">Cada produto pertence a uma ata vigente. Sua equipe escolhe item por item, monta a lista do município e a Atto devolve o projeto com valores e prazo.</p>
+
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px">
+        <sc-for list="{{ categorias }}" as="cat" hint-placeholder-count="6">
+          <button type="button" onClick="{{ cat.selecionar }}" style="{{ cat.estilo }}">{{ cat.rotulo }}</button>
+        </sc-for>
+      </div>
+      <p style="font: var(--type-body-sm); color: var(--ink-500); margin: 20px 0 0">{{ contagem }}</p>
+    </div>
+  </section>
+
+  <section style="padding: clamp(48px, 7vw, 80px) 0 clamp(64px, 9vw, 112px); background: var(--white)">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 20px">
+        <sc-for list="{{ produtos }}" as="p" hint-placeholder-count="12">
+          <a href="index.html#contato" style="display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 24px; box-shadow: var(--shadow-xs)" style-hover="background: var(--ink-25); box-shadow: var(--shadow-md)">
+            <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--ink-500)">{{ p.ata }}</span>
+            <h3 style="font: var(--type-h4); margin: 12px 0 6px; text-wrap: pretty">{{ p.nome }}</h3>
+            <p style="font: var(--type-body-sm); color: var(--text-secondary); margin: 0 0 18px">{{ p.spec }}</p>
+            <span style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border-subtle)">
+              <span style="font: var(--type-mono); font-size: 14px; color: var(--ink-950)">{{ p.valor }}</span>
+              <span style="font: var(--type-caption); color: var(--ink-500)">{{ p.ref }}</span>
+            </span>
+          </a>
+        </sc-for>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; margin-top: 56px; padding: 36px; border-radius: 14px 14px 14px 28px; background: var(--ink-25); border: 1px solid var(--border-subtle)">
+        <div>
+          <h2 style="font: var(--type-h2); margin: 0 0 8px">Não achou o item da sua lista?</h2>
+          <p style="font: var(--type-body); color: var(--text-secondary); margin: 0; max-width: 52ch">As atas somam mais de 300 itens registrados. Manda a lista do município e a gente aponta o que já está coberto.</p>
+        </div>
+        <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Button" variant="primary" size="lg" icon-right="arrow-right" href="index.html#contato" hint-size="auto,52px">Enviar minha lista</x-import>
+      </div>
+    </div>
+  </section>
+
+  <footer class="atto-inverse" style="background: var(--ink-1000); padding: 72px 0 40px">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 185px), 1fr)); gap: clamp(32px, 4vw, 48px)">
+        <div>
+          <img src="assets/brand/logo-lockup-reversed.png" alt="Portal Atto" style="height: 32px; width: auto; margin-bottom: 20px">
+          <p style="font: var(--type-body-sm); color: rgba(255,255,255,.6); margin: 0; max-width: 34ch">Projetos completos para a gestão pública, homologados em ata de registro de preços.</p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: rgba(255,255,255,.4)">Atas de registro</span>
+          <a href="index.html#atas" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Todas as atas</a>
+          <a href="ata.html" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Sala multissensorial</a>
+          <a href="produtos.html" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Produtos</a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: rgba(255,255,255,.4)">Institucional</span>
+          <a href="quem-somos.html" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Quem somos</a>
+          <a href="index.html#projetos" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Projetos entregues</a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: rgba(255,255,255,.4)">Contato</span>
+          <a href="index.html#contato" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Solicitar projeto</a>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; gap: 24px; margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); flex-wrap: wrap">
+        <span style="font: var(--type-caption); color: rgba(255,255,255,.4)">© 2026 Portal Atto. Todos os direitos reservados.</span>
+        <span style="font: var(--type-caption); color: rgba(255,255,255,.4)">Valores conforme ata homologada · Lei 14.133/2021</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const MOB = "Mobiliário escolar", PED = "Pedagógico", ESP = "Espumado e psicomotricidade", UNI = "Uniformes", INC = "Inclusão", TEC = "Tecnologia", LAB = "Laboratórios";
+
+const ITENS = [
+  [MOB, "Conjunto aluno azul", "Tamanho 6, em MDP", "R$ 801,37", "Ata vigente"],
+  [MOB, "Conjunto aluno verde", "Tamanho 5, em MDP", "R$ 796,37", "Ata vigente"],
+  [MOB, "Conjunto aluno vermelho", "Tamanho 4, em MDP", "R$ 795,37", "Ata vigente"],
+  [MOB, "Conjunto aluno laranja", "Tamanho 1, em ABS", "R$ 794,37", "Ata vigente"],
+  [MOB, "Conjunto aluno amarelo", "Tamanho 3, em MDP", "R$ 786,37", "Ata vigente"],
+  [MOB, "Conjunto aluno hexagonal azul", "Tamanho 6, em ABS", "R$ 961,37", "Ata vigente"],
+  [MOB, "Conjunto aluno hexagonal vermelho", "Tamanho 4, em ABS", "R$ 951,37", "Ata vigente"],
+  [MOB, "Conjunto infantil", "Mesa e cadeiras para educação infantil", "R$ 4.908,00", "Ata vigente"],
+  [MOB, "Conjunto coletivo 4 lugares", "Mesa coletiva com quatro assentos", "R$ 1.441,37", "Ata vigente"],
+  [MOB, "Mesa acessível", "Altura livre para cadeira de rodas", "R$ 776,37", "Ata vigente"],
+  [MOB, "Conjunto professor", "Mesa e cadeira do professor", "R$ 2.562,27", "Ata vigente"],
+  [MOB, "Conjunto refeitório adulto", "Sem encosto", "R$ 2.711,37", "Ata vigente"],
+  [MOB, "Conjunto refeitório amarelo", "Com encosto", "R$ 2.911,37", "Refeitório"],
+  [MOB, "Conjunto alimentação", "Mesa de alimentação para educação infantil", "R$ 4.711,71", "Refeitório"],
+  [MOB, "Refeitório infantil", "8 lugares", "R$ 5.911,33", "Ata vigente"],
+  [MOB, "Refeitório juvenil", "8 lugares", "R$ 5.916,09", "Ata vigente"],
+  [MOB, "Refeitório adulto", "8 lugares", "R$ 6.299,94", "Ata vigente"],
+  [MOB, "Armário porta cartolina", "Guarda cartolina e papel em folha", "R$ 4.511,61", "Ata vigente"],
+  [MOB, "Armário trocador", "Para creche e educação infantil", "R$ 2.311,37", "Ata vigente"],
+  [MOB, "Armário expositor de livros", "Prateleiras frontais para leitura", "R$ 1.911,37", "Ata vigente"],
+  [MOB, "Armário porta brinquedos", "Nichos abertos e portas", "R$ 2.060,00", "Ata vigente"],
+  [MOB, "Armário com 15 nichos", "Organização por turma", "R$ 2.311,37", "Ata vigente"],
+  [MOB, "Carteira com prancheta", "Assento e prancheta escamoteável", "R$ 1.000,37", "Ata vigente"],
+  [MOB, "Carteira com prancheta reforçada", "Assento e prancheta escamoteável", "R$ 1.010,37", "Ata vigente"],
+  [MOB, "Carteira com prancheta infantil", "Escala infantil", "R$ 1.001,37", "Ata vigente"],
+  [MOB, "Cadeira de treinamento e mesa multifunções", "Para formação de professores", "R$ 1.311,37", "Ata vigente"],
+
+  [PED, "Ábaco aberto", "Contagem e sistema decimal", "R$ 15,00", "Ata vigente"],
+  [PED, "Ábaco de seriação", "Sequência e ordenação", "R$ 15,00", "Ata vigente"],
+  [PED, "Acróstico", "Formação de palavras", "R$ 61,80", "Ata vigente"],
+  [PED, "Alfabeto ilustrado", "Letra e imagem correspondente", "R$ 52,10", "Ata vigente"],
+  [PED, "Alfabeto ilustrado em Libras", "Datilologia e imagem", "R$ 74,70", "Ata vigente"],
+  [PED, "Alfabeto móvel em MDF", "Letras soltas para composição", "R$ 25,00", "Ata vigente"],
+  [PED, "Bingo de letras", "Jogo coletivo de alfabetização", "R$ 145,00", "Ata vigente"],
+  [PED, "Blocos lógicos", "Forma, cor, tamanho e espessura", "R$ 79,55", "Ata vigente"],
+  [PED, "Bola de Bobath", "Estimulação motora e fisioterapia", "R$ 130,00", "Ata vigente"],
+  [PED, "Caixa de luz", "Mesa de luz para atividades sensoriais", "R$ 1.320,40", "Ata vigente"],
+  [PED, "Caixa de percepção tátil", "Reconhecimento por texturas", "R$ 71,30", "Ata vigente"],
+  [PED, "Caixa do sistema monetário", "Cédulas e moedas didáticas", "R$ 216,43", "Ata vigente"],
+  [PED, "Calendário mensal", "Rotina e noção de tempo", "R$ 119,72", "Ata vigente"],
+  [PED, "Conjunto de aramados", "Coordenação motora fina", "R$ 160,00", "Ata vigente"],
+  [PED, "Conjunto de encaixe para combinação de imagens", "Associação visual", "R$ 147,10", "Ata vigente"],
+  [PED, "Conjunto de instrumentos musicais infantis", "Percussão e ritmo", "R$ 690,00", "Ata vigente"],
+  [PED, "Conjunto de letras e números", "Alfabetização e numeramento", "R$ 94,10", "Ata vigente"],
+  [PED, "Conjunto de letras em braille", "Acessibilidade na alfabetização", "R$ 131,80", "Ata vigente"],
+  [PED, "Blocos de montagem com pinos", "Encaixe por pinos", "R$ 318,11", "Ata vigente"],
+  [PED, "Blocos de montagem com rodas", "Diferentes encaixes e rodas", "R$ 194,50", "Ata vigente"],
+  [PED, "Blocos de montagem em madeira", "Construção livre", "R$ 90,00", "Ata vigente"],
+
+  [ESP, "Dominó de espuma", "28 peças · 35 × 20 × 3 cm", "Conjunto Emoção e Imaginação", "Ref. E-50"],
+  [ESP, "Cara ou careta", "12 peças · cubo 10 × 10 × 10 cm", "Conjunto Emoção e Imaginação", "Ref. E-80"],
+  [ESP, "Tapete multicolorido", "1 peça · 48 × 25 × 25 cm", "Conjunto Emoção e Imaginação", "Ref. E-02"],
+  [ESP, "Cilindro das profissões", "4 peças · 75 × 40 × 40 cm", "Conjunto Emoção e Imaginação", "Ref. E-55"],
+  [ESP, "Robô geométrico", "10 peças · 50 × 20 × 10 cm", "Conjunto Emoção e Imaginação", "Ref. E-92"],
+  [ESP, "Mini sala de leitura", "3 peças", "Conjunto Emoção e Imaginação", "Ref. E-51A"],
+  [ESP, "Sala de leitura", "5 peças", "Conjunto Emoção e Imaginação", "Ref. E-51"],
+  [ESP, "Circuito bebê Little", "8 peças · 210 × 160 × 60 cm", "Conjunto Pequenos Passos", "Ref. E-61"],
+  [ESP, "Ponte Little", "5 peças · 240 × 40 × 30 cm", "Conjunto Pequenos Passos", "Pequenos Passos"],
+  [ESP, "Soft túnel baby Little", "5 peças · 160 × 100 × 55 cm", "Conjunto Pequenos Passos", "Ref. E-64"],
+  [ESP, "Mini ginasta", "7 peças · 210 × 120 × 75 cm", "Conjunto Pequenos Passos", "Ref. E-78"],
+  [ESP, "Conjunto de pneus", "9 peças · até 80 × 40 × 40 cm", "Conjunto Praticar", "Ref. E-37"],
+  [ESP, "Passa minhoca", "7 peças · 250 × 60 × 60 cm", "Conjunto Praticar", "Ref. E-26"],
+  [ESP, "Equilíbrio em S", "7 peças · 360 × 30 × 50 cm", "Conjunto Praticar", "Ref. E-84"],
+  [ESP, "Circuito olímpico", "10 peças · 450 × 180 × 118 cm", "Conjunto Praticar", "Ref. E-81"],
+
+  [UNI, "Meia padrão", "Malha com punho reforçado", "Valor registrado em ata", "Ata vigente"],
+  [UNI, "Meia com solado antiderrapante", "Para educação infantil e creche", "Valor registrado em ata", "Ata vigente"],
+  [UNI, "Meia social", "Servidor e uniforme profissional", "Valor registrado em ata", "Ata vigente"],
+  [UNI, "Meia infantil antiderrapante", "Grade infantil completa", "Valor registrado em ata", "Ata vigente"],
+  [UNI, "Uniforme escolar completo", "Camiseta, agasalho e bermuda com brasão", "Valor registrado em ata", "Ata vigente"],
+
+  [INC, "Piscina de bolinhas com LED", "Item da sala multissensorial", "Sob projeto", "Sala multissensorial"],
+  [INC, "Mochila inclusiva", "Mochila com abafador de ruído e kit sensorial", "Ata vigente", "Inclusão"],
+  [INC, "Abafador de ruído infantil", "Proteção auditiva para conforto sensorial em sala", "Ata vigente", "Inclusão"],
+  [INC, "Caderno de pauta ampliada", "Pauta larga para baixa visão e coordenação em formação", "Ata vigente", "Inclusão"],
+  [INC, "Tesoura dupla adaptada", "Corte assistido: professor e estudante na mesma tesoura", "Ata vigente", "Inclusão"],
+  [INC, "Massa de modelar sensorial", "Estimulação tátil e fortalecimento da preensão", "Ata vigente", "Inclusão"],
+  [PED, "Kit escolar inclusivo", "Kit completo com itens adaptados para a rede", "Ata vigente", "Kit do aluno"],
+
+  [TEC, "Notebook educacional", "Equipamento para a rede e para o professor", "Ficha técnica sob consulta", "Tecnologia"],
+  [TEC, "Tablet educacional", "Uso individual em sala de aula", "Ficha técnica sob consulta", "Tecnologia"],
+  [TEC, "Tela interativa 4K", "Ultra HD com software de colaboração", "Valor registrado em ata", "Ata vigente"],
+
+  [LAB, "Sala Maker", "Ambiente completo: mobiliário, cenografia, impressora 3D e robótica", "R$ 124.480,00", "Valor unitário"],
+  [LAB, "Laboratório Maker Móvel", "Carrinho com robótica, prototipagem e eletrônica para toda a escola", "R$ 146.200,00", "Valor unitário"],
+  [LAB, "Carrinho de Neurodiversidade", "Recursos pedagógicos, sensoriais e terapêuticos itinerantes", "R$ 55.579,28", "Valor unitário"],
+  [LAB, "Impressora 3D educacional", "Prototipagem em sala, com kit de filamento", "Compõe o laboratório", "Cultura maker"],
+  [LAB, "Kit de robótica educacional", "Componentes eletrônicos e programação alinhados à BNCC", "Compõe o laboratório", "Cultura maker"],
+  [LAB, "Ferramentas maker", "Bancada de ferramentas para prototipagem com segurança", "Compõe o laboratório", "Cultura maker"],
+  [LAB, "Livros de apoio ao professor", "Guia prático, propostas por fase e estratégias de sala", "Compõe o laboratório", "Formação"],
+  [LAB, "Assessoria formativa", "Capacitação híbrida e acompanhamento na implantação", "Compõe o laboratório", "Formação"]
+];
+
+class Component extends DCLogic {
+  state = { filtro: "Todos", compacto: false, menuAberto: false };
+
+  aoRedimensionar = () => {
+    const compacto = window.innerWidth < 760;
+    if (compacto !== this.state.compacto) this.setState({ compacto, menuAberto: false });
+  };
+
+  componentDidMount() {
+    window.addEventListener("resize", this.aoRedimensionar);
+    this.aoRedimensionar();
+  }
+
+  componentWillUnmount() { window.removeEventListener("resize", this.aoRedimensionar); }
+
+  menuVals() {
+    const compacto = this.state.compacto;
+    return {
+      navEstilo: { display: compacto ? "none" : "flex", gap: "clamp(14px, 2.2vw, 28px)", alignItems: "center", flexWrap: "nowrap", whiteSpace: "nowrap" },
+      estiloBotaoMenu: {
+        display: compacto ? "inline-flex" : "none", alignItems: "center", justifyContent: "center", flex: "0 0 auto",
+        width: 42, height: 42, marginRight: 4, padding: 0, cursor: "pointer",
+        borderRadius: 10, border: "1px solid var(--border-default)", background: "var(--white)", color: "var(--ink-950)"
+      },
+      menuAberto: compacto && this.state.menuAberto,
+      alternarMenu: () => this.setState(s => ({ menuAberto: !s.menuAberto })),
+      fecharMenu: () => this.setState({ menuAberto: false })
+    };
+  }
+
+  renderVals() {
+    const nomes = ["Todos", MOB, PED, LAB, ESP, UNI, INC, TEC];
+    const filtro = this.state.filtro;
+    const lista = filtro === "Todos" ? ITENS : ITENS.filter(i => i[0] === filtro);
+    return Object.assign(this.menuVals(), {
+      categorias: nomes.map(n => ({
+        rotulo: n,
+        selecionar: () => this.setState({ filtro: n }),
+        estilo: {
+          font: "var(--type-label)", padding: "11px 20px", borderRadius: 999, cursor: "pointer",
+          background: filtro === n ? "var(--ink-1000)" : "var(--white)",
+          color: filtro === n ? "var(--white)" : "var(--ink-700)",
+          border: "1px solid " + (filtro === n ? "var(--ink-1000)" : "var(--border-default)"),
+          transition: "background 120ms var(--ease-standard)"
+        }
+      })),
+      contagem: lista.length + (lista.length === 1 ? " item" : " itens") + (filtro === "Todos" ? " no catálogo" : " em " + filtro.toLowerCase()),
+      produtos: lista.map(i => ({ categoria: i[0], nome: i[1], spec: i[2], valor: i[3], ref: i[4], ata: i[0] }))
+    });
+  }
+}
+</script>
+</body>
+</html>

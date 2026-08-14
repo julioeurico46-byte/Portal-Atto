@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Produtos — Portal Atto</title>
-<meta name="description" content="Todos os itens registrados em ata, um por um: mobiliário escolar, pedagógico, espumado, uniformes, inclusão e tecnologia.">
+<meta name="description" content="Todos os itens registrados em ata, um por um: mobiliário escolar, pedagógico, socioemocional, espumado, uniformes, inclusão e tecnologia.">
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="assets/brand/logo-mark.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Produtos — Portal Atto">
-<meta property="og:description" content="Todos os itens registrados em ata, um por um: mobiliário escolar, pedagógico, espumado, uniformes, inclusão e tecnologia.">
+<meta property="og:description" content="Todos os itens registrados em ata, um por um: mobiliário escolar, pedagógico, socioemocional, espumado, uniformes, inclusão e tecnologia.">
 <meta property="og:image" content="assets/brand/logo-lockup-black.png">
 <meta property="og:locale" content="pt_BR">
 <script src="./support.js"></script>
@@ -148,7 +148,7 @@
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
-const MOB = "Mobiliário escolar", PED = "Pedagógico", ESP = "Espumado e psicomotricidade", UNI = "Uniformes", INC = "Inclusão", TEC = "Tecnologia", LAB = "Laboratórios";
+const MOB = "Mobiliário escolar", PED = "Pedagógico", ESP = "Espumado e psicomotricidade", UNI = "Uniformes", INC = "Inclusão", TEC = "Tecnologia", LAB = "Laboratórios", SOC = "Socioemocional";
 
 const ITENS = [
   [MOB, "Conjunto aluno azul", "Tamanho 6, em MDP", "R$ 801,37", "Ata vigente"],
@@ -241,7 +241,23 @@ const ITENS = [
   [LAB, "Kit de robótica educacional", "Componentes eletrônicos e programação alinhados à BNCC", "Compõe o laboratório", "Cultura maker"],
   [LAB, "Ferramentas maker", "Bancada de ferramentas para prototipagem com segurança", "Compõe o laboratório", "Cultura maker"],
   [LAB, "Livros de apoio ao professor", "Guia prático, propostas por fase e estratégias de sala", "Compõe o laboratório", "Formação"],
-  [LAB, "Assessoria formativa", "Capacitação híbrida e acompanhamento na implantação", "Compõe o laboratório", "Formação"]
+  [LAB, "Assessoria formativa", "Capacitação híbrida e acompanhamento na implantação", "Compõe o laboratório", "Formação"],
+
+  [SOC, "Caderno do professor", "Pautas de unidade e de aula, por etapa", "Compõe o programa", "Compasso Socioemocional"],
+  [SOC, "Caderno do aluno", "Um por estudante; na educação infantil, dois por ano", "Compõe o programa", "Compasso Socioemocional"],
+  [SOC, "Fantoches", "Educação infantil e 1º ano, para encenar as situações da aula", "Compõe o programa", "Compasso Socioemocional"],
+  [SOC, "Cartas dos sentimentos", "Nomear a emoção antes de reagir a ela", "Compõe o programa", "Compasso Socioemocional"],
+  [SOC, "Jogo da trilha", "Jogo coletivo de habilidades socioemocionais", "Compõe o programa", "Compasso Socioemocional"],
+  [SOC, "Cartazes de habilidades", "Ficam visíveis na sala o ano inteiro", "Compõe o programa", "Compasso Socioemocional"],
+  [SOC, "Minicartazes", "1º e 2º ano, versão de mesa dos cartazes", "Compõe o programa", "Compasso Socioemocional"],
+  [SOC, "Cartaz Maneiras Justas de Brincar", "1º e 2º ano, regras de convivência no pátio", "Compõe o programa", "Compasso Socioemocional"],
+  [SOC, "Exercícios para o cérebro", "Memória, atenção e controle inibitório", "Compõe o programa", "Compasso Socioemocional"],
+  [SOC, "Livro do Educador — Compasso Kids", "Contos da tradição oral e atividades para crianças de 3 anos", "Compõe o programa", "Compasso Kids"],
+  [SOC, "Formação em narração de histórias", "Vinte tópicos, assíncrona, na plataforma", "Compõe o programa", "Compasso Kids"],
+  [SOC, "Livro do Educador — Compasso Mind", "Da educação infantil ao ensino médio, por ano", "Compõe o programa", "Compasso Mind"],
+  [SOC, "Diário de Bordo do estudante", "Registro do treino diário de atenção", "Compõe o programa", "Compasso Mind"],
+  [SOC, "Plataforma digital", "Aulas expositivas gravadas, roteiros e material de apoio", "Compõe o programa", "Compasso Mind"],
+  [SOC, "Formação de educadores", "Inicial e continuada, com monitoramento da implantação", "Compõe o programa", "Todos os programas"]
 ];
 
 class Component extends DCLogic {
@@ -275,7 +291,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const nomes = ["Todos", MOB, PED, LAB, ESP, UNI, INC, TEC];
+    const nomes = ["Todos", MOB, PED, SOC, LAB, ESP, UNI, INC, TEC];
     const filtro = this.state.filtro;
     const lista = filtro === "Todos" ? ITENS : ITENS.filter(i => i[0] === filtro);
     return Object.assign(this.menuVals(), {

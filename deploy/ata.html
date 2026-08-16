@@ -7,11 +7,17 @@
 <meta name="description" content="Ambientes sensoriais completos, do projeto à implantação. Modelos P, M, G e GG por adesão a ata de registro de preços.">
 <meta name="theme-color" content="#000000">
 <link rel="icon" href="assets/brand/logo-mark.png">
+<link rel="canonical" href="https://portal-atto.vercel.app/ata">
+<meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Portal Atto">
+<meta property="og:url" content="https://portal-atto.vercel.app/ata">
 <meta property="og:title" content="Sala multissensorial — Portal Atto">
 <meta property="og:description" content="Ambientes sensoriais completos, do projeto à implantação. Modelos P, M, G e GG por adesão a ata de registro de preços.">
-<meta property="og:image" content="assets/brand/logo-lockup-black.png">
+<meta property="og:image" content="https://portal-atto.vercel.app/assets/img/sensorial-01.jpeg">
+<meta property="og:image:alt" content="Sala multissensorial implantada em escola municipal">
 <meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -37,6 +43,23 @@
     .atto-inverse a:hover { color: var(--atto-yellow-tint); }
     img { display: block; max-width: 100%; }
     section[id] { scroll-margin-top: 88px; }
+
+    /* Campos em HTML nativo com a aparência do design system — o componente Input
+       não emite id/name/for, o que deixava os campos sem nome acessível. */
+    .campo { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .campo > label { font: var(--type-label); color: var(--text-primary); }
+    .campo .req { color: var(--red-500); margin-left: 3px; }
+    .campo .caixa { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 12px; background: var(--surface-card); border: 1px solid var(--border-default); border-radius: 10px; transition: var(--transition-control); }
+    .campo .caixa:focus-within { border-color: var(--ink-950); box-shadow: 0 0 0 3px rgba(0,0,0,.09); }
+    .campo input, .campo select, .campo textarea { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font: var(--type-body); color: var(--text-primary); }
+    .campo textarea { padding: 11px 0; resize: vertical; line-height: 1.5; }
+    .campo .ajuda { font: var(--type-caption); color: var(--ink-500); margin: 0; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--ink-950); outline-offset: 2px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
   </style>
 </helmet>
 
@@ -75,6 +98,8 @@
     </sc-if>
   </header>
 
+  <main id="conteudo">
+
   <section class="atto-inverse" style="position: relative; overflow: hidden; background: var(--ink-1000); padding: 168px 0 72px">
     <span role="img" aria-label="{{ heroAlt }}" style="{{ heroEstilo }}"></span>
     <div style="position: absolute; inset: 0; background: rgba(0,0,0,.68)"></div>
@@ -84,9 +109,9 @@
       <h1 style="font: var(--type-display-lg); font-size: clamp(30px, 5vw, 56px); letter-spacing: var(--tracking-display); color: var(--white); margin: 0; max-width: 24ch; text-wrap: balance">{{ manchete }}</h1>
       <p style="font: var(--type-body-lg); color: rgba(255,255,255,.78); margin: 24px 0 0; max-width: 58ch; text-wrap: pretty">{{ chamada }}</p>
       <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 30px">
-        <span style="font: var(--type-label); color: var(--white); border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.12); padding: 9px 18px; border-radius: 999px">Ata vigente</span>
-        <span style="font: var(--type-label); color: var(--white); border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.12); padding: 9px 18px; border-radius: 999px">Adesão sem nova licitação</span>
-        <span style="font: var(--type-label); color: var(--white); border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.12); padding: 9px 18px; border-radius: 999px">Lei 14.133/2021</span>
+        <sc-for list="{{ selos }}" as="s" hint-placeholder-count="3">
+          <span style="font: var(--type-label); color: var(--white); border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.12); padding: 9px 18px; border-radius: 999px">{{ s.texto }}</span>
+        </sc-for>
       </div>
       <div style="display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap">
         <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Button" variant="primary" size="lg" icon-right="arrow-right" href="#solicitar" hint-size="auto,52px">Solicitar este projeto</x-import>
@@ -190,7 +215,7 @@
 
         <div style="background: var(--white); border: 1px solid var(--border-default); border-radius: 14px 14px 14px 28px; padding: clamp(24px, 4vw, 40px); box-shadow: var(--shadow-xs)">
           <sc-if value="{{ enviado }}" hint-placeholder-val="{{ false }}">
-            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px 0">
+            <div role="status" style="display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px 0">
               <span style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 28px; background: var(--atto-yellow); color: var(--ink-1000)">
                 <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Icon" name="check" size="26" hint-size="26px,26px"></x-import>
               </span>
@@ -200,19 +225,40 @@
           </sc-if>
           <sc-if value="{{ formAberto }}" hint-placeholder-val="{{ true }}">
             <form onSubmit="{{ enviar }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 20px">
-              <div style="grid-column: 1 / -1">
-                <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Input" label="Nome" placeholder="Como devemos chamar você" required="{{ true }}" hint-size="100%,72px"></x-import>
+              <input type="hidden" name="solucao" value="{{ titulo }}">
+              <div class="campo" style="grid-column: 1 / -1">
+                <label for="f-nome">Nome<span class="req" aria-hidden="true">*</span></label>
+                <div class="caixa"><input id="f-nome" name="nome" type="text" autocomplete="name" required="required" placeholder="Como devemos chamar você"></div>
               </div>
-              <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Input" label="E-mail institucional" type="email" placeholder="nome@prefeitura.gov.br" required="{{ true }}" hint-size="100%,72px"></x-import>
-              <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Input" label="Telefone" placeholder="(00) 00000-0000" required="{{ true }}" hint-size="100%,72px"></x-import>
-              <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Input" label="Município" placeholder="Cidade e estado" required="{{ true }}" hint-size="100%,72px"></x-import>
-              <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Input" label="Cargo" placeholder="Prefeito, secretário, gestor" hint-size="100%,72px"></x-import>
-              <div style="grid-column: 1 / -1">
-                <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Input" label="Sobre a demanda" multiline="{{ true }}" rows="{{ 4 }}" placeholder="{{ formPlaceholder }}" hint="Quanto mais concreto, mais rápida a resposta." hint-size="100%,140px"></x-import>
+              <div class="campo">
+                <label for="f-email">E-mail institucional<span class="req" aria-hidden="true">*</span></label>
+                <div class="caixa"><input id="f-email" name="email" type="email" autocomplete="email" required="required" placeholder="nome@prefeitura.gov.br"></div>
+              </div>
+              <div class="campo">
+                <label for="f-telefone">Telefone<span class="req" aria-hidden="true">*</span></label>
+                <div class="caixa"><input id="f-telefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" required="required" placeholder="(00) 00000-0000"></div>
+              </div>
+              <div class="campo">
+                <label for="f-municipio">Município<span class="req" aria-hidden="true">*</span></label>
+                <div class="caixa"><input id="f-municipio" name="municipio" type="text" autocomplete="address-level2" required="required" placeholder="Cidade e estado"></div>
+              </div>
+              <div class="campo">
+                <label for="f-cargo">Cargo</label>
+                <div class="caixa"><input id="f-cargo" name="cargo" type="text" autocomplete="organization-title" placeholder="Prefeito, secretário, gestor"></div>
+              </div>
+              <div class="campo" style="grid-column: 1 / -1">
+                <label for="f-demanda">Sobre a demanda</label>
+                <div class="caixa"><textarea id="f-demanda" name="demanda" rows="4" aria-describedby="f-demanda-ajuda" placeholder="{{ formPlaceholder }}"></textarea></div>
+                <p class="ajuda" id="f-demanda-ajuda">Quanto mais concreto, mais rápida a resposta.</p>
               </div>
               <div style="grid-column: 1 / -1; margin-top: 4px">
                 <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Button" variant="primary" size="lg" type="submit" full-width="{{ true }}" icon-right="arrow-right" hint-size="100%,52px">Enviar solicitação</x-import>
               </div>
+              <p aria-live="polite" style="grid-column: 1 / -1; font: var(--type-caption); color: var(--ink-500); margin: 0">{{ statusEnvio }}</p>
+              <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}">
+                <p role="alert" style="grid-column: 1 / -1; font: var(--type-body-sm); color: var(--red-500); margin: 0">{{ erro }}</p>
+              </sc-if>
+              <p style="grid-column: 1 / -1; font: var(--type-caption); color: var(--ink-500); margin: 0; text-wrap: pretty">Seus dados são usados apenas para responder a esta solicitação e não são compartilhados com terceiros.</p>
             </form>
           </sc-if>
         </div>
@@ -237,11 +283,13 @@
     </div>
   </section>
 
+  </main>
+
   <footer class="atto-inverse" style="background: var(--ink-1000); padding: 72px 0 40px">
     <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 185px), 1fr)); gap: clamp(32px, 4vw, 48px)">
         <div>
-          <img src="assets/brand/logo-lockup-reversed.png" alt="Portal Atto" style="height: 32px; width: auto; margin-bottom: 20px">
+          <img loading="lazy" decoding="async" src="assets/brand/logo-lockup-reversed.png" alt="Portal Atto" style="height: 32px; width: auto; margin-bottom: 20px">
           <p style="font: var(--type-body-sm); color: rgba(255,255,255,.6); margin: 0; max-width: 34ch">Projetos completos para a gestão pública, homologados em ata de registro de preços.</p>
         </div>
         <div style="display: flex; flex-direction: column; gap: 12px">
@@ -259,7 +307,8 @@
           <a href="#solicitar" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Solicitar projeto</a>
         </div>
       </div>
-      <div style="display: flex; justify-content: space-between; gap: 24px; margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); flex-wrap: wrap">
+      <p style="font: var(--type-caption); color: rgba(255,255,255,.42); margin: 48px 0 0; max-width: 92ch; text-wrap: pretty">A adesão a ata de registro de preços depende da ata aplicável, da autorização do órgão gerenciador, da vigência, do saldo disponível e da análise do órgão interessado, nos termos da Lei 14.133/2021. As informações deste site têm caráter informativo e não substituem parecer jurídico.</p>
+      <div style="display: flex; justify-content: space-between; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); flex-wrap: wrap">
         <span style="font: var(--type-caption); color: rgba(255,255,255,.4)">© 2026 Portal Atto. Todos os direitos reservados.</span>
         <span style="font: var(--type-caption); color: rgba(255,255,255,.4)">Adesão a ata de registro de preços · Lei 14.133/2021</span>
       </div>
@@ -269,6 +318,12 @@
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
+// ─── Destino das solicitações do formulário ──────────────────────────────────
+// Mantenha igual ao definido em index.html. Enquanto os dois estiverem vazios,
+// o formulário avisa o visitante em vez de fingir que enviou.
+const ENDPOINT_FORMULARIO = "";
+const EMAIL_CONTATO = "";
+
 const ATAS = {
   "sala-multissensorial": {
     categoria: "Inclusão", titulo: "Sala multissensorial",
@@ -319,7 +374,7 @@ const ATAS = {
     categoria: "Sala de aula", titulo: "Mobiliário escolar",
     manchete: "A sala de aula inteira, do conjunto ao armário",
     chamada: "Conjunto aluno em MDP e ABS, coletivos, refeitório, armários e carteiras com prancheta.",
-    imagem: "assets/img/mobiliario-sala.jpeg", alt: "Sala de aula equipada com conjuntos escolares",
+    imagem: "assets/img/mobiliario-sala-aula.jpeg", alt: "Sala de aula com conjuntos aluno em uso: carteiras e cadeiras azuis ocupadas pela turma",
     dados: [["Itens", "Conjuntos, coletivos, refeitório e armários"], ["Materiais", "MDP e ABS"], ["Acessibilidade", "Mesa para cadeira de rodas"], ["Entrega", "Montada, sala por sala"]],
     sobreTitulo: "Mobiliário que aguenta o ano letivo inteiro",
     sobreTexto: "A ata cobre a sala de aula, o refeitório, a biblioteca e a sala do professor. Os conjuntos seguem a escala por tamanho, do infantil ao adulto, e há mesa acessível para estudante em cadeira de rodas.",
@@ -365,28 +420,28 @@ const ATAS = {
     manchete: "Tecnologia que a professora usa no primeiro dia",
     chamada: "Telas Ultra HD 4K com inteligência artificial e software de colaboração.",
     imagem: "assets/img/tela-interativa-01.jpeg", alt: "Professor conduzindo aula de geografia na tela interativa com a turma",
-    dados: [["Resolução", "Ultra HD 4K"], ["Recursos", "Inteligência artificial integrada"], ["Software", "Colaboração em sala"], ["Entrega", "Instalada, com formação da equipe"]],
+    dados: [["Composição", "Três itens, comercializados em conjunto"], ["Tela", "Ultra HD 4K, som 2.1 de 60 W, câmera 48 MP"], ["Software", "DeepHub Class, Board e Broadcast"], ["Módulo OPS", "Windows 11, Intel i7, 8 GB, SSD 240 GB"]],
     sobreTitulo: "A lousa que a escola realmente usa",
-    sobreTexto: "Tela interativa entregue instalada, com o software configurado e a equipe pedagógica treinada. A adoção começa na primeira semana, não no semestre seguinte.",
-    blocos: [["01", "Imagem 4K", "Ultra HD com toque múltiplo e resposta imediata à escrita."], ["02", "Colaboração", "Software que espelha o conteúdo nos dispositivos da turma."], ["03", "Formação", "Treinamento da equipe pedagógica junto com a instalação."]],
-    tituloGaleria: "Sala conectada",
-    galeria: [["assets/img/tela-interativa-01.jpeg", "Aula na tela interativa com a turma"], ["assets/img/tela-interativa-02.jpeg", "Tela interativa instalada na sala de aula"], ["assets/img/tecnologia-02.jpeg", "Equipamento de tecnologia educacional"], ["assets/img/tecnologia-poster.jpeg", "Sala equipada"], ["assets/img/lab-sala-maker.jpeg", "Ambiente de aprendizagem com tecnologia"]],
-    itens: ["Tela Ultra HD 4K", "Toque múltiplo", "Software de colaboração", "Inteligência artificial", "Suporte de parede ou pedestal", "Formação da equipe"],
+    sobreTexto: "A ata registra três itens que só são comercializados juntos: a tela interativa, o software de gestão educacional e o módulo Windows OPS que roda dentro dela. Chega instalada, com o software configurado e a equipe pedagógica treinada.",
+    blocos: [["01", "Tela interativa", "Ultra HD 4K, som 2.1 de 60 W, câmera de 48 MP, escrita com reconhecimento de caligrafia e pressão da caneta, desbloqueio por NFC e digital."], ["02", "Software de gestão", "DeepHub Class com biblioteca de objetos 3D e caneta de IA; DeepHub Board para mapas mentais e votação; Broadcast para espelhar em qualquer dispositivo."], ["03", "Módulo Windows OPS", "Windows 11, Intel i7 de 11ª geração, 8 GB de RAM, SSD de 240 GB, RJ-45 e Wi-Fi."]],
+    tituloGaleria: "O conjunto da ata",
+    galeria: [["assets/img/lousa-tela.jpeg", "Tela interativa Ultra HD 4K"], ["assets/img/lousa-ops.jpeg", "Módulo Windows OPS que se acopla à tela"], ["assets/img/tela-interativa-01.jpeg", "Aula na tela interativa com a turma"], ["assets/img/tela-interativa-02.jpeg", "Tela interativa instalada na sala de aula"]],
+    itens: ["Tela interativa Ultra HD 4K", "Som 2.1 de 60 W", "Câmera de 48 MP", "Reconhecimento de caligrafia", "Caneta de IA que gera modelos 3D", "DeepHub Class", "DeepHub Board", "Broadcast e Cast", "Módulo Windows OPS", "Formação da equipe"],
     formTitulo: "Quantas salas quer conectar",
     formPlaceholder: "Número de salas, escolas e infraestrutura disponível"
   },
-  "mochila-inclusiva": {
-    categoria: "Inclusão", titulo: "Mochila inclusiva",
-    manchete: "O estudante neurodivergente com o que precisa na mochila",
-    chamada: "Kit para autorregulação, concentração, comunicação e conforto sensorial.",
-    imagem: "assets/img/mochila-inclusiva-01.jpeg", alt: "Mochila inclusiva azul com abafador de ruído no bolso frontal",
+  "kit-inclusivo": {
+    categoria: "Inclusão", titulo: "Kit inclusivo",
+    manchete: "O estudante neurodivergente com o que precisa ao alcance da mão",
+    chamada: "Kit individual para autorregulação, concentração, comunicação e conforto sensorial.",
+    imagem: "assets/img/kit-inclusivo-03.jpeg", alt: "Kit inclusivo com caderno de pauta ampliada, tesoura dupla adaptada, massa de modelar e recursos sensoriais",
     dados: [["Formato", "Kit individual por estudante"], ["Eixos", "Autorregulação, concentração, comunicação"], ["Atende", "Estudantes neurodivergentes"], ["Entrega", "Kit montado, pronto para uso"]],
     sobreTitulo: "Recursos que acompanham o estudante",
-    sobreTexto: "Nem toda escola tem sala de recursos, mas todo estudante pode ter os seus. A mochila reúne os itens de regulação sensorial e comunicação que permitem a permanência em sala, sem depender de um espaço exclusivo.",
-    blocos: [["01", "Autorregulação", "Abafador de ruído e recursos táteis para momentos de sobrecarga."], ["02", "Concentração", "Materiais de apoio à escrita e à atenção durante a aula."], ["03", "Comunicação", "Recursos de comunicação alternativa para quem ainda não se comunica pela fala."]],
-    tituloGaleria: "O que vai na mochila",
-    galeria: [["assets/img/mochila-inclusiva-01.jpeg", "Mochila inclusiva com abafador de ruído"], ["assets/img/kit-escolar-01.jpeg", "Recursos adaptados que vão na mochila"], ["assets/img/kit-inclusivo-02.jpeg", "Kit inclusivo entregue ao estudante"], ["assets/img/sensorial-04.jpeg", "Recursos sensoriais"], ["assets/img/sensorial-01.jpeg", "Ambiente de atendimento especializado"]],
-    itens: ["Abafador de ruído", "Recursos táteis", "Apoio de escrita", "Comunicação alternativa", "Caderno de pauta ampliada", "Tesoura adaptada"],
+    sobreTexto: "Nem toda escola tem sala de recursos, mas todo estudante pode ter os seus. O kit reúne os itens de regulação sensorial, apoio à escrita e comunicação que permitem a permanência em sala, sem depender de um espaço exclusivo. Vem montado, incluindo a mochila que o estudante leva todo dia.",
+    blocos: [["01", "Autonomia e vida diária", "Mochila sensorial, copo de treinamento antivazamento e avental infantil com bolso."], ["02", "Regulação sensorial", "Colar mordedor, pop it spinner, squish, livro sensorial, slime e abafador de ruídos."], ["03", "Escrita e coordenação motora", "Adaptadores de lápis, lápis grafite triangular, borracha ergonômica, tesoura dupla tandem e caderno de pauta ampliada."], ["04", "Arte e expressão criativa", "Giz de cera com encaixe no dedo, hidrocor de ponta reforçada, lápis de cor apagável, pincel ergonômico e massinhas."], ["05", "Recursos pedagógicos", "Quadro de rotinas apagável, cartela de adesivos de emoções e kit de livros paradidáticos."]],
+    tituloGaleria: "O que vem no kit",
+    galeria: [["assets/img/kit-inclusivo-03.jpeg", "Kit inclusivo com caderno de pauta ampliada, tesoura dupla e massa de modelar"], ["assets/img/mochila-inclusiva-01.jpeg", "Mochila do kit, com abafador de ruído no bolso frontal"], ["assets/img/mochila-inclusiva-02.jpeg", "Mochila Inclusiva exposta com os itens que a compõem"], ["assets/img/kit-inclusivo-02.jpeg", "Kit inclusivo entregue ao estudante"]],
+    itens: ["Mochila sensorial", "Copo de treinamento antivazamento", "Avental infantil com bolso", "Colar mordedor", "Pop it spinner", "Squish sensorial", "Livro sensorial", "Slime", "Abafador de ruídos infantil", "Adaptador de lápis em EVA", "Adaptador de lápis com encaixe de dedos", "Lápis grafite big triangular", "Borracha ergonômica hexagonal", "Tesoura escolar dupla tandem", "Caderno com pauta ampliada", "Giz de cera com encaixe no dedo", "Giz de cera retrátil", "Hidrocor big ponta que não afunda", "Lápis de cor apagável big", "Pincel com pega ergonômica", "Kit massinha de areia", "Maleta com massa de modelar", "Livro de colorir", "Quadro de rotinas apagável", "Cartela de adesivos de emoções", "Kit de livros paradidáticos"],
     formTitulo: "Quantos estudantes serão atendidos",
     formPlaceholder: "Número de estudantes com laudo, escolas e etapas"
   },
@@ -451,32 +506,17 @@ const ATAS = {
     formTitulo: "Quantos servidores serão uniformizados",
     formPlaceholder: "Secretarias, número de servidores e prazo desejado"
   },
-  "material-kit-escolar": {
-    categoria: "Início do ano letivo", titulo: "Material e kit escolar",
-    manchete: "Cada criança da rede começa o ano com o mesmo material",
-    chamada: "Kit completo, com itens adaptados: pauta ampliada, tesoura dupla e materiais de fácil preensão.",
-    imagem: "assets/img/kit-escolar-01.jpeg", alt: "Kit escolar com caderno de pauta ampliada, tesoura dupla e massa de modelar",
-    dados: [["Formato", "Kit individual por estudante"], ["Inclusão", "Itens adaptados no mesmo kit"], ["Personalização", "Identidade do município"], ["Entrega", "Antes do início das aulas"]],
-    sobreTitulo: "O kit que chega antes da primeira aula",
-    sobreTexto: "Kit montado por etapa de ensino e entregue escola por escola antes do início do ano letivo. Inclui itens adaptados no mesmo kit — o estudante com necessidade específica recebe junto com a turma, sem separação.",
-    blocos: [["01", "Por etapa", "Composição diferente para educação infantil e fundamental."], ["02", "Itens adaptados", "Pauta ampliada, tesoura dupla e apoio de preensão no kit padrão."], ["03", "Logística", "Entrega programada por escola, com conferência na recepção."]],
-    tituloGaleria: "O que vem no kit",
-    galeria: [["assets/img/kit-escolar-01.jpeg", "Kit escolar com caderno de pauta ampliada e tesoura dupla"], ["assets/img/material-escolar-01.jpeg", "Itens de material escolar"], ["assets/img/kit-inclusivo-02.jpeg", "Mochila inclusiva"], ["assets/img/uniforme-03.jpeg", "Kit escolar do município"]],
-    itens: ["Caderno de pauta ampliada", "Tesoura dupla adaptada", "Apoio de preensão", "Massa de modelar", "Canetas hidrográficas", "Lápis e apontador", "Avental de atividades"],
-    formTitulo: "Quantos kits a rede precisa",
-    formPlaceholder: "Número de estudantes por etapa, escolas e prazo"
-  },
   "sala-maker": {
     categoria: "Cultura maker", titulo: "Sala Maker",
     manchete: "A sala onde o estudante deixa de assistir e passa a construir",
     chamada: "Ambiente completo de prototipagem: mobiliário exclusivo, cenografia, impressora 3D, robótica e eletrônica.",
-    imagem: "assets/img/lab-sala-maker.jpeg", alt: "Sala Maker montada com bancadas, ferramentas e mural de projetos",
+    imagem: "assets/img/sala-maker-01.jpeg", alt: "Estudantes construindo protótipos na Sala Maker, com impressora 3D e mural do processo criativo ao fundo",
     dados: [["Modalidade", "Ambiente completo, da concepção à entrega"], ["Inclui", "Mobiliário, cenografia e equipamentos"], ["Alinhamento", "Pensamento computacional na BNCC"], ["Entrega", "Sala pronta para uso"]],
     sobreTitulo: "Um laboratório de inovação dentro da escola",
     sobreTexto: "A Sala Maker é entregue pronta: mobiliário exclusivo, cenografia personalizada, impressora 3D, kits de robótica, componentes eletrônicos e ferramentas. O ambiente é planejado para a colaboração, a resolução de problemas e as competências de pensamento computacional previstas na BNCC.",
     blocos: [["01", "Ambiente", "Mobiliário exclusivo, cenografia e ambientação acolhedora."], ["02", "Equipamentos", "Impressora 3D, robótica, eletrônica, tablets e ferramentas maker."], ["03", "Formação", "Livros de apoio ao professor e assessoria na implantação."]],
     tituloGaleria: "A sala montada",
-    galeria: [["assets/img/lab-sala-maker.jpeg", "Sala Maker com bancadas e mural de projetos"], ["assets/img/lab-maker-movel.jpeg", "Carrinho maker com ferramentas"], ["assets/img/tecnologia-01.jpeg", "Equipamento tecnológico em uso"], ["assets/img/lab-neurodiversidade.jpeg", "Carrinho de recursos itinerante"]],
+    galeria: [["assets/img/sala-maker-01.jpeg", "Sala Maker em uso, com bancadas, mural e impressora 3D"], ["assets/img/maker-impressora-01.jpeg", "Estudantes operando a impressora 3D"], ["assets/img/maker-robotica-01.jpeg", "Professor e estudantes montando um kit de robótica"], ["assets/img/lab-sala-maker.jpeg", "Bancadas e mural de projetos da sala"]],
     itens: ["Mobiliário exclusivo", "Cenografia personalizada", "Impressora 3D", "Kit de robótica", "Componentes eletrônicos", "Ferramentas maker", "Tablet para programação", "Assessoria formativa"],
     formTitulo: "Qual escola vai receber a Sala Maker",
     formPlaceholder: "Escola, metragem da sala e número de estudantes atendidos"
@@ -485,13 +525,13 @@ const ATAS = {
     categoria: "Laboratório itinerante", titulo: "Laboratório Maker Móvel",
     manchete: "A escola sem sala disponível também faz maker",
     chamada: "Um carrinho leva robótica, prototipagem e eletrônica de uma sala para a outra.",
-    imagem: "assets/img/lab-maker-movel.jpeg", alt: "Laboratório maker móvel em carrinho com ferramentas e notebook",
+    imagem: "assets/img/maker-movel-01.jpeg", alt: "Laboratório maker móvel: carrinho com bancada, painel de ferramentas, gavetas e notebook",
     dados: [["Modalidade", "Laboratório itinerante em carrinho"], ["Mobilidade", "Circula entre salas e escolas"], ["Inclui", "Robótica, prototipagem e eletrônica"], ["Entrega", "Carrinho montado e equipado"]],
     sobreTitulo: "Inovação que chega a todas as escolas",
     sobreTexto: "Nem toda escola tem espaço físico para uma Sala Maker. O laboratório móvel reúne, em uma estrutura prática e organizada, os recursos de robótica, programação, eletrônica e prototipagem — e vai até a turma. Um único conjunto beneficia um número maior de estudantes.",
     blocos: [["01", "Mobilidade", "Estrutura com rodas, resistente, para transporte entre salas."], ["02", "Equipamentos", "Kits de robótica, componentes eletrônicos e ferramentas maker."], ["03", "Alcance", "Um conjunto atende várias turmas e várias escolas da rede."]],
     tituloGaleria: "O carrinho por dentro",
-    galeria: [["assets/img/lab-maker-movel.jpeg", "Laboratório maker móvel equipado"], ["assets/img/lab-sala-maker.jpeg", "Sala Maker completa"], ["assets/img/tecnologia-01.jpeg", "Notebooks para a rede"], ["assets/img/lab-neurodiversidade.jpeg", "Carrinho itinerante de recursos"]],
+    galeria: [["assets/img/maker-movel-01.jpeg", "Carrinho maker aberto, com bancada e painel de ferramentas"], ["assets/img/maker-robotica-01.jpeg", "Turma montando robótica com o professor"], ["assets/img/maker-impressora-01.jpeg", "Impressora 3D em uso pelos estudantes"], ["assets/img/sala-maker-01.jpeg", "Sala Maker completa"]],
     itens: ["Carrinho personalizável", "Kit de robótica", "Componentes eletrônicos", "Ferramentas maker", "Impressora 3D", "Notebook", "Armazenamento organizado"],
     formTitulo: "Quantas escolas o carrinho vai atender",
     formPlaceholder: "Número de escolas, distância entre elas e turmas atendidas"
@@ -500,37 +540,37 @@ const ATAS = {
     categoria: "Inclusão itinerante", titulo: "Carrinho de Neurodiversidade",
     manchete: "Os recursos da inclusão circulando pela escola",
     chamada: "Recursos pedagógicos, sensoriais e terapêuticos que circulam entre salas, biblioteca e atendimento especializado.",
-    imagem: "assets/img/lab-neurodiversidade.jpeg", alt: "Carrinho de neurodiversidade com gaveteiros de recursos pedagógicos",
+    imagem: "assets/img/neurodiversidade-01.jpeg", alt: "Sala de recursos inclusiva com circuito motor, mesa sensorial e crianças em atividade — ambiente onde o carrinho circula",
     dados: [["Modalidade", "Solução itinerante"], ["Recursos", "Pedagógicos, sensoriais e terapêuticos"], ["Atende", "Crianças típicas e atípicas"], ["Entrega", "Carrinho montado e organizado"]],
     sobreTitulo: "Inclusão sem depender de um espaço exclusivo",
     sobreTexto: "A educação inclusiva acontece quando cada estudante tem acesso aos recursos de que precisa. O carrinho reúne materiais que estimulam o desenvolvimento cognitivo, sensorial, motor, emocional e social — e leva esses recursos para a sala de aula, a biblioteca e o atendimento especializado.",
     blocos: [["01", "Organização", "Gaveteiros identificados, com material separado por objetivo pedagógico."], ["02", "Atendimento", "Especial atenção a estudantes com TEA e outras necessidades específicas."], ["03", "Mobilidade", "Sai da sala de recursos e chega a qualquer ambiente da escola."]],
     tituloGaleria: "O carrinho em uso",
-    galeria: [["assets/img/lab-neurodiversidade.jpeg", "Carrinho de neurodiversidade com gaveteiros"], ["assets/img/sensorial-01.jpeg", "Recursos sensoriais"], ["assets/img/kit-inclusivo-02.jpeg", "Mochila inclusiva"], ["assets/img/sensorial-04.jpeg", "Materiais de regulação sensorial"]],
+    galeria: [["assets/img/neurodiversidade-02.jpeg", "Carrinho de neurodiversidade com dezesseis gaveteiros identificados"], ["assets/img/neurodiversidade-01.jpeg", "Sala de recursos inclusiva onde o carrinho é usado"], ["assets/img/sensorial-01.jpeg", "Recursos sensoriais de apoio"], ["assets/img/kit-inclusivo-03.jpeg", "Kit inclusivo do estudante"]],
     itens: ["Gaveteiros identificados", "Recursos sensoriais", "Material terapêutico", "Jogos pedagógicos", "Atendimento a TEA", "Estrutura com rodas"],
     formTitulo: "Quantos estudantes atípicos a rede atende",
     formPlaceholder: "Estudantes com laudo, escolas e estrutura de atendimento atual"
   },
   "materiais-escolares": {
-    categoria: "Rede completa", titulo: "Materiais escolares",
-    manchete: "Do avental ao compasso, escola por escola",
-    chamada: "Ata titular de materiais escolares, com entrega programada por unidade.",
-    imagem: "assets/img/material-escolar-01.jpeg", alt: "Itens de material escolar: canetas, apontadores, apoio de lápis e avental",
-    dados: [["Escopo", "Material escolar da rede completa"], ["Inclusão", "Itens de apoio à escrita"], ["Logística", "Entrega programada por escola"], ["Conferência", "Na recepção de cada unidade"]],
+    categoria: "Início do ano letivo", titulo: "Material e kit escolar",
+    manchete: "Cada criança da rede começa o ano com o mesmo material",
+    chamada: "Do avental ao compasso: material de uso diário e kit individual por estudante, com itens adaptados no mesmo pacote.",
+    imagem: "assets/img/kit-inclusivo-03.jpeg", alt: "Kit escolar com caderno de pauta ampliada, tesoura dupla adaptada, massa de modelar e canetas",
+    dados: [["Escopo", "Material da rede e kit por estudante"], ["Inclusão", "Itens adaptados no kit padrão"], ["Personalização", "Identidade do município"], ["Entrega", "Programada por escola, antes das aulas"]],
     sobreTitulo: "O material que sustenta o ano letivo",
-    sobreTexto: "A ata cobre o material de uso diário de toda a rede, incluindo os itens de apoio à escrita para estudantes em processo de coordenação motora. A entrega é programada por escola, com conferência na recepção.",
-    blocos: [["01", "Uso diário", "Canetas, lápis, apontadores, borrachas e cadernos."], ["02", "Apoio à escrita", "Apoio de preensão, pauta ampliada e itens de coordenação."], ["03", "Atividades", "Avental, massa de modelar e material de arte."]],
-    tituloGaleria: "Itens da ata",
-    galeria: [["assets/img/material-escolar-01.jpeg", "Itens de material escolar"], ["assets/img/kit-inclusivo-01.jpeg", "Kit escolar com itens adaptados"], ["assets/img/uniforme-03.jpeg", "Kit do município"], ["assets/img/kit-inclusivo-02.jpeg", "Mochila inclusiva"]],
-    itens: ["Canetas hidrográficas", "Apontador com depósito", "Apoio de preensão", "Borracha", "Avental de atividades", "Massa de modelar", "Caderno de pauta ampliada"],
-    formTitulo: "Qual o tamanho da sua rede",
+    sobreTexto: "Uma ata só cobre as duas pontas: o material de uso diário de toda a rede e o kit individual que cada estudante recebe. Os itens adaptados — pauta ampliada, tesoura dupla, apoio de preensão — vêm no kit padrão, então o estudante com necessidade específica recebe junto com a turma, sem separação. A entrega é programada escola por escola, com conferência na recepção.",
+    blocos: [["01", "Uso diário", "Canetas, lápis, apontadores, borrachas e cadernos para toda a rede."], ["02", "Kit por estudante", "Composição diferente para educação infantil e fundamental."], ["03", "Itens adaptados", "Pauta ampliada, tesoura dupla e apoio de preensão no kit padrão."], ["04", "Logística", "Entrega programada por escola, com conferência na recepção."]],
+    tituloGaleria: "O que vem no kit",
+    galeria: [["assets/img/kit-inclusivo-03.jpeg", "Kit escolar com caderno de pauta ampliada e tesoura dupla adaptada"], ["assets/img/material-escolar-01.jpeg", "Itens de material escolar de uso diário"], ["assets/img/kit-escolar-01.jpeg", "Kit montado para entrega"], ["assets/img/uniforme-03.jpeg", "Kit do município entregue à escola"]],
+    itens: ["Canetas hidrográficas", "Lápis e apontador", "Borracha", "Caderno de pauta ampliada", "Tesoura dupla adaptada", "Apoio de preensão", "Massa de modelar", "Avental de atividades"],
+    formTitulo: "Quantos kits a rede precisa",
     formPlaceholder: "Número de escolas, estudantes por etapa e prazo"
   },
   "bullying-cyberbullying": {
     categoria: "Convivência escolar", titulo: "Bullying e cyberbullying",
     manchete: "Prevenção estruturada, não campanha de uma semana",
     chamada: "Kit Compasso da educação infantil ao fundamental: fantoches, cartelas de convivência e guia do professor.",
-    imagem: "assets/img/bullying-01.jpeg", alt: "Kit Compasso da educação infantil com fantoches, cartelas e caderno do professor",
+    imagem: "assets/img/convivencia-01.jpeg", alt: "Crianças deitadas na grama, sorrindo juntas em roda",
     dados: [["Programa", "Kit Compasso"], ["Atende", "Educação infantil ao fundamental"], ["Material", "Professor, estudante e família"], ["Entrega", "Kit completo por turma"]],
     sobreTitulo: "Um programa para o ano letivo inteiro",
     sobreTexto: "O kit organiza a prevenção ao bullying e ao cyberbullying em aulas estruturadas, com material para o professor conduzir e cartelas que ficam visíveis na sala. Não é palestra pontual: é rotina de convivência.",
@@ -545,7 +585,7 @@ const ATAS = {
     categoria: "Da educação infantil ao 9º ano", titulo: "Programa Compasso Socioemocional",
     manchete: "Socioemocional com hora marcada na grade, não campanha de uma semana",
     chamada: "Versão brasileira do Second Step: currículo estruturado, com a pauta de aula pronta na mão do professor da turma.",
-    imagem: "assets/img/socioemocional-01.jpeg", alt: "Kit do Programa Compasso Socioemocional do 2º ano, com caderno do aluno, caderno do professor e cartazes de habilidades",
+    imagem: "assets/img/compasso-socio-aula.jpeg", alt: "Professora acompanhando de perto a atividade de uma estudante em sala de aula",
     dados: [["Atende", "Educação infantil (4 e 5 anos) ao 9º ano"], ["Origem", "Versão brasileira do Second Step"], ["Currículo", "Quatro unidades, retomadas a cada ano"], ["Carga", "10 a 15 min diários no infantil · 1 aula semanal no fundamental"]],
     sobreTitulo: "Quem dá a aula é o professor da turma",
     sobreTexto: "O programa não terceiriza a conversa para um palestrante de fora. O professor recebe pauta de aula pronta, material do estudante e formação para conduzir. As quatro unidades voltam todo ano com mais profundidade, e o caderno do aluno leva a conversa para dentro de casa.",
@@ -558,6 +598,7 @@ const ATAS = {
   },
   "compasso-kids": {
     categoria: "Primeira infância · 3 anos", titulo: "Compasso Kids",
+    selos: ["Programa pedagógico", "Consulte a ata aplicável", "Lei 14.133/2021"],
     manchete: "A roda de história deixa de ser passatempo e vira método",
     chamada: "Programa socioemocional para crianças de 3 anos, construído sobre a contação de histórias da tradição oral.",
     imagem: "assets/img/compasso-kids-01.jpeg", alt: "Educadora lendo o Livro do Educador do Compasso Kids para um grupo de crianças pequenas",
@@ -573,9 +614,10 @@ const ATAS = {
   },
   "compasso-mind": {
     categoria: "Do infantil ao ensino médio", titulo: "Compasso Mind",
+    selos: ["Programa pedagógico", "Consulte a ata aplicável", "Lei 14.133/2021"],
     manchete: "Antes de ensinar qualquer conteúdo, ensine a prestar atenção",
     chamada: "Programa socioemocional estruturado sobre treino de atenção, foco e concentração, com prática diária de 5 a 10 minutos.",
-    imagem: "assets/img/compasso-mind-01.jpeg", alt: "Livro do Educador do Compasso Mind para o 3º ano do ensino fundamental",
+    imagem: "assets/img/compasso-mind-aula.jpeg", alt: "Turma uniformizada sentada em roda ao ar livre durante uma sessão do programa",
     dados: [["Atende", "Educação infantil ao ensino médio"], ["Base", "Treino de atenção e autoconsciência"], ["Rotina", "2 aulas semanais e treino diário de 5 a 10 min"], ["Apoio", "Aulas expositivas gravadas em plataforma"]],
     sobreTitulo: "O pilar que falta antes do conteúdo",
     sobreTexto: "Não falta material nem informação na escola. Falta o estudante ter domínio da própria atenção: saber para onde direcionar o foco, sustentar apesar da conversa paralela ao lado, e perceber a própria emoção antes de reagir a ela. O Mind treina isso como se treina qualquer habilidade — todo dia, em blocos curtos, com o educador apoiado por roteiro e vídeo.",
@@ -603,7 +645,49 @@ const ATAS = {
   }
 };
 
+// Playgrounds saiu de brinquedos-educacionais e virou ata própria. Entrada mínima só para
+// o link da vitrine resolver — o conteúdo entra quando montarmos a página dessa ata.
+ATAS["playgrounds"] = {
+  categoria: "Playground e pátio", titulo: "Playgrounds",
+  selos: ["Programa em estruturação", "Consulte a ata aplicável", "Lei 14.133/2021"],
+  manchete: "Estruturas de brincar para o pátio da escola",
+  chamada: "Playground modular, casinha, gangorra, barco pirata e trave, em polietileno para área externa.",
+  imagem: "assets/img/play-modular-01.jpeg", alt: "Playground modular com torre, escorregador e túnel instalado em área externa",
+  dados: [["Aplicação", "Pátio e área externa"], ["Material", "Polietileno rotomoldado"], ["Atende", "Educação infantil e fundamental"], ["Entrega", "Instalado pela nossa equipe"]],
+  sobreTitulo: "O pátio que a criança quer usar no recreio",
+  sobreTexto: "Estruturas de brincar em polietileno, dimensionadas para pátio escolar e instaladas pela nossa equipe. Esta página ainda será detalhada a partir do catálogo da ata.",
+  blocos: [["01", "Estruturas", "Playground modular com torre, escorregador, túnel e escalada."], ["02", "Brinquedos", "Casinha, gangorra, barco pirata e trave de futebol."], ["03", "Instalação", "Montagem no local, sobre superfície de impacto."]],
+  tituloGaleria: "Itens da ata",
+  galeria: [["assets/img/play-modular-01.jpeg", "Playground modular com torre e escorregador"], ["assets/img/play-casinha.jpeg", "Casinha infantil em polietileno"], ["assets/img/play-barco.jpeg", "Barco pirata de escalada"], ["assets/img/play-gangorra.jpeg", "Gangorra em polietileno"]],
+  itens: ["Playground modular", "Casinha infantil", "Gangorra", "Gangorra jacaré", "Barco pirata", "Trave de futebol infantil"],
+  formTitulo: "Quantas escolas recebem playground",
+  formPlaceholder: "Escolas, área disponível no pátio e faixa etária atendida"
+};
+
+// Linha Pikler e Montessori, do catálogo consolidado de julho/2026. Entrada mínima
+// para o link da vitrine resolver — conteúdo entra quando montarmos a página.
+ATAS["pikler-montessori"] = {
+  categoria: "Educação infantil", titulo: "Pikler e Montessori",
+  selos: ["Linha em estruturação", "Consulte a ata aplicável", "Lei 14.133/2021"],
+  manchete: "Autonomia e movimento livre na educação infantil",
+  chamada: "Triângulos, rampas, arcos e mobiliário na medida da criança, para movimento livre e escolha autônoma.",
+  imagem: "assets/img/sensorial-04.jpeg", alt: "Ambiente de educação infantil com recursos de movimento livre",
+  dados: [["Abordagem", "Pikler e Montessori"], ["Atende", "Berçário e educação infantil"], ["Material", "Madeira e tecido, atóxicos"], ["Catálogo", "Consolidado de julho de 2026"]],
+  sobreTitulo: "A criança escolhe, alcança e sobe sozinha",
+  sobreTexto: "Mobiliário e equipamentos dimensionados para a criança agir sem depender do adulto: subir, descer, alcançar e guardar. Esta página ainda será detalhada a partir do catálogo da ata.",
+  blocos: [["01", "Movimento livre", "Triângulos de escalada, rampas, arcos e trepa-trepa."], ["02", "Vida prática", "Mobiliário na altura da criança, para autonomia na rotina."], ["03", "Ambiente", "Composição por sala, do berçário à pré-escola."]],
+  tituloGaleria: "A linha na escola",
+  galeria: [["assets/img/sensorial-04.jpeg", "Recursos de movimento e psicomotricidade"], ["assets/img/sensorial-02.jpeg", "Ambiente de educação infantil"], ["assets/img/espumado-01.png", "Circuito em espuma"], ["assets/img/sensorial-05.jpeg", "Espaço sensorial montado"]],
+  itens: ["Triângulo de escalada", "Rampa e escorregador", "Arco multiuso", "Mobiliário na altura da criança", "Composição por ambiente"],
+  formTitulo: "Quantas salas de educação infantil",
+  formPlaceholder: "Creches e pré-escolas, número de salas e faixa etária"
+};
+
 const ORDEM = Object.keys(ATAS);
+
+// Selos exibidos no topo da página. Só afirme "Ata vigente" onde existe ARP registrada:
+// para declarar isso em uma solução, basta remover o campo `selos` dela e ela volta ao padrão.
+const SELOS_PADRAO = ["Ata vigente", "Adesão sem nova licitação", "Lei 14.133/2021"];
 
 const ETAPAS = [
   ["1", "Solicitação da adesão", "O órgão ou entidade pública interessada encaminha o pedido por e-mail."],
@@ -618,7 +702,7 @@ const ETAPAS = [
 ];
 
 class Component extends DCLogic {
-  state = { enviado: false, slug: "sala-multissensorial", compacto: false, menuAberto: false };
+  state = { enviado: false, enviando: false, erro: "", slug: "sala-multissensorial", compacto: false, menuAberto: false };
 
   aoRedimensionar = () => {
     const compacto = window.innerWidth < 760;
@@ -646,11 +730,36 @@ class Component extends DCLogic {
   componentDidMount() {
     window.addEventListener("resize", this.aoRedimensionar);
     this.aoRedimensionar();
-    const q = new URLSearchParams(window.location.search).get("ata");
+    // Slugs antigos: sem isso o link salvo cai silenciosamente na sala multissensorial.
+    const ANTIGOS = { "mochila-inclusiva": "kit-inclusivo", "material-kit-escolar": "materiais-escolares" };
+    let q = new URLSearchParams(window.location.search).get("ata");
+    if (q && ANTIGOS[q]) {
+      q = ANTIGOS[q];
+      history.replaceState(null, "", "ata.html?ata=" + q);
+    }
     if (q && ATAS[q]) {
       this.setState({ slug: q });
       document.title = ATAS[q].titulo + " — Portal Atto";
+      this.atualizarMeta(q, ATAS[q]);
     }
+  }
+
+  // Cada ?ata= é conteúdo distinto: canonical, og:url e og:image precisam acompanhar,
+  // senão todas as atas compartilham o mesmo card de compartilhamento e o mesmo canônico.
+  atualizarMeta(slug, a) {
+    const BASE = "https://portal-atto.vercel.app";
+    const url = BASE + "/ata?ata=" + slug;
+    const def = (sel, attr, valor) => {
+      const el = document.head.querySelector(sel);
+      if (el) el.setAttribute(attr, valor);
+    };
+    def('link[rel="canonical"]', "href", url);
+    def('meta[property="og:url"]', "content", url);
+    def('meta[property="og:title"]', "content", a.titulo + " — Portal Atto");
+    def('meta[property="og:description"]', "content", a.chamada);
+    def('meta[name="description"]', "content", a.chamada);
+    def('meta[property="og:image"]', "content", BASE + "/" + a.imagem);
+    def('meta[property="og:image:alt"]', "content", a.alt);
   }
 
   renderVals() {
@@ -672,6 +781,7 @@ class Component extends DCLogic {
     }));
     return Object.assign(this.menuVals(), {
       titulo: a.titulo, categoria: a.categoria, manchete: a.manchete, chamada: a.chamada,
+      selos: (a.selos || SELOS_PADRAO).map(s => ({ texto: s })),
       heroAlt: a.alt,
       heroEstilo: foto(a.imagem, { position: "absolute", inset: 0, width: "100%", height: "100%" }),
       dados: a.dados.map(d => ({ rotulo: d[0], valor: d[1] })),
@@ -692,7 +802,42 @@ class Component extends DCLogic {
       outras,
       enviado: this.state.enviado,
       formAberto: !this.state.enviado,
-      enviar: (e) => { e.preventDefault(); this.setState({ enviado: true }); }
+      statusEnvio: this.state.enviando ? "Enviando a solicitação…" : "",
+      temErro: !!this.state.erro,
+      erro: this.state.erro,
+      enviar: (e) => {
+        e.preventDefault();
+        if (this.state.enviando) return;
+        const dados = new FormData(e.target);
+
+        if (ENDPOINT_FORMULARIO) {
+          this.setState({ enviando: true, erro: "" });
+          fetch(ENDPOINT_FORMULARIO, { method: "POST", headers: { Accept: "application/json" }, body: dados })
+            .then(r => {
+              if (!r.ok) throw new Error("HTTP " + r.status);
+              this.setState({ enviado: true, enviando: false, erro: "" });
+            })
+            .catch(() => this.setState({
+              enviando: false,
+              erro: "Não foi possível enviar agora. Tente novamente em instantes — os dados que você preencheu continuam aqui."
+            }));
+          return;
+        }
+
+        if (EMAIL_CONTATO) {
+          const linhas = [];
+          dados.forEach((v, k) => linhas.push(k + ": " + v));
+          window.location.href = "mailto:" + EMAIL_CONTATO
+            + "?subject=" + encodeURIComponent("Solicitação — " + (dados.get("solucao") || "Portal Atto"))
+            + "&body=" + encodeURIComponent(linhas.join("\n"));
+          this.setState({ enviado: true, erro: "" });
+          return;
+        }
+
+        this.setState({
+          erro: "O envio pelo site está temporariamente indisponível. Por favor, entre em contato pelos canais da Atto — sua solicitação não foi registrada."
+        });
+      }
     });
   }
 }

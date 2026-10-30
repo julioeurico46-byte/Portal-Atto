@@ -417,6 +417,8 @@ const ATAS = {
   },
   "telas-interativas": {
     categoria: "Sala conectada", titulo: "Telas interativas",
+    // ARP 009.2024 (lousas digitais) vencida (portfólio, 30/10/2026).
+    selos: ["Consulte a ata aplicável", "Adesão sem nova licitação", "Lei 14.133/2021"],
     manchete: "Tecnologia que a professora usa no primeiro dia",
     chamada: "Telas Ultra HD 4K com inteligência artificial e software de colaboração.",
     imagem: "assets/img/tela-interativa-01.jpeg", alt: "Professor conduzindo aula de geografia na tela interativa com a turma",
@@ -630,6 +632,9 @@ const ATAS = {
   },
   "cultura-de-paz": {
     categoria: "Coleção paradidática", titulo: "Cultura de paz",
+    // ARP 010.2024 vencida (portfólio, 30/10/2026). Enquanto não houver ata nova
+    // registrada, esta página não pode afirmar vigência.
+    selos: ["Consulte a ata aplicável", "Adesão sem nova licitação", "Lei 14.133/2021"],
     manchete: "Convivência ensinada pela literatura",
     chamada: "Livros que ensinam convivência, empatia e resolução de conflitos, do infantil ao fundamental.",
     imagem: "assets/img/cultura-paz-01.jpeg", alt: "Coleção paradidática de cultura de paz com oito títulos ilustrados",
@@ -681,6 +686,41 @@ ATAS["pikler-montessori"] = {
   itens: ["Triângulo de escalada", "Rampa e escorregador", "Arco multiuso", "Mobiliário na altura da criança", "Composição por ambiente"],
   formTitulo: "Quantas salas de educação infantil",
   formPlaceholder: "Creches e pré-escolas, número de salas e faixa etária"
+};
+
+// Frentes acrescentadas na revisão do portfólio de 30/10/2026. Vigência lida no
+// nome do catálogo de cada ata, não presumida. Entrada mínima para o link da
+// vitrine resolver — conteúdo entra quando montarmos a página.
+ATAS["mobiliario-corporativo"] = {
+  categoria: "Secretarias e gabinetes", titulo: "Mobiliário corporativo",
+  manchete: "O setor administrativo também precisa de mobiliário novo",
+  chamada: "Cadeiras giratórias, longarinas, mesas e estações de trabalho para as secretarias, gabinetes e salas de atendimento da prefeitura.",
+  imagem: "assets/img/mob-corporativo.jpeg", alt: "Estações de trabalho e cadeiras giratórias em sala administrativa",
+  dados: [["Atas", "ARP 30001-2025 e 30002-2025 CMRJ"], ["Vigência", "até 05/06/2027"], ["Aplicação", "Secretarias, gabinetes e atendimento"], ["Entrega", "Montada pela nossa equipe"]],
+  sobreTitulo: "Quem atende o cidadão passa o dia nessa cadeira",
+  sobreTexto: "Mobiliário administrativo registrado em duas atas do CMRJ, com vigência até junho de 2027. Esta página ainda será detalhada a partir do catálogo da ata.",
+  blocos: [["01", "Assentos", "Cadeiras giratórias com regulagem, fixas e longarinas para espera."], ["02", "Postos de trabalho", "Mesas, estações e armários de apoio."], ["03", "Ambientes", "Composição por sala, do gabinete ao atendimento."]],
+  tituloGaleria: "Itens da ata",
+  galeria: [["assets/img/mob-corporativo.jpeg", "Estações de trabalho e cadeiras giratórias"], ["assets/img/mob-longarina.jpeg", "Longarina de espera em área de atendimento"]],
+  itens: ["Cadeira giratória com regulagem", "Cadeira fixa", "Longarina de espera", "Mesa e estação de trabalho", "Armário de apoio"],
+  formTitulo: "Quais setores recebem mobiliário",
+  formPlaceholder: "Secretarias, número de postos de trabalho e prazo"
+};
+
+ATAS["mobiliario-aco"] = {
+  categoria: "Arquivo e guarda", titulo: "Mobiliário em aço",
+  manchete: "Onde o município guarda documento, material e merenda",
+  chamada: "Armários, arquivos, roupeiros e longarinas em aço, para almoxarifado, arquivo, vestiário e áreas de espera.",
+  imagem: "assets/img/mob-aco.jpeg", alt: "Armário de aço de duas portas com fechadura",
+  dados: [["Ata", "ARP 693-2025 AMGESP"], ["Vigência", "até 13/06/2027"], ["Material", "Aço com pintura eletrostática"], ["Aplicação", "Almoxarifado, arquivo e vestiário"]],
+  sobreTitulo: "Aço resolve onde o MDP não aguenta",
+  sobreTexto: "Guarda em aço com pintura eletrostática, para ambientes de uso pesado, umidade e carga. Esta página ainda será detalhada a partir do catálogo da ata.",
+  blocos: [["01", "Guarda", "Armários de portas, roupeiros e arquivos de gavetas."], ["02", "Espera", "Longarinas em aço para recepção e atendimento."], ["03", "Acabamento", "Pintura eletrostática, para uso pesado e limpeza frequente."]],
+  tituloGaleria: "Itens da ata",
+  galeria: [["assets/img/mob-aco.jpeg", "Armário de aço de duas portas"], ["assets/img/mob-longarina.jpeg", "Longarina em aço para área de espera"]],
+  itens: ["Armário de aço", "Arquivo de gavetas", "Roupeiro vestiário", "Estante de aço", "Longarina"],
+  formTitulo: "O que precisa de guarda em aço",
+  formPlaceholder: "Almoxarifado, arquivo, vestiário — e quantas unidades"
 };
 
 const ORDEM = Object.keys(ATAS);

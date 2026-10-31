@@ -92,6 +92,19 @@ a { color: inherit; text-decoration: none; }
 }
 .bloco > .interno { max-width: var(--coluna); margin: 0 auto; }
 .claro { background: var(--white); }
+/* seção que sai da pilha de cartões: o branco vira o fundo da página inteira,
+   e a lista respira sem moldura em volta */
+.sem-cartao {
+  margin: 0;
+  border-radius: 0;
+  padding-block: clamp(44px, 6vw, 86px);
+}
+/* aqui o conteúdo é a roda, não o cabeçalho: no tamanho dos outros blocos os
+   dois disputavam a mesma hierarquia e a seção ficava sem foco */
+.sem-cartao .titulo {
+  font-size: clamp(26px, 3.1vw, 40px);
+  line-height: 1.08;
+}
 .escuro { background: var(--ink-950); color: var(--white); }
 .escuro .secundario { color: rgba(255,255,255,.66); }
 .secundario { color: var(--text-secondary); }
@@ -211,7 +224,14 @@ a { color: inherit; text-decoration: none; }
 .hamburger { display: none; }
 
 /* ── herói ──────────────────────────────────────────────────────────────── */
-.heroi { padding-bottom: 0; }
+/* A capa sangra até as bordas, do topo da janela até a esteira. Ela deixa de
+   ser mais um cartão na pilha e vira o fundo de onde a pilha emerge — o
+   primeiro bloco claro é que começa a recortar a página. */
+.heroi {
+  margin: 0;
+  border-radius: 0;
+  padding: clamp(18px, 3vw, 34px) var(--pad-bloco) 0;
+}
 .heroi::before {
   content: ""; position: absolute; inset: 0;
   background:
@@ -409,30 +429,79 @@ a { color: inherit; text-decoration: none; }
   font: var(--type-caption); color: rgba(255,255,255,.5);
 }
 
-/* ── tabela de frentes ──────────────────────────────────────────────────── */
-.lista { border-top: 1px solid var(--border-default); }
-.lista .cab, .lista a.linha {
-  display: grid; grid-template-columns: 1.6fr 1fr auto 56px;
-  gap: 16px; align-items: center;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--border-subtle);
+
+/* ── roda de frentes ────────────────────────────────────────────────────────
+   Seletor em roda: a frente em foco fica grande no centro e as vizinhas
+   encolhem conforme se afastam. Quem gira é a própria rolagem lateral — o
+   script só lê a distância de cada item até o centro e escreve a escala. */
+.roda { position: relative; }
+
+.roda-trilho {
+  display: flex; align-items: center;
+  /* vão largo de propósito: ao recuar no eixo Z os itens convergem para o
+     ponto de fuga, então precisam partir mais afastados para não colidir */
+  gap: clamp(44px, 6.5vw, 120px);
+  overflow-x: auto;
+  /* a perspectiva mora no trilho: o ponto de fuga fica no centro visível e os
+     nomes curvam para longe dele, como se estivessem na face de um cilindro */
+  perspective: 1100px;
+  perspective-origin: 50% 50%;
+  /* metade da largura de cada lado: sem isso o primeiro e o último item nunca
+     alcançam o centro */
+  padding: 10px 50%;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  scrollbar-width: none; -ms-overflow-style: none;
+  cursor: grab;
 }
-.lista .cab {
+.roda-trilho::-webkit-scrollbar { display: none; }
+.roda-trilho.arrastando { cursor: grabbing; scroll-behavior: auto; }
+
+.roda-item {
+  flex: none; scroll-snap-align: center;
+  appearance: none; background: none; border: 0; padding: 0;
+  font: var(--weight-black) clamp(28px, 5vw, 62px)/1.06 var(--font-display);
+  letter-spacing: var(--tracking-display);
+  color: var(--ink-950);
+  white-space: nowrap; cursor: pointer;
+  opacity: var(--o, .22);
+  /* afastar no eixo Z e só então girar: o item recua e vira a face,
+     em vez de girar parado */
+  transform: translateZ(var(--tz, -340px)) rotateY(var(--ry, 0deg)) scale(var(--s, 1));
+  transform-origin: center;
+  filter: blur(var(--b, 0px));
+  transition: opacity .25s ease, color .25s ease, filter .2s linear;
+  will-change: transform, opacity;
+}
+.roda-item[aria-selected="true"] { color: var(--ink-950); }
+.roda-item:not([aria-selected="true"]):hover { opacity: .5; }
+
+.roda-dica {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin: 6px 0 0;
   font: var(--type-overline); letter-spacing: var(--tracking-overline);
-  text-transform: uppercase; color: var(--ink-500);
-  border-bottom-color: var(--border-default);
+  text-transform: uppercase; color: var(--ink-400);
+  transition: opacity .3s ease;
 }
-.lista a.linha { transition: var(--transition-control, all .18s ease); }
-.lista a.linha:hover { background: var(--ink-25); padding-left: 14px; padding-right: 14px; }
-.lista .nome { font: var(--weight-bold) clamp(19px, 2.1vw, 26px)/1.2 var(--font-display); letter-spacing: var(--tracking-heading); }
-.lista .marca-cat {
-  justify-self: start;
-  padding: 5px 12px; border: 1px solid var(--border-default); border-radius: 999px;
+.roda.girou .roda-dica { opacity: 0; }
+
+.roda-detalhe {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: 10px 18px;
+  margin-top: clamp(20px, 3vw, 34px);
+  min-height: 46px;
+}
+.roda-cat {
+  padding: 6px 13px; border: 1px solid var(--border-default); border-radius: 999px;
   font: var(--type-caption); color: var(--ink-600); white-space: nowrap;
 }
-.lista .qtd { font: var(--type-label); color: var(--ink-600); white-space: nowrap; }
-.lista .ir { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border-default); display: grid; place-items: center; justify-self: end; }
-.lista a.linha:hover .ir { background: var(--atto-yellow); border-color: var(--atto-yellow); }
+.roda-qtd { font: var(--type-label); color: var(--ink-600); }
+
+@media (prefers-reduced-motion: reduce) {
+  /* sem o efeito de roda: todas as frentes no mesmo tamanho e legíveis */
+  .roda-item { opacity: 1 !important; transform: none !important; filter: none !important; font-size: clamp(20px, 2.6vw, 30px); }
+  .roda-trilho { scroll-behavior: auto; }
+}
 
 /* ── faixa amarela ──────────────────────────────────────────────────────── */
 /* O amarelo continua sendo a base; a foto entra pela direita e se dissolve
@@ -736,11 +805,6 @@ a { color: inherit; text-decoration: none; }
   .hamburger { display: grid; }
   .barra .espaco { flex: 1; }
   .cartao-flutuante { left: 0; bottom: -16px; }
-  .lista .cab { display: none; }
-  .lista a.linha { grid-template-columns: 1fr auto; row-gap: 8px; }
-  .lista .marca-cat { grid-row: 2; }
-  .lista .qtd { grid-row: 2; justify-self: end; }
-  .lista .ir { grid-row: 1; grid-column: 2; }
   .campos { grid-template-columns: 1fr; }
   /* A dobra vira uma coluna. A figura continua saindo pelo topo do painel,
      mas por outro caminho: empilhada ela é a primeira linha e está no fluxo
@@ -1050,7 +1114,7 @@ a { color: inherit; text-decoration: none; }
 </section>
 
 <!-- ══ CATÁLOGO (tabela) ══════════════════════════════════════════════════ -->
-<section class="bloco claro">
+<section class="bloco claro sem-cartao">
   <div class="interno">
     <div class="cabeca">
       <div>
@@ -1068,11 +1132,25 @@ a { color: inherit; text-decoration: none; }
       </div>
     </div>
 
-    <div class="lista" id="lista">
-      <div class="cab">
-        <span>Frente</span><span>Categoria</span><span>Itens</span><span></span>
+    <div class="roda" id="roda">
+      <div class="roda-trilho" id="roda-trilho" role="tablist" aria-label="Frentes do catálogo">
+        <!-- preenchido pelo script a partir de FRENTES -->
       </div>
-      <!-- preenchido pelo script a partir de FRENTES -->
+
+      <p class="roda-dica" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Gire para ver as frentes
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </p>
+
+      <div class="roda-detalhe" aria-live="polite">
+        <span class="roda-cat" id="roda-cat"></span>
+        <span class="roda-qtd" id="roda-qtd"></span>
+        <a href="produtos.html" class="btn btn-marca" id="roda-link">
+          Ver a ata
+          <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -1245,13 +1323,152 @@ document.getElementById("trilho").innerHTML = ATAS.map(([cat, nome, desc, img, s
     <span class="veu" aria-hidden="true"></span>
   </a>`).join("");
 
-document.getElementById("lista").insertAdjacentHTML("beforeend", FRENTES.map(([nome, cat, qtd, slug]) => `
-  <a class="linha" href="ata.html?ata=${esc(slug)}">
-    <span class="nome">${esc(nome)}</span>
-    <span class="marca-cat">${esc(cat)}</span>
-    <span class="qtd">${qtd} itens</span>
-    <span class="ir">${SETA_CANTO}</span>
-  </a>`).join(""));
+/* ─── Roda de frentes ─────────────────────────────────────────────────────
+   A escala de cada item sai da distância dele até o centro do trilho, lida a
+   cada quadro de rolagem. Não há estado a sincronizar: a posição da rolagem
+   já é o estado.                                                            */
+const roda = document.getElementById("roda");
+const rodaTrilho = document.getElementById("roda-trilho");
+
+rodaTrilho.innerHTML = FRENTES.map(([nome], i) => `
+  <button type="button" class="roda-item" role="tab" data-i="${i}"
+          aria-selected="${i === 0}">${esc(nome)}</button>`).join("");
+
+const itensRoda = [...rodaTrilho.querySelectorAll(".roda-item")];
+const rodaCat = document.getElementById("roda-cat");
+const rodaQtd = document.getElementById("roda-qtd");
+const rodaLink = document.getElementById("roda-link");
+
+let focoAtual = -1;
+
+const pintarRoda = () => {
+  const caixa = rodaTrilho.getBoundingClientRect();
+  const centro = caixa.left + caixa.width / 2;
+  // alcance da queda: além disso o item já está no tamanho mínimo
+  const alcance = Math.max(360, caixa.width * 0.56);
+
+  let maisPerto = 0, menorDist = Infinity;
+
+  itensRoda.forEach((el, i) => {
+    const r = el.getBoundingClientRect();
+    // distância COM sinal: o lado define para onde a face vira
+    const ds = (r.left + r.width / 2 - centro) / alcance;
+    const d = Math.abs(ds);
+    const a = Math.min(1.7, d);
+    // curva suave: cai rápido perto do centro e assenta nas pontas
+    const f = 1 - Math.min(1, d) * Math.min(1, d);
+
+    el.style.setProperty("--ry", (-Math.max(-1.7, Math.min(1.7, ds)) * 40).toFixed(1) + "deg");
+    el.style.setProperty("--tz", (-a * 190).toFixed(0) + "px");
+    el.style.setProperty("--s", (1 - a * 0.05).toFixed(3));
+    // queda lenta: o que importa é quantos nomes continuam legíveis na curva
+    el.style.setProperty("--o", (0.14 + 0.86 * (1 - Math.min(1, d * 0.72))).toFixed(3));
+    // desfoque só quando já está longe, para não custar caro no centro
+    el.style.setProperty("--b", a > 0.35 ? Math.min(2.4, (a - 0.35) * 2).toFixed(2) + "px" : "0px");
+
+    if (d < menorDist) { menorDist = d; maisPerto = i; }
+  });
+
+  if (maisPerto !== focoAtual) {
+    focoAtual = maisPerto;
+    const [nome, cat, qtd, slug] = FRENTES[maisPerto];
+    rodaCat.textContent = cat;
+    rodaQtd.textContent = `${qtd} itens`;
+    rodaLink.href = `ata.html?ata=${slug}`;
+    rodaLink.setAttribute("aria-label", `Ver a ata de ${nome}`);
+    itensRoda.forEach((el, i) => el.setAttribute("aria-selected", String(i === maisPerto)));
+  }
+};
+
+const centralizar = (i, suave = true) => {
+  const el = itensRoda[i];
+  if (!el) return;
+  const alvo = el.offsetLeft - (rodaTrilho.clientWidth - el.offsetWidth) / 2;
+  rodaTrilho.classList.toggle("arrastando", !suave);
+  encaixando = true;                       // mesma trava do encaixe automático
+  rodaTrilho.scrollLeft = alvo;
+  if (!suave) requestAnimationFrame(() => rodaTrilho.classList.remove("arrastando"));
+  setTimeout(() => { encaixando = false; pintarRoda(); }, suave ? 450 : 60);
+};
+
+/* Encaixe ao fim do giro. O snap nativo não resolve: proximity deixa a roda
+   descansar entre dois nomes, e nenhum fica nítido; mandatory cancela a
+   rolagem suave por atribuição de scrollLeft. Então o detent é feito à mão,
+   depois que a rolagem para. */
+let paradaRoda;
+// Trava indispensável: o encaixe rola até o item em foco, essa rolagem dispara
+// scroll, que reavalia o foco e reagenda outro encaixe. Sem a trava a roda
+// briga consigo mesma e nunca assenta — nenhum nome fica nítido.
+let encaixando = false;
+
+const agendarEncaixe = () => {
+  if (encaixando) return;
+  clearTimeout(paradaRoda);
+  paradaRoda = setTimeout(() => {
+    if (arrastando || encaixando) return;
+    const el = itensRoda[focoAtual];
+    if (!el) return;
+    const alvo = el.offsetLeft - (rodaTrilho.clientWidth - el.offsetWidth) / 2;
+    if (Math.abs(rodaTrilho.scrollLeft - alvo) < 2) return;
+    encaixando = true;
+    rodaTrilho.scrollLeft = alvo;
+    setTimeout(() => { encaixando = false; pintarRoda(); }, 450);
+  }, 120);
+};
+
+let rodaAgendada = false;
+// a centralização inicial também dispara scroll: sem esta trava, a dica some
+// antes de a pessoa ter girado qualquer coisa
+let giroDoUsuario = false;
+rodaTrilho.addEventListener("scroll", () => {
+  if (giroDoUsuario) roda.classList.add("girou");
+  agendarEncaixe();
+  if (rodaAgendada) return;
+  rodaAgendada = true;
+  requestAnimationFrame(() => { rodaAgendada = false; pintarRoda(); });
+}, { passive: true });
+
+// clicar numa frente traz ela para o centro; já centralizada, abre a ata
+itensRoda.forEach((el, i) => {
+  el.addEventListener("click", () => {
+    if (i === focoAtual) { location.href = rodaLink.href; return; }
+    centralizar(i);
+  });
+  // teclado: setas percorrem a roda, como em qualquer lista de abas
+  el.addEventListener("keydown", (e) => {
+    const passo = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+    if (!passo) return;
+    e.preventDefault();
+    const alvo = Math.max(0, Math.min(itensRoda.length - 1, i + passo));
+    centralizar(alvo);
+    itensRoda[alvo].focus();
+  });
+});
+
+// arrastar com o mouse, para quem não tem roda lateral no dispositivo
+let arrastando = false, xInicial = 0, scrollInicial = 0;
+rodaTrilho.addEventListener("pointerdown", (e) => {
+  if (e.pointerType === "touch") return;   // o toque já rola nativamente
+  arrastando = true; xInicial = e.clientX; scrollInicial = rodaTrilho.scrollLeft;
+  rodaTrilho.classList.add("arrastando");
+  rodaTrilho.setPointerCapture(e.pointerId);
+});
+rodaTrilho.addEventListener("pointermove", (e) => {
+  if (!arrastando) return;
+  rodaTrilho.scrollLeft = scrollInicial - (e.clientX - xInicial);
+});
+const soltar = () => { arrastando = false; rodaTrilho.classList.remove("arrastando"); agendarEncaixe(); };
+rodaTrilho.addEventListener("pointerup", soltar);
+rodaTrilho.addEventListener("pointercancel", soltar);
+
+addEventListener("resize", () => { pintarRoda(); centralizar(focoAtual, false); });
+centralizar(0, false);
+pintarRoda();
+
+// a partir daqui, qualquer rolagem é da pessoa
+for (const ev of ["wheel", "pointerdown", "touchstart", "keydown"]) {
+  rodaTrilho.addEventListener(ev, () => { giroDoUsuario = true; }, { passive: true, once: true });
+}
 
 /* A foto é absoluta para poder crescer até as bordas do card, então o ponto de
    partida da animação vem do vão que ela ocupa no fluxo. Medir é mais seguro do
@@ -1370,7 +1587,7 @@ if (!semMovimento && "IntersectionObserver" in window) {
     ["#atas .cabeca > *", "rev", 110],
     [".carta", "rev-f", 70],
     [".bloco.claro .cabeca > *", "rev", 110],
-    [".lista a.linha", "rev", 45],
+    [".roda-detalhe > *", "rev", 90],
     [".faixa .interno > *", "rev", 110],
     ["#contato .form-grade > *", "rev", 130]
   ];

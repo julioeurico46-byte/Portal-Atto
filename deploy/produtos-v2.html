@@ -20,6 +20,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=Instrument+Serif:ital@0;1&display=swap">
 
 <script src="assets/produtos-dados.js"></script>
+<!-- as atas entram para a busca alcançar o que está escrito nelas: título,
+     manchete e chamada da ata de origem de cada item -->
+<script src="assets/atas-dados.js"></script>
 
 <style>
 /* ══ Vitrine — variação 2 ═════════════════════════════════════════════════════
@@ -131,6 +134,39 @@ button, input, select, textarea { font-family: inherit; }
 
 /* ── filtros ────────────────────────────────────────────────────────────── */
 .filtros-caixa { position: sticky; top: 0; z-index: 8; background: var(--white); padding: 18px 0 14px; margin-bottom: clamp(24px, 3vw, 36px); border-bottom: 1px solid var(--border-subtle); }
+
+/* ── busca ──────────────────────────────────────────────────────────────── */
+.busca {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 16px; min-height: 52px; margin-bottom: 14px;
+  background: var(--white);
+  border: 1px solid var(--border-default); border-radius: 999px;
+  transition: var(--transition-control, all .18s ease);
+}
+.busca:focus-within { border-color: var(--ink-950); box-shadow: 0 0 0 3px rgba(0,0,0,.07); }
+.busca svg { flex: none; color: var(--ink-400); }
+.busca input {
+  flex: 1; min-width: 0; border: 0; outline: 0; background: transparent;
+  font: var(--type-body); color: var(--text-primary);
+}
+.busca input::placeholder { color: var(--ink-400); }
+/* o X nativo do type=search varia entre navegadores; usamos o nosso */
+.busca input::-webkit-search-cancel-button { display: none; }
+.busca .limpar {
+  flex: none; width: 30px; height: 30px; border-radius: 50%;
+  border: 0; background: var(--ink-100); color: var(--ink-700);
+  display: grid; place-items: center; cursor: pointer;
+}
+.busca .limpar:hover { background: var(--ink-200); }
+.busca .limpar[hidden] { display: none; }
+
+.aprox {
+  margin: 10px 0 0; padding: 10px 14px; border-radius: 12px;
+  background: var(--atto-yellow-wash); border: 1px solid var(--atto-yellow-tint);
+  font: var(--type-body-sm); color: var(--ink-800);
+}
+.aprox[hidden] { display: none; }
+mark { background: var(--atto-yellow-tint); color: inherit; padding: 0 2px; border-radius: 3px; }
 .filtros { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 2px; }
 .filtros::-webkit-scrollbar { display: none; }
 .filtros button {
@@ -285,8 +321,19 @@ button, input, select, textarea { font-family: inherit; }
   <div class="interno">
 
     <div class="filtros-caixa">
+      <div class="busca">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label for="busca" class="visualmente-oculto" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Buscar no catálogo</label>
+        <input id="busca" type="search" autocomplete="off" spellcheck="false"
+               placeholder="Buscar por nome, função ou ata — autismo, quadra, mochila…">
+        <button type="button" class="limpar" id="limpar" hidden aria-label="Limpar busca">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
       <div class="filtros" id="filtros" role="group" aria-label="Filtrar por frente"></div>
       <p class="conta" id="conta" aria-live="polite"></p>
+      <p class="aprox" id="aprox" hidden></p>
     </div>
 
     <div class="grade" id="grade"></div>
@@ -364,6 +411,167 @@ for (const trilho of document.querySelectorAll(".trilho-mov")) {
   trilho.innerHTML = `<span class="grupo">${grupo}</span><span class="grupo" aria-hidden="true">${grupo}</span>`;
 }
 
+/* ═══ Busca ═══════════════════════════════════════════════════════════════
+   Busca por função, não só por nome exato. Três camadas:
+
+   1. Normalização — tira acento e caixa, para "mochila" achar "Mochila" e
+      "sensorial" achar "Integração Sensorial".
+   2. Índice por item — além do nome, entram a especificação, a categoria e o
+      que está escrito na ata de origem (título, manchete e chamada). É o que
+      faz "autismo" chegar na sala sensorial mesmo sem a palavra estar em
+      nenhum nome de produto.
+   3. Dicionário de intenção — o município busca pelo problema ("quadra",
+      "cadeirante", "merenda"), não pelo nome de catálogo ("piso modular",
+      "mesa acessível", "refeitório"). O mapa abaixo faz essa ponte.
+
+   A pontuação exige que TODOS os termos digitados casem em algum campo. Se
+   nada casar com todos, uma segunda passada afrouxa para qualquer termo e
+   avisa que o resultado é aproximado — melhor que devolver vazio.          */
+
+const semAcento = (s) => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+// esquerda: como a pessoa pensa · direita: como o catálogo escreve
+const INTENCAO = {
+  autismo: ["sensorial", "tea", "neurodiver", "regulacao", "inclusiv"],
+  tea: ["autismo", "sensorial", "neurodiver"],
+  deficiencia: ["inclusiv", "acessiv", "adaptad", "neurodiver"],
+  inclusao: ["inclusiv", "acessiv", "sensorial", "neurodiver", "adaptad"],
+  cadeirante: ["acessiv", "cadeira de rodas", "adaptad"],
+  rodas: ["acessiv", "adaptad"],
+  cadeira: ["conjunto", "giratoria", "longarina", "assento"],
+  mesa: ["conjunto", "bancada", "refeitorio", "estacao"],
+  carteira: ["conjunto", "aluno", "prancheta"],
+  merenda: ["refeitorio", "coletivo", "alimentacao"],
+  cozinha: ["refeitorio", "alimentacao", "eletrodomestico"],
+  // "piso" é ambíguo em português — chão de sala e superfície de quadra.
+  // Usar "piso" como tradução de "quadra" trazia almofada de piso no topo.
+  quadra: ["esportiv", "superficie", "drenante", "indoor", "poliedric"],
+  piso: ["superficie", "drenante", "modular", "esportiv"],
+  esporte: ["esportiv", "educacao fisica", "quadra", "bau"],
+  parquinho: ["playground", "escorregador", "gangorra", "patio"],
+  brinquedo: ["playground", "pedagogic", "brincar", "ludic"],
+  computador: ["notebook", "desktop", "tablet", "informatica", "tecnologia"],
+  informatica: ["notebook", "tablet", "desktop", "tecnologia"],
+  internet: ["tecnologia", "notebook", "tablet"],
+  televisao: ["tela", "interativa", "lousa"],
+  tv: ["tela", "interativa", "lousa"],
+  lousa: ["tela", "interativa", "quadro"],
+  projetor: ["tela", "interativa"],
+  robotica: ["maker", "prototipagem", "eletronica"],
+  impressora: ["maker", "3d", "prototipagem"],
+  uniforme: ["camiseta", "calca", "bermuda", "agasalho", "tenis", "mochila", "polo"],
+  roupa: ["uniforme", "camiseta", "calca", "agasalho"],
+  calcado: ["tenis", "sapatilha", "botina", "coturno", "meia"],
+  mochila: ["uniforme", "escolar", "kit"],
+  material: ["kit", "escolar", "papelaria", "caderno"],
+  papelaria: ["kit", "material", "escolar"],
+  biblioteca: ["leitura", "livro", "estante", "paradidatic"],
+  livro: ["leitura", "paradidatic", "colecao", "cultura de paz"],
+  leitura: ["livro", "cantinho", "paradidatic"],
+  armario: ["guarda", "nicho", "organizador", "roupeiro", "estante"],
+  arquivo: ["aco", "gaveta", "guarda", "almoxarifado"],
+  almoxarifado: ["aco", "armario", "estante", "guarda"],
+  escalada: ["triangulo", "rampa", "alpinista", "trepa"],
+  espelho: ["espelhado", "acrilico"],
+  luz: ["led", "iluminacao", "fibra optica", "luminos"],
+  som: ["sonoro", "musical", "auditiv"],
+  tatil: ["textura", "sensorial", "tato"],
+  bebe: ["infantil", "pikler", "bercario", "primeira infancia"],
+  bercario: ["infantil", "pikler", "bebe"],
+  creche: ["infantil", "pikler", "bercario"],
+  bullying: ["convivencia", "socioemocional", "compasso", "cultura de paz"],
+  emocional: ["socioemocional", "compasso", "convivencia"],
+  seguranca: ["panico", "camera", "cidade segura", "guarda"],
+  guarda: ["uniforme profissional", "seguranca", "municipal"],
+  limpeza: ["uniforme profissional", "alta visibilidade", "urbana"],
+  saude: ["jaleco", "samu", "hospitalar", "uniforme profissional"],
+  hospital: ["hospitalar", "saude", "jaleco"],
+  escritorio: ["corporativo", "estacao", "giratoria", "gaveteiro"],
+  prefeitura: ["corporativo", "profissional", "secretaria"]
+};
+
+const ATA_DE = (slug) => (typeof ATAS !== "undefined" && ATAS[slug]) || {};
+
+// índice montado uma vez: buscar não deve reprocessar 541 itens a cada tecla
+const INDICE = ITENS.map(([cat, nome, spec, , slug]) => {
+  const a = ATA_DE(slug);
+  return {
+    nome: semAcento(nome),
+    cat: semAcento(cat),
+    ata: semAcento([a.titulo, a.categoria].filter(Boolean).join(" ")),
+    spec: semAcento(spec),
+    sobre: semAcento([a.manchete, a.chamada].filter(Boolean).join(" "))
+  };
+});
+
+// peso por campo: o nome vale mais que o texto da ata
+const PESOS = { nome: 10, cat: 6, ata: 6, spec: 3, sobre: 2 };
+
+/* Três graus de casamento, e a diferença entre eles importa: sem isso
+   "quadra" casava com "Almofada Quadrada" tão forte quanto com "piso de
+   quadra", e o resultado vinha cheio de almofada. */
+const pontuaTermo = (reg, termo) => {
+  let melhor = 0;
+  for (const campo in PESOS) {
+    const texto = reg[campo];
+    if (!texto) continue;
+    let i = texto.indexOf(termo);
+    while (i >= 0) {
+      const antes = i === 0 || !/[a-z0-9]/.test(texto[i - 1]);
+      const depois = !/[a-z0-9]/.test(texto[i + termo.length] || " ");
+      const grau = antes && depois ? 1        // palavra inteira
+                 : antes           ? 0.45     // começo de palavra
+                 :                   0.2;     // miolo de palavra
+      melhor = Math.max(melhor, PESOS[campo] * grau);
+      if (grau === 1) break;
+      i = texto.indexOf(termo, i + 1);
+    }
+  }
+  return melhor;
+};
+
+const pontuar = (reg, termos, exigirTodos) => {
+  let total = 0, casaram = 0;
+  for (const t of termos) {
+    const traducao = INTENCAO[t];
+    // Quando o termo está no dicionário, a pessoa falou pelo problema e não
+    // pelo nome de catálogo: a tradução passa a valer mais que a palavra
+    // literal. É o que faz "quadra" trazer piso esportivo e não almofada.
+    const pesoLiteral = traducao ? 0.45 : 1;
+    const pesoTraduzido = traducao ? 1 : 0.8;
+
+    let p = pontuaTermo(reg, t) * pesoLiteral;
+    for (const v of traducao || []) p = Math.max(p, pontuaTermo(reg, semAcento(v)) * pesoTraduzido);
+
+    if (p > 0) casaram++;
+    total += p;
+  }
+  if (exigirTodos && casaram < termos.length) return 0;
+  return casaram === 0 ? 0 : total;
+};
+
+/* A busca trabalha sobre índices, nunca procurando o item dentro de ITENS:
+   um indexOf por item seria 541² comparações a cada tecla. */
+const buscar = (consulta, baseIdx) => {
+  const termos = semAcento(consulta).split(/\s+/).filter((t) => t.length >= 2);
+  if (!termos.length) return { idx: baseIdx, aproximado: false };
+
+  const pontuados = (exigirTodos) => {
+    const out = [];
+    for (const i of baseIdx) {
+      const p = pontuar(INDICE[i], termos, exigirTodos);
+      if (p > 0) out.push([i, p]);
+    }
+    out.sort((a, b) => b[1] - a[1]);
+    return out.map(([i]) => i);
+  };
+
+  const exatos = pontuados(true);
+  if (exatos.length) return { idx: exatos, aproximado: false };
+  // nada casou com todos os termos: afrouxa e avisa
+  return { idx: pontuados(false), aproximado: true };
+};
+
 /* ─── Filtros ──────────────────────────────────────────────────────────── */
 const elFiltros = document.getElementById("filtros");
 const elGrade = document.getElementById("grade");
@@ -385,7 +593,7 @@ elFiltros.innerHTML = CATEGORIAS.map((c) => `
    são 541 nós, 541 observadores de imagem e um layout gigante. A vitrine
    rende em fatias e o botão continua de onde parou.                        */
 const FATIA = 48;
-let lista = [];
+let lista = [];        // índices em ITENS, já filtrados e ordenados
 let mostrados = 0;
 
 const cartaHtml = ([cat, nome, spec, img, slug, ajuste], i) => {
@@ -396,7 +604,7 @@ const cartaHtml = ([cat, nome, spec, img, slug, ajuste], i) => {
     ? "object-fit:contain; padding:10px; background:var(--white); border:1px solid var(--border-subtle)"
     : "object-fit:cover; background:var(--ink-25)";
   return `
-  <a class="carta" href="ata.html?ata=${esc(slug)}">
+  <a class="carta" href="ata-v2.html?ata=${esc(slug)}">
     <span class="cat">${esc(cat)}</span>
     <img class="capa-item" loading="${i < 12 ? "eager" : "lazy"}" decoding="async"
          src="assets/img/${esc(img)}" alt="${esc(nome)}" width="420" height="315" style="${estilo}">
@@ -408,22 +616,44 @@ const cartaHtml = ([cat, nome, spec, img, slug, ajuste], i) => {
 
 const pintarFatia = () => {
   const fim = Math.min(lista.length, mostrados + FATIA);
-  const pedaco = lista.slice(mostrados, fim).map((it, k) => cartaHtml(it, mostrados + k)).join("");
+  const pedaco = lista.slice(mostrados, fim).map((i, k) => cartaHtml(ITENS[i], mostrados + k)).join("");
   elGrade.insertAdjacentHTML("beforeend", pedaco);
   mostrados = fim;
 
   const restam = lista.length - mostrados;
   elMais.hidden = restam <= 0;
   btnMaisTexto.textContent = restam > FATIA ? `Mostrar mais ${FATIA}` : `Mostrar os últimos ${restam}`;
+  // vazio não ganha linha de contagem: quem explica é o bloco .vazio, que
+  // sabe se foi a frente ou a busca que não devolveu nada
   elConta.textContent = lista.length === 0
-    ? "Nenhum item nesta frente"
+    ? ""
     : `Mostrando ${mostrados} de ${lista.length} ${lista.length === 1 ? "item" : "itens"}`;
 };
 
-const aplicar = (novo) => {
-  filtro = novo;
+const elBusca = document.getElementById("busca");
+const elLimpar = document.getElementById("limpar");
+const elAprox = document.getElementById("aprox");
+
+const aplicar = () => {
   for (const b of elFiltros.children) b.setAttribute("aria-pressed", String(b.dataset.cat === filtro));
-  lista = filtro === "Todos" ? ITENS : ITENS.filter((i) => i[0] === filtro);
+
+  // primeiro a frente, depois a busca dentro dela
+  const base = [];
+  for (let i = 0; i < ITENS.length; i++) if (filtro === "Todos" || ITENS[i][0] === filtro) base.push(i);
+
+  const consulta = elBusca.value.trim();
+  const r = buscar(consulta, base);
+  lista = r.idx;
+
+  elLimpar.hidden = consulta === "";
+  elAprox.hidden = !(r.aproximado && lista.length > 0);
+  if (!elAprox.hidden) {
+    elAprox.textContent = `Nenhum item casa com tudo que você escreveu. Mostrando o que se aproxima de "${consulta}".`;
+  }
+  elVazio.textContent = consulta
+    ? `Nada encontrado para "${consulta}"${filtro !== "Todos" ? ` em ${filtro}` : ""}.`
+    : "Nenhum item nesta frente ainda.";
+
   elGrade.innerHTML = "";
   mostrados = 0;
   elVazio.hidden = lista.length > 0;
@@ -433,10 +663,21 @@ const aplicar = (novo) => {
 elFiltros.addEventListener("click", (e) => {
   const b = e.target.closest("button");
   if (!b || b.dataset.cat === filtro) return;
-  aplicar(b.dataset.cat);
+  filtro = b.dataset.cat;
+  aplicar();
   // volta para o topo da vitrine, não da página: a barra de filtros é sticky
   document.getElementById("vitrine").scrollIntoView({ block: "start" });
 });
+
+/* digitar não dispara a busca a cada tecla: 541 itens × termos × campos a
+   cada letra trava o campo em teclado rápido */
+let aguardando;
+elBusca.addEventListener("input", () => {
+  clearTimeout(aguardando);
+  aguardando = setTimeout(aplicar, 160);
+});
+elBusca.addEventListener("keydown", (e) => { if (e.key === "Escape") { elBusca.value = ""; aplicar(); } });
+elLimpar.addEventListener("click", () => { elBusca.value = ""; elBusca.focus(); aplicar(); });
 
 btnMais.addEventListener("click", () => {
   const antes = elGrade.children.length;
@@ -445,7 +686,7 @@ btnMais.addEventListener("click", () => {
   elGrade.children[antes]?.focus?.();
 });
 
-aplicar(filtro);
+aplicar();
 
 /* ─── Menu ─────────────────────────────────────────────────────────────── */
 const btnMenu = document.getElementById("btn-menu");

@@ -910,7 +910,7 @@ a { color: inherit; text-decoration: none; }
       <nav class="menu" id="menu" aria-label="Principal">
         <a href="#topo" aria-current="page">Home</a>
         <a href="#atas">Atas de registro</a>
-        <a href="produtos.html">Produtos</a>
+        <a href="produtos-v2.html">Produtos</a>
         <a href="quem-somos.html">Quem somos</a>
         <a href="#contato">Contato</a>
       </nav>
@@ -943,7 +943,7 @@ a { color: inherit; text-decoration: none; }
         <p style="font:var(--type-body-sm); color:var(--ink-600); margin:5px 0 0">
           itens registrados em ata, cada um com ficha técnica e documentação de adesão.
         </p>
-        <a href="produtos.html" class="btn btn-marca" style="margin-top:16px">
+        <a href="produtos-v2.html" class="btn btn-marca" style="margin-top:16px">
           Ver o catálogo
           <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
         </a>
@@ -1061,7 +1061,7 @@ a { color: inherit; text-decoration: none; }
         <span class="etiqueta"><span class="ponto"></span>ARP 016/2024 · vigente até 08/2027</span>
         <h3>Do tênis à meia<br>antiderrapante</h3>
         <p>Uniforme, mochila e kit de material com a identidade do município. Grade fechada por escola e entrega antes do primeiro dia de aula.</p>
-        <a href="ata.html?ata=uniformes-escolares" class="btn btn-preto">
+        <a href="ata-v2.html?ata=uniformes-escolares" class="btn btn-preto">
           Ver a ata
           <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
         </a>
@@ -1103,7 +1103,7 @@ a { color: inherit; text-decoration: none; }
                alt="Mochila escolar com rodinhas e alça telescópica" width="420" height="420">
           <span class="destaque-nome">Mochila com rodinhas</span>
           <span class="destaque-sub">Alça telescópica e bolso lateral</span>
-          <a href="ata.html?ata=uniformes-escolares" class="destaque-cta">
+          <a href="ata-v2.html?ata=uniformes-escolares" class="destaque-cta">
             Ver na ata
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
           </a>
@@ -1125,7 +1125,7 @@ a { color: inherit; text-decoration: none; }
         <p class="apoio secundario" style="margin:0 0 20px">
           Nada de catálogo genérico: cada item do portal foi lido da ata de origem, com foto própria, especificação e o link para o documento que o registra.
         </p>
-        <a href="produtos.html" class="btn btn-marca">
+        <a href="produtos-v2.html" class="btn btn-marca">
           Ver todos os produtos
           <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
         </a>
@@ -1146,7 +1146,7 @@ a { color: inherit; text-decoration: none; }
       <div class="roda-detalhe" aria-live="polite">
         <span class="roda-cat" id="roda-cat"></span>
         <span class="roda-qtd" id="roda-qtd"></span>
-        <a href="produtos.html" class="btn btn-marca" id="roda-link">
+        <a href="produtos-v2.html" class="btn btn-marca" id="roda-link">
           Ver a ata
           <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
         </a>
@@ -1241,7 +1241,7 @@ a { color: inherit; text-decoration: none; }
       <nav aria-label="Rodapé">
         <a href="#topo">Home</a>
         <a href="#atas">Atas de registro</a>
-        <a href="produtos.html">Produtos</a>
+        <a href="produtos-v2.html">Produtos</a>
         <a href="quem-somos.html">Quem somos</a>
         <a href="#contato">Contato</a>
       </nav>
@@ -1313,7 +1313,7 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
 const SETA_CANTO = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>';
 
 document.getElementById("trilho").innerHTML = ATAS.map(([cat, nome, desc, img, slug], i) => `
-  <a class="carta" href="ata.html?ata=${esc(slug)}">
+  <a class="carta" href="ata-v2.html?ata=${esc(slug)}">
     <span class="cat">${esc(cat)}</span>
     <h3>${esc(nome)}</h3>
     <div class="capa-vao" aria-hidden="true"></div>
@@ -1374,7 +1374,7 @@ const pintarRoda = () => {
     const [nome, cat, qtd, slug] = FRENTES[maisPerto];
     rodaCat.textContent = cat;
     rodaQtd.textContent = `${qtd} itens`;
-    rodaLink.href = `ata.html?ata=${slug}`;
+    rodaLink.href = `ata-v2.html?ata=${slug}`;
     rodaLink.setAttribute("aria-label", `Ver a ata de ${nome}`);
     itensRoda.forEach((el, i) => el.setAttribute("aria-selected", String(i === maisPerto)));
   }

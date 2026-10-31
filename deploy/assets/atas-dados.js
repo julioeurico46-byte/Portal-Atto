@@ -343,21 +343,20 @@ const ATAS = {
   }
 };
 
-// Playgrounds saiu de brinquedos-educacionais e virou ata própria. Entrada mínima só para
-// o link da vitrine resolver — o conteúdo entra quando montarmos a página dessa ata.
+// Playgrounds. Conteúdo e fotos do catálogo CIMAMS 2026 — Brink Mobil,
+// ARP 049-2026. Saiu de brinquedos-educacionais e virou ata própria.
 ATAS["playgrounds"] = {
   categoria: "Playground e pátio", titulo: "Playgrounds",
-  selos: ["Programa em estruturação", "Consulte a ata aplicável", "Lei 14.133/2021"],
-  manchete: "Estruturas de brincar para o pátio da escola",
-  chamada: "Playground modular, casinha, gangorra, barco pirata e trave, em polietileno para área externa.",
+  manchete: "O pátio que a criança quer usar no recreio",
+  chamada: "Playground modular em polietileno, estruturas em madeira plástica, gangorras, gira-gira e casinha — instalados pela nossa equipe.",
   imagem: "assets/img/play-modular-01.jpeg", alt: "Playground modular com torre, escorregador e túnel instalado em área externa",
-  dados: [["Aplicação", "Pátio e área externa"], ["Material", "Polietileno rotomoldado"], ["Atende", "Educação infantil e fundamental"], ["Entrega", "Instalado pela nossa equipe"]],
-  sobreTitulo: "O pátio que a criança quer usar no recreio",
-  sobreTexto: "Estruturas de brincar em polietileno, dimensionadas para pátio escolar e instaladas pela nossa equipe. Esta página ainda será detalhada a partir do catálogo da ata.",
-  blocos: [["01", "Estruturas", "Playground modular com torre, escorregador, túnel e escalada."], ["02", "Brinquedos", "Casinha, gangorra, barco pirata e trave de futebol."], ["03", "Instalação", "Montagem no local, sobre superfície de impacto."]],
-  tituloGaleria: "Itens da ata",
-  galeria: [["assets/img/play-modular-01.jpeg", "Playground modular com torre e escorregador"], ["assets/img/play-casinha.jpeg", "Casinha infantil em polietileno"], ["assets/img/play-barco.jpeg", "Barco pirata de escalada"], ["assets/img/play-gangorra.jpeg", "Gangorra em polietileno"]],
-  itens: ["Playground modular", "Casinha infantil", "Gangorra", "Gangorra jacaré", "Barco pirata", "Trave de futebol infantil"],
+  dados: [["Ata", "ARP 049-2026 CIMAMS, assinada em 08/09/2026"], ["Materiais", "Polietileno rotomoldado e madeira plástica"], ["Atende", "Educação infantil e fundamental"], ["Entrega", "Instalado pela nossa equipe"]],
+  sobreTitulo: "Equipamento de pátio aguenta sol, chuva e recreio",
+  sobreTexto: "O que derruba playground de escola não é o uso, é o material: metal enferruja na chuva, madeira tratada racha no sol e precisa de manutenção todo ano. A ata trabalha com polietileno rotomoldado e madeira plástica, que não enferrujam, não lascam e aceitam lavagem. As peças são modulares, então o mesmo pátio pode crescer por etapas conforme o orçamento.",
+  blocos: [["Modular", "Torres e escorregadores", "Conjuntos com torre, escorregador reto e espiral, túnel de passagem, escada e rampa de escalada, combináveis entre si."], ["Movimento", "Gangorra e gira-gira", "Gangorra de dois e quatro lugares, cavalinho de mola, gira-gira e balanço — as peças que a criança pequena usa sozinha."], ["Faz de conta", "Casinha e barco", "Casinha com porta e janela, barco pirata de escalada e estruturas em madeira plástica com cobertura."]],
+  tituloGaleria: "Os equipamentos da ata",
+  galeria: [["assets/img/play-modular-01.jpeg", "Playground modular instalado em área externa com grama"], ["assets/img/play-modular-slide.jpeg", "Conjunto modular com escorregador e balanço"], ["assets/img/play-modular-tunel.jpeg", "Conjunto modular com túnel de passagem e escalada"], ["assets/img/play-madeira-torres.jpeg", "Estrutura em madeira plástica com várias torres e escorregadores"], ["assets/img/play-madeira-palhoca.jpeg", "Playground em madeira plástica com cobertura e túnel"], ["assets/img/play-madeira-balanco.jpeg", "Balanço em madeira plástica com estrutura de barco"], ["assets/img/play-giragira.jpeg", "Gira-gira em polietileno rotomoldado"], ["assets/img/play-casinha.jpeg", "Casinha infantil em polietileno"]],
+  itens: ["Playground modular", "Conjunto com escorregador", "Conjunto com túnel", "Estrutura em madeira plástica", "Torre com cobertura", "Balanço", "Gangorra 2 lugares", "Gangorra 4 lugares", "Cavalinho de mola", "Gira-gira", "Casinha infantil", "Barco pirata", "Trave de futebol"],
   formTitulo: "Quantas escolas recebem playground",
   formPlaceholder: "Escolas, área disponível no pátio e faixa etária atendida"
 };

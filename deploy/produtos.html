@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Produtos — Portal Atto</title>
-<meta name="description" content="Todos os itens registrados em ata, um por um: mobiliário escolar, pedagógico, socioemocional, espumado, uniformes, inclusão e tecnologia.">
-<meta name="theme-color" content="#000000">
+<meta name="description" content="Todos os itens registrados em ata de registro de preços, um por um, com ficha técnica e a ata de origem.">
+<meta name="theme-color" content="#101012">
 <link rel="icon" href="assets/brand/logo-mark.png">
 <link rel="canonical" href="https://portal-atto.vercel.app/produtos">
 <meta name="robots" content="index,follow,max-image-preview:large">
@@ -13,225 +13,747 @@
 <meta property="og:site_name" content="Portal Atto">
 <meta property="og:url" content="https://portal-atto.vercel.app/produtos">
 <meta property="og:title" content="Produtos — Portal Atto">
-<meta property="og:description" content="Todos os itens registrados em ata, um por um: mobiliário escolar, pedagógico, socioemocional, espumado, uniformes, inclusão e tecnologia.">
+<meta property="og:description" content="Todos os itens registrados em ata de registro de preços, um por um, com ficha técnica e a ata de origem.">
 <meta property="og:image" content="https://portal-atto.vercel.app/assets/img/mobiliario-sala.jpeg">
 <meta property="og:image:alt" content="Sala de aula equipada com conjuntos escolares">
 <meta property="og:locale" content="pt_BR">
 <meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/colors.css">
+<link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/typography.css">
+<link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/radius.css">
+<link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/elevation.css">
+<link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/motion.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=Instrument+Serif:ital@0;1&display=swap">
+
 <script src="assets/produtos-dados.js"></script>
-<script src="./support.js"></script>
+<!-- as atas entram para a busca alcançar o que está escrito nelas: título,
+     manchete e chamada da ata de origem de cada item -->
+<script src="assets/atas-dados.js"></script>
+
+<style>
+/* ══ Vitrine ═════════════════════════════════════════════════════
+   Mesma gramática das outras páginas. Os 541 itens vêm de assets/produtos-dados.js,
+   o mesmo arquivo que o produtos.html lê.
+
+   Decisão de escala: 541 cards não entram de uma vez. A página rende em
+   fatias conforme a pessoa desce — ver "mostrarMais" no script.             */
+
+:root {
+  --fonte-titulo: "Instrument Serif", "Playfair Display", Georgia, serif;
+  --pagina: #ECEDEF;
+  --raio-bloco: 32px;
+  --respiro: clamp(12px, 1.2vw, 18px);
+  --coluna: 1240px;
+  --pad-bloco: clamp(24px, 5vw, 76px);
+
+  --text-body-lg: 18px;
+  --text-body: 16px;
+  --text-body-sm: 14px;
+  --text-caption: 13px;
+  --text-overline: 12px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--pagina); color: var(--text-primary); font: var(--type-body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font-family: inherit; }
+:where(a, button, input, select, textarea):focus-visible { outline: 3px solid var(--ink-950); outline-offset: 3px; border-radius: 6px; }
+.escuro :where(a, button, input, select, textarea):focus-visible { outline-color: var(--atto-yellow); }
+
+.bloco { margin: var(--respiro); border-radius: var(--raio-bloco); padding: var(--pad-bloco); overflow: hidden; position: relative; }
+.bloco > .interno { max-width: var(--coluna); margin: 0 auto; }
+.claro { background: var(--white); }
+.escuro { background: var(--ink-950); color: var(--white); }
+.escuro .secundario { color: rgba(255,255,255,.68); }
+.secundario { color: var(--text-secondary); }
+.sem-cartao { margin: 0; border-radius: 0; padding-block: clamp(44px, 6vw, 86px); }
+
+.etiqueta {
+  display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px;
+  border: 1px solid var(--border-default); border-radius: 999px;
+  font: var(--type-overline); letter-spacing: var(--tracking-overline);
+  text-transform: uppercase; color: var(--ink-600); background: var(--white);
+}
+.escuro .etiqueta { border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.80); background: rgba(255,255,255,.05); }
+.etiqueta .ponto { width: 6px; height: 6px; border-radius: 50%; background: var(--atto-yellow); flex: none; }
+
+.titulo { font: var(--weight-black) clamp(32px, 4.8vw, 58px)/1.08 var(--font-display); letter-spacing: var(--tracking-display); margin: 16px 0 0; text-wrap: balance; }
+.titulo-md { font: var(--weight-black) clamp(26px, 3.4vw, 40px)/1.1 var(--font-display); letter-spacing: var(--tracking-display); margin: 14px 0 0; text-wrap: balance; }
+.realce { color: var(--atto-yellow); font-family: var(--fonte-titulo); font-style: italic; font-weight: 400; font-size: 1.06em; letter-spacing: -0.005em; }
+
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 7px 7px 7px 20px; border-radius: 999px; border: 1px solid transparent; font: var(--type-label); cursor: pointer; white-space: nowrap; transition: var(--transition-control, all .18s ease); }
+.btn .seta { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; flex: none; transition: transform .18s ease; }
+.btn:hover .seta { transform: translate(2px, -2px); }
+.btn-marca { background: var(--atto-yellow); color: var(--ink-1000); }
+.btn-marca .seta { background: var(--ink-1000); color: var(--atto-yellow); }
+.btn-marca:hover { background: var(--atto-yellow-press); }
+.btn-preto { background: var(--ink-1000); color: var(--white); }
+.btn-preto .seta { background: var(--atto-yellow); color: var(--ink-1000); }
+.btn-contorno { border-color: var(--border-default); color: var(--ink-950); padding-right: 20px; background: transparent; }
+.escuro .btn-contorno { border-color: rgba(255,255,255,.26); color: var(--white); }
+.escuro .btn-contorno:hover { background: rgba(255,255,255,.08); }
+.circulo { width: 44px; height: 44px; flex: none; border-radius: 50%; border: 1px solid var(--border-default); background: transparent; color: inherit; display: grid; place-items: center; cursor: pointer; }
+.escuro .circulo { border-color: rgba(255,255,255,.26); }
+
+.barra { display: flex; align-items: center; gap: 20px; position: relative; z-index: 3; }
+.barra .marca { height: 30px; width: auto; }
+.menu { display: flex; align-items: center; gap: 2px; padding: 5px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: 999px; backdrop-filter: blur(10px); }
+.menu a { padding: 9px 16px; border-radius: 999px; font: var(--type-label); color: rgba(255,255,255,.74); transition: var(--transition-control, all .18s ease); }
+.menu a:hover { color: var(--white); background: rgba(255,255,255,.10); }
+.menu a[aria-current] { color: var(--ink-1000); background: var(--white); }
+.hamburger { display: none; }
+
+/* ── capa ───────────────────────────────────────────────────────────────── */
+.capa { margin: 0; border-radius: 0; padding: clamp(18px, 3vw, 34px) var(--pad-bloco) 0; }
+.capa-fundo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.capa-fundo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.capa-veu {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(100deg, rgba(16,16,18,.97) 0%, rgba(16,16,18,.93) 30%, rgba(16,16,18,.58) 48%, rgba(16,16,18,.30) 64%, rgba(16,16,18,.55) 100%),
+    linear-gradient(to bottom, rgba(16,16,18,.92) 0%, rgba(16,16,18,.30) 20%, rgba(16,16,18,.24) 56%, rgba(16,16,18,.88) 88%, var(--ink-950) 100%);
+}
+.capa-grade { position: relative; z-index: 2; padding: clamp(36px, 5vw, 70px) 0 clamp(30px, 4vw, 48px); max-width: 740px; }
+.capa p.lead { font: var(--type-body-lg); color: rgba(255,255,255,.80); margin: 20px 0 0; max-width: 52ch; text-wrap: pretty; }
+.capa .acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+
+.numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(14px, 2.6vw, 40px); border-top: 1px solid rgba(255,255,255,.14); padding: clamp(22px, 3vw, 32px) 0 clamp(60px, 6vw, 76px); position: relative; z-index: 2; }
+.numeros .item { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.numeros .n { font: var(--weight-black) clamp(26px, 3.2vw, 38px)/1 var(--font-display); letter-spacing: var(--tracking-display); }
+.numeros .r { font: var(--type-body-sm); color: rgba(255,255,255,.58); }
+
+/* ── esteira ────────────────────────────────────────────────────────────── */
+.esteira { position: relative; z-index: 2; overflow: hidden; padding: 30px 0; margin: -58px 0 -46px; }
+.faixa-mov { overflow: hidden; width: 108%; margin-left: -4%; padding: 13px 0; border-block: 1px solid rgba(0,0,0,.14); }
+.faixa-mov.clara { background: var(--atto-yellow); color: var(--ink-1000); transform: rotate(-1.8deg); }
+.faixa-mov.escura { background: var(--ink-950); color: var(--white); transform: rotate(1.6deg); margin-top: -14px; border-color: rgba(255,255,255,.12); }
+.trilho-mov { display: flex; width: max-content; animation: correr 44s linear infinite; }
+.faixa-mov.escura .trilho-mov { animation-duration: 52s; animation-direction: reverse; }
+.faixa-mov:hover .trilho-mov { animation-play-state: paused; }
+@keyframes correr { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.trilho-mov .grupo { display: flex; flex: none; }
+.trilho-mov .termo { display: inline-flex; align-items: center; gap: 22px; padding-right: 22px; font: var(--weight-bold) clamp(12px, 1.25vw, 15px)/1 var(--font-sans); letter-spacing: .13em; text-transform: uppercase; white-space: nowrap; }
+.trilho-mov .losango { font-size: .72em; opacity: .55; }
+.faixa-mov.escura .losango { color: var(--atto-yellow); opacity: 1; }
+
+/* ── filtros ────────────────────────────────────────────────────────────── */
+.filtros-caixa { position: sticky; top: 0; z-index: 8; background: var(--white); padding: 18px 0 14px; margin-bottom: clamp(24px, 3vw, 36px); border-bottom: 1px solid var(--border-subtle); }
+
+/* ── busca ──────────────────────────────────────────────────────────────── */
+.busca {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 16px; min-height: 52px; margin-bottom: 14px;
+  background: var(--white);
+  border: 1px solid var(--border-default); border-radius: 999px;
+  transition: var(--transition-control, all .18s ease);
+}
+.busca:focus-within { border-color: var(--ink-950); box-shadow: 0 0 0 3px rgba(0,0,0,.07); }
+.busca svg { flex: none; color: var(--ink-400); }
+.busca input {
+  flex: 1; min-width: 0; border: 0; outline: 0; background: transparent;
+  font: var(--type-body); color: var(--text-primary);
+}
+.busca input::placeholder { color: var(--ink-400); }
+/* o X nativo do type=search varia entre navegadores; usamos o nosso */
+.busca input::-webkit-search-cancel-button { display: none; }
+.busca .limpar {
+  flex: none; width: 30px; height: 30px; border-radius: 50%;
+  border: 0; background: var(--ink-100); color: var(--ink-700);
+  display: grid; place-items: center; cursor: pointer;
+}
+.busca .limpar:hover { background: var(--ink-200); }
+.busca .limpar[hidden] { display: none; }
+
+.aprox {
+  margin: 10px 0 0; padding: 10px 14px; border-radius: 12px;
+  background: var(--atto-yellow-wash); border: 1px solid var(--atto-yellow-tint);
+  font: var(--type-body-sm); color: var(--ink-800);
+}
+.aprox[hidden] { display: none; }
+mark { background: var(--atto-yellow-tint); color: inherit; padding: 0 2px; border-radius: 3px; }
+.filtros { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 2px; }
+.filtros::-webkit-scrollbar { display: none; }
+.filtros button {
+  flex: none; padding: 10px 18px; border-radius: 999px;
+  border: 1px solid var(--border-default); background: var(--white);
+  font: var(--type-label); color: var(--ink-700); cursor: pointer; white-space: nowrap;
+  transition: var(--transition-control, all .18s ease);
+}
+.filtros button:hover { background: var(--ink-50); }
+.filtros button[aria-pressed="true"] { background: var(--ink-950); border-color: var(--ink-950); color: var(--white); }
+.conta { margin: 14px 0 0; font: var(--type-body-sm); color: var(--ink-500); }
+
+/* ── grade de cards ─────────────────────────────────────────────────────── */
+.grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 248px), 1fr)); gap: clamp(14px, 1.8vw, 22px); }
+/* Entrada por keyframes, não por transição: o card já usa transform no hover,
+   e duas transições na mesma propriedade se atropelam. A animação roda uma vez
+   e devolve o elemento ao estado base, deixando o hover livre.
+   O "backwards" segura o card invisível durante o atraso dele. */
+@keyframes entrar-carta {
+  from { opacity: 0; transform: translateY(14px) scale(.985); }
+  to   { opacity: 1; transform: none; }
+}
+.carta {
+  display: flex; flex-direction: column; gap: 11px;
+  background: var(--white); border: 1px solid var(--border-subtle);
+  border-radius: 18px; padding: 13px; overflow: hidden;
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+  animation: entrar-carta .44s cubic-bezier(.22,.61,.36,1) backwards;
+  animation-delay: var(--d, 0ms);
+}
+.carta:hover { transform: translateY(-4px); border-color: var(--border-default); box-shadow: 0 16px 34px rgba(0,0,0,.09); }
+.carta .capa-item { width: 100%; height: auto; aspect-ratio: 4 / 3; border-radius: 12px; }
+.carta .cat { align-self: flex-start; padding: 4px 10px; border: 1px solid var(--border-default); border-radius: 999px; font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--ink-600); }
+.carta h3 { font: var(--weight-bold) var(--text-body)/1.25 var(--font-sans); margin: 0; text-wrap: pretty; }
+.carta p { font: var(--type-body-sm); color: var(--ink-600); margin: 0; text-wrap: pretty; }
+.carta .pe { margin-top: auto; padding-top: 11px; border-top: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; gap: 8px; font: var(--type-label); color: var(--ink-950); }
+.carta .pe span { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border-default); display: grid; place-items: center; flex: none; transition: var(--transition-control, all .18s ease); }
+.carta:hover .pe span { background: var(--atto-yellow); border-color: var(--atto-yellow); }
+
+.mais { display: flex; justify-content: center; margin-top: clamp(28px, 4vw, 44px); }
+.vazio { padding: 48px 0; text-align: center; font: var(--type-body); color: var(--ink-500); }
+
+/* ── faixa amarela ──────────────────────────────────────────────────────── */
+.faixa { background: var(--atto-yellow); color: var(--ink-1000); position: relative; }
+.faixa .foto {
+  position: absolute; top: 0; right: 0; bottom: 0; width: min(58%, 680px); height: 100%;
+  object-fit: cover; object-position: 50% 42%; mix-blend-mode: multiply; opacity: .9; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
+          mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
+}
+.faixa .interno { position: relative; z-index: 1; display: grid; grid-template-columns: 1.4fr auto; gap: 32px; align-items: center; }
+.faixa h2 { font: var(--weight-black) clamp(26px, 3.4vw, 40px)/1.1 var(--font-display); letter-spacing: var(--tracking-display); margin: 0; text-wrap: balance; }
+.faixa p { margin: 12px 0 0; font: var(--type-body); color: rgba(0,0,0,.68); }
+
+/* ── rodapé ─────────────────────────────────────────────────────────────── */
+.rodape { padding-top: clamp(32px, 4vw, 48px); }
+.rodape .topo-rodape { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,.12); }
+.rodape nav { display: flex; flex-wrap: wrap; gap: 8px 22px; font: var(--type-label); }
+.rodape nav a { color: rgba(255,255,255,.7); }
+.rodape nav a:hover { color: var(--white); }
+.legal { font: var(--type-caption); line-height: 1.55; color: rgba(255,255,255,.64); margin: 24px 0 0; max-width: 72ch; text-wrap: pretty; }
+
+/* ── entrada por rolagem ────────────────────────────────────────────────── */
+.rev { opacity: 0; transform: translateY(20px); will-change: opacity, transform;
+  transition: opacity .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms), transform .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms); }
+.rev.vis { opacity: 1; transform: none; will-change: auto; }
+
+/* ── responsivo ─────────────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  :root { --raio-bloco: 24px; }
+  .faixa .interno { grid-template-columns: 1fr; }
+  .capa-veu { background: linear-gradient(to bottom, rgba(16,16,18,.90) 0%, rgba(16,16,18,.62) 38%, rgba(16,16,18,.88) 76%, var(--ink-950) 100%); }
+  .numeros { grid-template-columns: 1fr; gap: 20px; padding-bottom: 36px; }
+  .menu { display: none; }
+  .menu.aberto { display: flex; flex-direction: column; align-items: stretch; position: absolute; top: 58px; left: 0; right: 0; background: var(--ink-900); border-radius: 18px; padding: 10px; z-index: 5; }
+  .hamburger { display: grid; }
+  .esteira { margin: -26px 0 -24px; padding: 26px 0; }
+  .faixa-mov.clara { transform: rotate(-2.4deg); }
+  .faixa-mov.escura { transform: rotate(2.2deg); margin-top: -10px; }
+  .faixa-mov { width: 122%; margin-left: -11%; }
+  .faixa { padding-bottom: 150px; }
+  .faixa .foto { top: auto; bottom: 0; right: 0; left: 0; width: 100%; height: 172px;
+    -webkit-mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%); }
+  .grade { grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); }
+}
+@media (max-width: 560px) { .barra .cta-topo { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  .trilho-mov { animation: none; }
+  .faixa-mov { overflow-x: auto; scrollbar-width: none; }
+  .rev { opacity: 1; transform: none; }
+  /* os cards aparecem direto: sem subida, sem escalonamento, sem espera */
+  .carta { animation: none; }
+}
+</style>
 </head>
 <body>
-<x-dc>
-<helmet>
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/fonts.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/colors.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/typography.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/spacing.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/radius.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/elevation.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/motion.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/layout.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/base.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/styles.css">
-  <script src="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/_ds_bundle.js"></script>
-  <style>
-    html { scroll-behavior: smooth; }
-    body { margin: 0; overflow-x: hidden; background: var(--white); color: var(--text-primary); font: var(--type-body); -webkit-font-smoothing: antialiased; }
-    a { color: var(--text-link); text-decoration: none; }
-    a:hover { color: var(--text-link-hover); }
-    .atto-inverse a { color: var(--atto-yellow); }
-    .atto-inverse a:hover { color: var(--atto-yellow-tint); }
-    img { display: block; max-width: 100%; }
-  </style>
-</helmet>
 
-<div>
+<!-- ══ CAPA ═══════════════════════════════════════════════════════════════ -->
+<header class="bloco escuro capa" id="topo">
+  <div class="capa-fundo">
+    <img fetchpriority="high" decoding="async" src="assets/img/mobiliario-sala-aula.jpeg"
+         alt="Sala de aula equipada com conjuntos entregues pela Atto" width="1600" height="900">
+    <div class="capa-veu"></div>
+  </div>
 
-  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: rgba(255,255,255,.86); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-subtle)">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 10px clamp(16px, 4vw, 32px); height: 72px; display: flex; align-items: center; gap: clamp(12px, 3vw, 40px); flex-wrap: nowrap">
-      <a href="index.html" style="display: flex; align-items: center; flex: 0 0 auto">
-        <img src="assets/brand/logo-lockup-black.png" alt="Portal Atto" style="height: 30px; width: auto">
+  <div class="interno">
+    <div class="barra">
+      <a href="index.html" aria-label="Portal Atto — início">
+        <img class="marca" src="assets/brand/logo-lockup-reversed.png" alt="Portal Atto" width="108" height="30">
       </a>
-      <nav style="{{ navEstilo }}">
-        <a href="index.html" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Home</a>
-        <a href="index.html#atas" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Atas de registro</a>
-        <a href="produtos.html" style="font: var(--type-label); color: var(--ink-950)">Produtos</a>
-        <a href="quem-somos.html" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Quem somos</a>
-        <a href="index.html#contato" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Contato</a>
+      <div style="flex:1"></div>
+      <nav class="menu" id="menu" aria-label="Principal">
+        <a href="index.html">Home</a>
+        <a href="index.html#atas">Atas de registro</a>
+        <a href="produtos.html" aria-current="page">Produtos</a>
+        <a href="quem-somos.html">Quem somos</a>
+        <a href="index.html#contato">Contato</a>
       </nav>
-      <div style="flex: 1 1 auto"></div>
-      <button type="button" onClick="{{ alternarMenu }}" aria-label="Abrir menu" aria-expanded="{{ menuAberto }}" style="{{ estiloBotaoMenu }}">
-        <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Icon" name="menu" size="20" hint-size="20px,20px"></x-import>
+      <div style="flex:1"></div>
+      <button type="button" class="circulo hamburger" id="btn-menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
-      <div style="flex: 0 0 auto; display: flex; gap: 12px; align-items: center">
-        <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Button" variant="primary" size="sm" icon-right="arrow-right" href="index.html#contato" hint-size="auto,36px">Solicitar projeto</x-import>
+      <a href="index.html#contato" class="btn btn-marca cta-topo">
+        Solicitar projeto
+        <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+      </a>
+    </div>
+
+    <div class="capa-grade">
+      <span class="etiqueta"><span class="ponto"></span>Vitrine · sem preço, com a ata de origem</span>
+      <h1 class="titulo">Todos os itens<br><span class="realce">registrados, um por um</span></h1>
+      <p class="lead">Cada produto pertence a uma ata. Sua equipe escolhe item por item, monta a lista do município e a Atto devolve o projeto com valores e prazo.</p>
+      <div class="acoes">
+        <a href="index.html#contato" class="btn btn-marca">
+          Solicitar projeto
+          <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
+        <a href="index.html#atas" class="btn btn-contorno">Ver as atas</a>
       </div>
     </div>
-    <sc-if value="{{ menuAberto }}" hint-placeholder-val="{{ false }}">
-      <div style="background: var(--white); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm)">
-        <div style="max-width: 1280px; margin: 0 auto; padding: 8px clamp(16px, 4vw, 32px) 16px; display: flex; flex-direction: column">
-          <a href="index.html" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Home</a>
-          <a href="index.html#atas" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Atas de registro</a>
-          <a href="produtos.html" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Produtos</a>
-          <a href="quem-somos.html" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Quem somos</a>
-          <a href="index.html#contato" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0">Contato</a>
-        </div>
-      </div>
-    </sc-if>
-  </header>
 
-  <main id="conteudo">
-
-  <section style="padding: 152px 0 56px; background: var(--ink-25); border-bottom: 1px solid var(--border-subtle)">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
-      <p style="font: var(--type-body-sm); color: var(--ink-500); margin: 0 0 20px"><a href="index.html" style="color: var(--ink-500)">Início</a> · Produtos</p>
-      <h1 style="font: var(--type-display-md); font-size: clamp(28px, 4.6vw, 44px); letter-spacing: var(--tracking-heading); margin: 0; max-width: 20ch; text-wrap: balance">Todos os itens registrados, um por um</h1>
-      <p style="font: var(--type-body-lg); color: var(--text-secondary); margin: 20px 0 0; max-width: 62ch; text-wrap: pretty">Cada produto pertence a uma ata vigente. Sua equipe escolhe item por item, monta a lista do município e a Atto devolve o projeto com valores e prazo.</p>
-
-      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px">
-        <sc-for list="{{ categorias }}" as="cat" hint-placeholder-count="6">
-          <button type="button" onClick="{{ cat.selecionar }}" style="{{ cat.estilo }}">{{ cat.rotulo }}</button>
-        </sc-for>
-      </div>
-      <p style="font: var(--type-body-sm); color: var(--ink-500); margin: 20px 0 0">{{ contagem }}</p>
+    <div class="numeros">
+      <div class="item"><span class="n" id="n-itens"></span><span class="r">itens com ficha técnica</span></div>
+      <div class="item"><span class="n" id="n-cats"></span><span class="r">frentes de projeto</span></div>
+      <div class="item"><span class="n">R$ 0</span><span class="r">para montar o projeto</span></div>
     </div>
-  </section>
+  </div>
+</header>
 
-  <section style="padding: clamp(48px, 7vw, 80px) 0 clamp(64px, 9vw, 112px); background: var(--white)">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 20px">
-        <sc-for list="{{ produtos }}" as="p" hint-placeholder-count="12">
-          <a href="{{ p.href }}" style="display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--border-subtle); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-xs)" style-hover="background: var(--ink-25); box-shadow: var(--shadow-md)">
-            <img loading="lazy" decoding="async" src="{{ p.img }}" alt="{{ p.alt }}" style="{{ p.estiloImg }}">
-            <span style="display: flex; flex-direction: column; flex: 1; padding: 22px 24px 24px">
-              <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--ink-500)">{{ p.categoria }}</span>
-              <h3 style="font: var(--type-h4); margin: 12px 0 6px; text-wrap: pretty">{{ p.nome }}</h3>
-              <p style="font: var(--type-body-sm); color: var(--text-secondary); margin: 0 0 18px">{{ p.spec }}</p>
-              <span style="display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border-subtle); font: var(--type-label); color: var(--ink-950)">
-                Clique para ver a ata de origem
-                <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Icon" name="arrow-right" size="15" hint-size="15px,15px"></x-import>
-              </span>
-            </span>
-          </a>
-        </sc-for>
-      </div>
+<main>
 
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; margin-top: 56px; padding: 36px; border-radius: 14px 14px 14px 28px; background: var(--ink-25); border: 1px solid var(--border-subtle)">
-        <div>
-          <h2 style="font: var(--type-h2); margin: 0 0 8px">Não achou o item da sua lista?</h2>
-          <p style="font: var(--type-body); color: var(--text-secondary); margin: 0; max-width: 52ch">As atas somam mais de 300 itens registrados. Manda a lista do município e a gente aponta o que já está coberto.</p>
-        </div>
-        <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Button" variant="primary" size="lg" icon-right="arrow-right" href="index.html#contato" hint-size="auto,52px">Enviar minha lista</x-import>
-      </div>
-    </div>
-  </section>
-
-  </main>
-
-  <footer class="atto-inverse" style="background: var(--ink-1000); padding: 72px 0 40px">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 185px), 1fr)); gap: clamp(32px, 4vw, 48px)">
-        <div>
-          <img loading="lazy" decoding="async" src="assets/brand/logo-lockup-reversed.png" alt="Portal Atto" style="height: 32px; width: auto; margin-bottom: 20px">
-          <p style="font: var(--type-body-sm); color: rgba(255,255,255,.6); margin: 0; max-width: 34ch">Projetos completos para a gestão pública, homologados em ata de registro de preços.</p>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 12px">
-          <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: rgba(255,255,255,.4)">Atas de registro</span>
-          <a href="index.html#atas" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Todas as atas</a>
-          <a href="ata.html" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Sala multissensorial</a>
-          <a href="produtos.html" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Produtos</a>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 12px">
-          <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: rgba(255,255,255,.4)">Institucional</span>
-          <a href="quem-somos.html" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Quem somos</a>
-          <a href="index.html#projetos" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Projetos entregues</a>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 12px">
-          <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: rgba(255,255,255,.4)">Contato</span>
-          <a href="index.html#contato" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Solicitar projeto</a>
-        </div>
-      </div>
-      <p style="font: var(--type-caption); color: rgba(255,255,255,.42); margin: 48px 0 0; max-width: 92ch; text-wrap: pretty">A adesão a ata de registro de preços depende da ata aplicável, da autorização do órgão gerenciador, da vigência, do saldo disponível e da análise do órgão interessado, nos termos da Lei 14.133/2021. As informações deste site têm caráter informativo e não substituem parecer jurídico.</p>
-      <div style="display: flex; justify-content: space-between; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); flex-wrap: wrap">
-        <span style="font: var(--type-caption); color: rgba(255,255,255,.4)">© 2026 Portal Atto. Todos os direitos reservados.</span>
-        <span style="font: var(--type-caption); color: rgba(255,255,255,.4)">Valores conforme ata homologada · Lei 14.133/2021</span>
-      </div>
-    </div>
-  </footer>
-
+<!-- ══ ESTEIRA ════════════════════════════════════════════════════════════ -->
+<div class="esteira">
+  <div class="faixa-mov clara"><div class="trilho-mov" data-termos="frentes"></div></div>
+  <div class="faixa-mov escura"><div class="trilho-mov" data-termos="garantias"></div></div>
 </div>
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props="{}">
-// Uma categoria por ata. Pasta em Conteudos\atas agrupa atas irmãs numa categoria só;
-// Os itens da vitrine e a ordem dos filtros saíram daqui para
-// assets/produtos-dados.js: fonte única, lida também pelo produtos-v2.html.
 
-class Component extends DCLogic {
-  state = { filtro: "Todos", compacto: false, menuAberto: false };
+<!-- ══ VITRINE ════════════════════════════════════════════════════════════ -->
+<section class="bloco claro sem-cartao" id="vitrine">
+  <div class="interno">
 
-  aoRedimensionar = () => {
-    const compacto = window.innerWidth < 760;
-    if (compacto !== this.state.compacto) this.setState({ compacto, menuAberto: false });
+    <div class="filtros-caixa">
+      <div class="busca">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label for="busca" class="visualmente-oculto" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Buscar no catálogo</label>
+        <input id="busca" type="search" autocomplete="off" spellcheck="false"
+               placeholder="Buscar por nome, função ou ata — autismo, quadra, mochila…">
+        <button type="button" class="limpar" id="limpar" hidden aria-label="Limpar busca">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="filtros" id="filtros" role="group" aria-label="Filtrar por frente"></div>
+      <p class="conta" id="conta" aria-live="polite"></p>
+      <p class="aprox" id="aprox" hidden></p>
+    </div>
+
+    <div class="grade" id="grade"></div>
+    <p class="vazio" id="vazio" hidden>Nenhum item nesta frente ainda.</p>
+
+    <div class="mais" id="mais" hidden>
+      <button type="button" class="btn btn-preto" id="btn-mais">
+        <span id="btn-mais-texto">Mostrar mais</span>
+        <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FAIXA ══════════════════════════════════════════════════════════════ -->
+<section class="bloco faixa">
+  <img class="foto" loading="lazy" decoding="async" src="assets/img/convivencia-01.jpeg" alt="" aria-hidden="true" width="1200" height="800">
+  <div class="interno">
+    <div>
+      <h2>Sua equipe adere.<br>A gente entrega, monta e treina.</h2>
+      <p>Sem abrir novo processo licitatório e sem custo para montar o projeto.</p>
+    </div>
+    <a href="index.html#contato" class="btn btn-preto">
+      Solicitar projeto
+      <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- ══ RODAPÉ ═════════════════════════════════════════════════════════════ -->
+<footer class="bloco escuro rodape">
+  <div class="interno">
+    <div class="topo-rodape">
+      <img src="assets/brand/logo-lockup-reversed.png" alt="Portal Atto" width="120" height="33" style="height:33px;width:auto">
+      <nav aria-label="Rodapé">
+        <a href="index.html">Home</a>
+        <a href="index.html#atas">Atas de registro</a>
+        <a href="produtos.html">Produtos</a>
+        <a href="quem-somos.html">Quem somos</a>
+        <a href="index.html#contato">Contato</a>
+      </nav>
+    </div>
+    <p class="legal">
+      A adesão a ata de registro de preços depende da ata aplicável, da autorização do órgão gerenciador, da vigência, da disponibilidade de saldo e da análise do órgão interessado. As informações deste site são informativas e não substituem parecer jurídico nem a consulta ao documento oficial da ata.
+    </p>
+    <p class="legal" style="margin-top:14px">© <span id="ano"></span> Portal Atto. Projetos completos para a gestão pública, homologados em ata de registro de preços.</p>
+  </div>
+</footer>
+
+<script>
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
+  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+));
+
+const SETA = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>';
+
+/* ─── Capa ─────────────────────────────────────────────────────────────── */
+document.getElementById("n-itens").textContent = ITENS.length;
+document.getElementById("n-cats").textContent = CATEGORIAS.length - 1;   // tira "Todos"
+document.getElementById("ano").textContent = new Date().getFullYear();
+
+/* ─── Esteira ──────────────────────────────────────────────────────────── */
+const TERMOS = {
+  frentes: CATEGORIAS.slice(1, 11),
+  garantias: ["Adesão sem nova licitação", "Lei 14.133/2021", `${ITENS.length} itens registrados`,
+              "Ficha técnica pronta", "Entrega, montagem e treinamento", "Projeto sem custo"]
+};
+for (const trilho of document.querySelectorAll(".trilho-mov")) {
+  const grupo = (TERMOS[trilho.dataset.termos] || [])
+    .map((t) => `<span class="termo">${esc(t)}<span class="losango" aria-hidden="true">&#9670;</span></span>`).join("");
+  // a segunda cópia fecha o laço; para o leitor de tela ela não existe
+  trilho.innerHTML = `<span class="grupo">${grupo}</span><span class="grupo" aria-hidden="true">${grupo}</span>`;
+}
+
+/* ═══ Busca ═══════════════════════════════════════════════════════════════
+   Busca por função, não só por nome exato. Três camadas:
+
+   1. Normalização — tira acento e caixa, para "mochila" achar "Mochila" e
+      "sensorial" achar "Integração Sensorial".
+   2. Índice por item — além do nome, entram a especificação, a categoria e o
+      que está escrito na ata de origem (título, manchete e chamada). É o que
+      faz "autismo" chegar na sala sensorial mesmo sem a palavra estar em
+      nenhum nome de produto.
+   3. Dicionário de intenção — o município busca pelo problema ("quadra",
+      "cadeirante", "merenda"), não pelo nome de catálogo ("piso modular",
+      "mesa acessível", "refeitório"). O mapa abaixo faz essa ponte.
+
+   A pontuação exige que TODOS os termos digitados casem em algum campo. Se
+   nada casar com todos, uma segunda passada afrouxa para qualquer termo e
+   avisa que o resultado é aproximado — melhor que devolver vazio.          */
+
+const semAcento = (s) => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+// esquerda: como a pessoa pensa · direita: como o catálogo escreve
+const INTENCAO = {
+  autismo: ["sensorial", "tea", "neurodiver", "regulacao", "inclusiv"],
+  tea: ["autismo", "sensorial", "neurodiver"],
+  deficiencia: ["inclusiv", "acessiv", "adaptad", "neurodiver"],
+  inclusao: ["inclusiv", "acessiv", "sensorial", "neurodiver", "adaptad"],
+  cadeirante: ["acessiv", "cadeira de rodas", "adaptad"],
+  rodas: ["acessiv", "adaptad"],
+  cadeira: ["conjunto", "giratoria", "longarina", "assento"],
+  mesa: ["conjunto", "bancada", "refeitorio", "estacao"],
+  carteira: ["conjunto", "aluno", "prancheta"],
+  merenda: ["refeitorio", "coletivo", "alimentacao"],
+  cozinha: ["refeitorio", "alimentacao", "eletrodomestico"],
+  // "piso" é ambíguo em português — chão de sala e superfície de quadra.
+  // Usar "piso" como tradução de "quadra" trazia almofada de piso no topo.
+  quadra: ["esportiv", "superficie", "drenante", "indoor", "poliedric"],
+  piso: ["superficie", "drenante", "modular", "esportiv"],
+  esporte: ["esportiv", "educacao fisica", "quadra", "bau"],
+  parquinho: ["playground", "escorregador", "gangorra", "patio"],
+  brinquedo: ["playground", "pedagogic", "brincar", "ludic"],
+  computador: ["notebook", "desktop", "tablet", "informatica", "tecnologia"],
+  informatica: ["notebook", "tablet", "desktop", "tecnologia"],
+  internet: ["tecnologia", "notebook", "tablet"],
+  televisao: ["tela", "interativa", "lousa"],
+  tv: ["tela", "interativa", "lousa"],
+  lousa: ["tela", "interativa", "quadro"],
+  projetor: ["tela", "interativa"],
+  robotica: ["maker", "prototipagem", "eletronica"],
+  impressora: ["maker", "3d", "prototipagem"],
+  uniforme: ["camiseta", "calca", "bermuda", "agasalho", "tenis", "mochila", "polo"],
+  roupa: ["uniforme", "camiseta", "calca", "agasalho"],
+  calcado: ["tenis", "sapatilha", "botina", "coturno", "meia"],
+  mochila: ["uniforme", "escolar", "kit"],
+  material: ["kit", "escolar", "papelaria", "caderno"],
+  papelaria: ["kit", "material", "escolar"],
+  biblioteca: ["leitura", "livro", "estante", "paradidatic"],
+  livro: ["leitura", "paradidatic", "colecao", "cultura de paz"],
+  leitura: ["livro", "cantinho", "paradidatic"],
+  armario: ["guarda", "nicho", "organizador", "roupeiro", "estante"],
+  arquivo: ["aco", "gaveta", "guarda", "almoxarifado"],
+  almoxarifado: ["aco", "armario", "estante", "guarda"],
+  escalada: ["triangulo", "rampa", "alpinista", "trepa"],
+  espelho: ["espelhado", "acrilico"],
+  luz: ["led", "iluminacao", "fibra optica", "luminos"],
+  som: ["sonoro", "musical", "auditiv"],
+  tatil: ["textura", "sensorial", "tato"],
+  bebe: ["infantil", "pikler", "bercario", "primeira infancia"],
+  bercario: ["infantil", "pikler", "bebe"],
+  creche: ["infantil", "pikler", "bercario"],
+  bullying: ["convivencia", "socioemocional", "compasso", "cultura de paz"],
+  emocional: ["socioemocional", "compasso", "convivencia"],
+  seguranca: ["panico", "camera", "cidade segura", "guarda"],
+  guarda: ["uniforme profissional", "seguranca", "municipal"],
+  limpeza: ["uniforme profissional", "alta visibilidade", "urbana"],
+  saude: ["jaleco", "samu", "hospitalar", "uniforme profissional"],
+  hospital: ["hospitalar", "saude", "jaleco"],
+  escritorio: ["corporativo", "estacao", "giratoria", "gaveteiro"],
+  prefeitura: ["corporativo", "profissional", "secretaria"]
+};
+
+const ATA_DE = (slug) => (typeof ATAS !== "undefined" && ATAS[slug]) || {};
+
+// índice montado uma vez: buscar não deve reprocessar 541 itens a cada tecla
+const INDICE = ITENS.map(([cat, nome, spec, , slug]) => {
+  const a = ATA_DE(slug);
+  return {
+    nome: semAcento(nome),
+    cat: semAcento(cat),
+    ata: semAcento([a.titulo, a.categoria].filter(Boolean).join(" ")),
+    spec: semAcento(spec),
+    sobre: semAcento([a.manchete, a.chamada].filter(Boolean).join(" "))
+  };
+});
+
+// peso por campo: o nome vale mais que o texto da ata
+const PESOS = { nome: 10, cat: 6, ata: 6, spec: 3, sobre: 2 };
+
+/* Três graus de casamento, e a diferença entre eles importa: sem isso
+   "quadra" casava com "Almofada Quadrada" tão forte quanto com "piso de
+   quadra", e o resultado vinha cheio de almofada. */
+const pontuaTermo = (reg, termo) => {
+  let melhor = 0;
+  for (const campo in PESOS) {
+    const texto = reg[campo];
+    if (!texto) continue;
+    let i = texto.indexOf(termo);
+    while (i >= 0) {
+      const antes = i === 0 || !/[a-z0-9]/.test(texto[i - 1]);
+      const depois = !/[a-z0-9]/.test(texto[i + termo.length] || " ");
+      const grau = antes && depois ? 1        // palavra inteira
+                 : antes           ? 0.45     // começo de palavra
+                 :                   0.2;     // miolo de palavra
+      melhor = Math.max(melhor, PESOS[campo] * grau);
+      if (grau === 1) break;
+      i = texto.indexOf(termo, i + 1);
+    }
+  }
+  return melhor;
+};
+
+const pontuar = (reg, termos, exigirTodos) => {
+  let total = 0, casaram = 0;
+  for (const t of termos) {
+    const traducao = INTENCAO[t];
+    // Quando o termo está no dicionário, a pessoa falou pelo problema e não
+    // pelo nome de catálogo: a tradução passa a valer mais que a palavra
+    // literal. É o que faz "quadra" trazer piso esportivo e não almofada.
+    const pesoLiteral = traducao ? 0.45 : 1;
+    const pesoTraduzido = traducao ? 1 : 0.8;
+
+    let p = pontuaTermo(reg, t) * pesoLiteral;
+    for (const v of traducao || []) p = Math.max(p, pontuaTermo(reg, semAcento(v)) * pesoTraduzido);
+
+    if (p > 0) casaram++;
+    total += p;
+  }
+  if (exigirTodos && casaram < termos.length) return 0;
+  return casaram === 0 ? 0 : total;
+};
+
+/* A busca trabalha sobre índices, nunca procurando o item dentro de ITENS:
+   um indexOf por item seria 541² comparações a cada tecla. */
+const buscar = (consulta, baseIdx) => {
+  const termos = semAcento(consulta).split(/\s+/).filter((t) => t.length >= 2);
+  if (!termos.length) return { idx: baseIdx, aproximado: false };
+
+  const pontuados = (exigirTodos) => {
+    const out = [];
+    for (const i of baseIdx) {
+      const p = pontuar(INDICE[i], termos, exigirTodos);
+      if (p > 0) out.push([i, p]);
+    }
+    out.sort((a, b) => b[1] - a[1]);
+    return out.map(([i]) => i);
   };
 
-  componentDidMount() {
-    window.addEventListener("resize", this.aoRedimensionar);
-    this.aoRedimensionar();
+  const exatos = pontuados(true);
+  if (exatos.length) return { idx: exatos, aproximado: false };
+  // nada casou com todos os termos: afrouxa e avisa
+  return { idx: pontuados(false), aproximado: true };
+};
+
+/* ─── Filtros ──────────────────────────────────────────────────────────── */
+const elFiltros = document.getElementById("filtros");
+const elGrade = document.getElementById("grade");
+const elConta = document.getElementById("conta");
+const elVazio = document.getElementById("vazio");
+const elMais = document.getElementById("mais");
+const btnMais = document.getElementById("btn-mais");
+const btnMaisTexto = document.getElementById("btn-mais-texto");
+
+// a frente pode vir pela URL, para o card de uma ata cair já filtrado aqui
+const daUrl = new URLSearchParams(location.search).get("frente");
+let filtro = CATEGORIAS.includes(daUrl) ? daUrl : "Todos";
+
+elFiltros.innerHTML = CATEGORIAS.map((c) => `
+  <button type="button" data-cat="${esc(c)}" aria-pressed="${c === filtro}">${esc(c)}</button>`).join("");
+
+/* ─── Render em fatias ─────────────────────────────────────────────────────
+   541 cards de uma vez custam caro no primeiro paint mesmo com lazy loading:
+   são 541 nós, 541 observadores de imagem e um layout gigante. A vitrine
+   rende em fatias e o botão continua de onde parou.                        */
+const FATIA = 48;
+let lista = [];        // índices em ITENS, já filtrados e ordenados
+let mostrados = 0;
+
+/* O escalonamento acompanha a ordem de leitura, mas trava no 14º: com 48
+   cards, um atraso por card faria o último entrar quase dois segundos depois
+   do primeiro, e a vitrine pareceria lenta em vez de suave. */
+const atrasoDe = (pos) => `${Math.min(pos, 14) * 26}ms`;
+
+const cartaHtml = ([cat, nome, spec, img, slug, ajuste], i, pos) => {
+  const solto = ajuste === "contain";
+  // render de produto em fundo branco entra inteiro, com respiro;
+  // foto de cena preenche o quadro
+  const estilo = solto
+    ? "object-fit:contain; padding:10px; background:var(--white); border:1px solid var(--border-subtle)"
+    : "object-fit:cover; background:var(--ink-25)";
+  return `
+  <a class="carta" href="ata.html?ata=${esc(slug)}" style="--d:${atrasoDe(pos)}">
+    <span class="cat">${esc(cat)}</span>
+    <img class="capa-item" loading="${i < 12 ? "eager" : "lazy"}" decoding="async"
+         src="assets/img/${esc(img)}" alt="${esc(nome)}" width="420" height="315" style="${estilo}">
+    <h3>${esc(nome)}</h3>
+    <p>${esc(spec)}</p>
+    <span class="pe">Ver a ata de origem <span>${SETA}</span></span>
+  </a>`;
+};
+
+const pintarFatia = () => {
+  const fim = Math.min(lista.length, mostrados + FATIA);
+  // o escalonamento conta a partir desta fatia: ao carregar mais, os novos
+  // entram como se fossem os primeiros, e não com o atraso do card 48
+  const pedaco = lista.slice(mostrados, fim).map((i, k) => cartaHtml(ITENS[i], mostrados + k, k)).join("");
+  elGrade.insertAdjacentHTML("beforeend", pedaco);
+  mostrados = fim;
+
+  const restam = lista.length - mostrados;
+  elMais.hidden = restam <= 0;
+  btnMaisTexto.textContent = restam > FATIA ? `Mostrar mais ${FATIA}` : `Mostrar os últimos ${restam}`;
+  // vazio não ganha linha de contagem: quem explica é o bloco .vazio, que
+  // sabe se foi a frente ou a busca que não devolveu nada
+  elConta.textContent = lista.length === 0
+    ? ""
+    : `Mostrando ${mostrados} de ${lista.length} ${lista.length === 1 ? "item" : "itens"}`;
+};
+
+const elBusca = document.getElementById("busca");
+const elLimpar = document.getElementById("limpar");
+const elAprox = document.getElementById("aprox");
+
+const aplicar = () => {
+  for (const b of elFiltros.children) b.setAttribute("aria-pressed", String(b.dataset.cat === filtro));
+
+  // primeiro a frente, depois a busca dentro dela
+  const base = [];
+  for (let i = 0; i < ITENS.length; i++) if (filtro === "Todos" || ITENS[i][0] === filtro) base.push(i);
+
+  const consulta = elBusca.value.trim();
+  const r = buscar(consulta, base);
+  lista = r.idx;
+
+  elLimpar.hidden = consulta === "";
+  elAprox.hidden = !(r.aproximado && lista.length > 0);
+  if (!elAprox.hidden) {
+    elAprox.textContent = `Nenhum item casa com tudo que você escreveu. Mostrando o que se aproxima de "${consulta}".`;
   }
+  elVazio.textContent = consulta
+    ? `Nada encontrado para "${consulta}"${filtro !== "Todos" ? ` em ${filtro}` : ""}.`
+    : "Nenhum item nesta frente ainda.";
 
-  componentWillUnmount() { window.removeEventListener("resize", this.aoRedimensionar); }
+  elGrade.innerHTML = "";
+  mostrados = 0;
+  elVazio.hidden = lista.length > 0;
+  pintarFatia();
+};
 
-  menuVals() {
-    const compacto = this.state.compacto;
-    return {
-      navEstilo: { display: compacto ? "none" : "flex", gap: "clamp(14px, 2.2vw, 28px)", alignItems: "center", flexWrap: "nowrap", whiteSpace: "nowrap" },
-      estiloBotaoMenu: {
-        display: compacto ? "inline-flex" : "none", alignItems: "center", justifyContent: "center", flex: "0 0 auto",
-        width: 42, height: 42, marginRight: 4, padding: 0, cursor: "pointer",
-        borderRadius: 10, border: "1px solid var(--border-default)", background: "var(--white)", color: "var(--ink-950)"
-      },
-      menuAberto: compacto && this.state.menuAberto,
-      alternarMenu: () => this.setState(s => ({ menuAberto: !s.menuAberto })),
-      fecharMenu: () => this.setState({ menuAberto: false })
-    };
-  }
+elFiltros.addEventListener("click", (e) => {
+  const b = e.target.closest("button");
+  if (!b || b.dataset.cat === filtro) return;
+  filtro = b.dataset.cat;
+  aplicar();
+  // volta para o topo da vitrine, não da página: a barra de filtros é sticky
+  document.getElementById("vitrine").scrollIntoView({ block: "start" });
+});
 
-  renderVals() {
-    const nomes = CATEGORIAS;
-    const filtro = this.state.filtro;
-    const lista = filtro === "Todos" ? ITENS : ITENS.filter(i => i[0] === filtro);
-    return Object.assign(this.menuVals(), {
-      categorias: nomes.map(n => ({
-        rotulo: n,
-        selecionar: () => this.setState({ filtro: n }),
-        estilo: {
-          font: "var(--type-label)", padding: "11px 20px", borderRadius: 999, cursor: "pointer",
-          background: filtro === n ? "var(--ink-1000)" : "var(--white)",
-          color: filtro === n ? "var(--white)" : "var(--ink-700)",
-          border: "1px solid " + (filtro === n ? "var(--ink-1000)" : "var(--border-default)"),
-          transition: "background 120ms var(--ease-standard)"
-        }
-      })),
-      contagem: lista.length + (lista.length === 1 ? " item" : " itens") + (filtro === "Todos" ? " no catálogo" : " em " + filtro.toLowerCase()),
-      produtos: lista.map(i => {
-        // render de produto em fundo branco nao pode ser cortado: entra inteiro, com respiro
-        const solto = i[5] === "contain";
-        return {
-          categoria: i[0], nome: i[1], spec: i[2],
-          img: "assets/img/" + i[3], alt: i[1],
-          href: "ata.html?ata=" + i[4],
-          estiloImg: {
-            width: "100%", aspectRatio: "4 / 3", boxSizing: "border-box",
-            objectFit: solto ? "contain" : "cover",
-            padding: solto ? "14px" : "0",
-            background: solto ? "var(--white)" : "var(--ink-25)",
-            borderBottom: "1px solid var(--border-subtle)"
-          }
-        };
-      })
+/* digitar não dispara a busca a cada tecla: 541 itens × termos × campos a
+   cada letra trava o campo em teclado rápido */
+let aguardando;
+elBusca.addEventListener("input", () => {
+  clearTimeout(aguardando);
+  aguardando = setTimeout(aplicar, 160);
+});
+elBusca.addEventListener("keydown", (e) => { if (e.key === "Escape") { elBusca.value = ""; aplicar(); } });
+elLimpar.addEventListener("click", () => { elBusca.value = ""; elBusca.focus(); aplicar(); });
+
+btnMais.addEventListener("click", () => {
+  const antes = elGrade.children.length;
+  pintarFatia();
+  // leva o foco para o primeiro card novo, senão quem usa teclado se perde
+  elGrade.children[antes]?.focus?.();
+});
+
+aplicar();
+
+/* ─── Menu ─────────────────────────────────────────────────────────────── */
+const btnMenu = document.getElementById("btn-menu");
+const menu = document.getElementById("menu");
+btnMenu.addEventListener("click", () => {
+  const aberto = menu.classList.toggle("aberto");
+  btnMenu.setAttribute("aria-expanded", String(aberto));
+  btnMenu.setAttribute("aria-label", aberto ? "Fechar menu" : "Abrir menu");
+});
+menu.addEventListener("click", (e) => {
+  if (e.target.tagName === "A") { menu.classList.remove("aberto"); btnMenu.setAttribute("aria-expanded", "false"); }
+});
+
+/* ─── Entrada por rolagem ──────────────────────────────────────────────── */
+const semMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!semMovimento) {
+  const pendentes = new Set();
+  for (const [sel, passo] of [[".capa-grade > *", 80], [".numeros .item", 70], [".faixa .interno > *", 110]]) {
+    document.querySelectorAll(sel).forEach((el, i) => {
+      el.classList.add("rev");
+      el.style.setProperty("--atraso", `${Math.min(i, 5) * passo}ms`);
+      pendentes.add(el);
     });
   }
+  /* Varredura por posição, e não IntersectionObserver: numa rolagem rápida o
+     observer entrega o callback quando o elemento já saiu da vista. */
+  let agendado = false;
+  const varrer = () => {
+    agendado = false;
+    const linha = innerHeight * 0.92;
+    for (const el of pendentes) {
+      if (el.getBoundingClientRect().top < linha) { el.classList.add("vis"); pendentes.delete(el); }
+    }
+    if (!pendentes.size) { removeEventListener("scroll", aoMover); removeEventListener("resize", aoMover); }
+  };
+  const aoMover = () => { if (!agendado) { agendado = true; requestAnimationFrame(varrer); } };
+  addEventListener("scroll", aoMover, { passive: true });
+  addEventListener("resize", aoMover);
+  varrer();
 }
 </script>
 </body>

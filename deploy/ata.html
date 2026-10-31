@@ -3,471 +3,833 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sala multissensorial — Portal Atto</title>
-<meta name="description" content="Ambientes sensoriais completos, do projeto à implantação. Modelos P, M, G e GG por adesão a ata de registro de preços.">
-<meta name="theme-color" content="#000000">
+<title>Ata de registro de preços — Portal Atto</title>
+<meta name="description" content="Solução registrada em ata de registro de preços. Sua equipe adere, a Atto entrega, monta e treina.">
+<meta name="theme-color" content="#101012">
 <link rel="icon" href="assets/brand/logo-mark.png">
 <link rel="canonical" href="https://portal-atto.vercel.app/ata">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Portal Atto">
 <meta property="og:url" content="https://portal-atto.vercel.app/ata">
-<meta property="og:title" content="Sala multissensorial — Portal Atto">
-<meta property="og:description" content="Ambientes sensoriais completos, do projeto à implantação. Modelos P, M, G e GG por adesão a ata de registro de preços.">
+<meta property="og:title" content="Ata de registro de preços — Portal Atto">
+<meta property="og:description" content="Solução registrada em ata de registro de preços. Sua equipe adere, a Atto entrega, monta e treina.">
 <meta property="og:image" content="https://portal-atto.vercel.app/assets/img/sensorial-01.jpeg">
 <meta property="og:image:alt" content="Sala multissensorial implantada em escola municipal">
 <meta property="og:locale" content="pt_BR">
 <meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/colors.css">
+<link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/typography.css">
+<link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/radius.css">
+<link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/elevation.css">
+<link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/motion.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=Instrument+Serif:ital@0;1&display=swap">
+
 <script src="assets/atas-dados.js"></script>
-<script src="./support.js"></script>
+
+<style>
+/* ══ Página de ata ═══════════════════════════════════════════════
+   Mesma gramática da home: pilha de blocos arredondados sobre cinza, capa
+   escura sangrada, serifa só como acento. O conteúdo das 25 atas vem de
+   assets/atas-dados.js, o mesmo arquivo que o ata.html lê.
+
+   O CSS de base ainda está duplicado entre as páginas. É o próximo
+   passo: extrair para assets/base.css quando o desenho estabilizar — enquanto
+   muda a cada rodada, arquivo compartilhado atrapalha mais do que ajuda.  */
+
+:root {
+  --fonte-titulo: "Instrument Serif", "Playfair Display", Georgia, serif;
+  --pagina: #ECEDEF;
+  --raio-bloco: 32px;
+  --respiro: clamp(12px, 1.2vw, 18px);
+  --coluna: 1240px;
+  --pad-bloco: clamp(24px, 5vw, 76px);
+
+  --text-body-lg: 18px;
+  --text-body: 16px;
+  --text-body-sm: 14px;
+  --text-caption: 13px;
+  --text-overline: 12px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--pagina); color: var(--text-primary);
+  font: var(--type-body); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font-family: inherit; }
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--ink-950); outline-offset: 3px; border-radius: 6px;
+}
+.escuro :where(a, button, input, select, textarea):focus-visible { outline-color: var(--atto-yellow); }
+
+/* ── blocos ─────────────────────────────────────────────────────────────── */
+.bloco { margin: var(--respiro); border-radius: var(--raio-bloco); padding: var(--pad-bloco); overflow: hidden; position: relative; }
+.bloco > .interno { max-width: var(--coluna); margin: 0 auto; }
+.claro { background: var(--white); }
+.escuro { background: var(--ink-950); color: var(--white); }
+.escuro .secundario { color: rgba(255,255,255,.68); }
+.secundario { color: var(--text-secondary); }
+.sem-cartao { margin: 0; border-radius: 0; padding-block: clamp(44px, 6vw, 86px); }
+
+/* ── etiqueta ───────────────────────────────────────────────────────────── */
+.etiqueta {
+  display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px;
+  border: 1px solid var(--border-default); border-radius: 999px;
+  font: var(--type-overline); letter-spacing: var(--tracking-overline);
+  text-transform: uppercase; color: var(--ink-600); background: var(--white);
+}
+.escuro .etiqueta { border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.80); background: rgba(255,255,255,.05); }
+.etiqueta .ponto { width: 6px; height: 6px; border-radius: 50%; background: var(--atto-yellow); flex: none; }
+
+/* ── títulos ────────────────────────────────────────────────────────────── */
+.titulo {
+  font: var(--weight-black) clamp(32px, 4.8vw, 58px)/1.08 var(--font-display);
+  letter-spacing: var(--tracking-display); margin: 16px 0 0; text-wrap: balance;
+}
+.titulo-md {
+  font: var(--weight-black) clamp(26px, 3.4vw, 40px)/1.1 var(--font-display);
+  letter-spacing: var(--tracking-display); margin: 14px 0 0; text-wrap: balance;
+}
+/* a serifa é acento: entra no nome da ata, acima da manchete */
+.kicker {
+  display: block; margin: 18px 0 2px;
+  font: 400 clamp(22px, 2.6vw, 34px)/1.1 var(--fonte-titulo);
+  font-style: italic; color: var(--atto-yellow); letter-spacing: -0.005em;
+}
+
+/* ── botões ─────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 7px 7px 7px 20px; border-radius: 999px; border: 1px solid transparent;
+  font: var(--type-label); cursor: pointer; white-space: nowrap;
+  transition: var(--transition-control, all .18s ease);
+}
+.btn .seta { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; flex: none; transition: transform .18s ease; }
+.btn:hover .seta { transform: translate(2px, -2px); }
+.btn-marca { background: var(--atto-yellow); color: var(--ink-1000); }
+.btn-marca .seta { background: var(--ink-1000); color: var(--atto-yellow); }
+.btn-marca:hover { background: var(--atto-yellow-press); }
+.btn-preto { background: var(--ink-1000); color: var(--white); }
+.btn-preto .seta { background: var(--atto-yellow); color: var(--ink-1000); }
+.btn-contorno { border-color: var(--border-default); color: var(--ink-950); padding-right: 20px; background: transparent; }
+.escuro .btn-contorno { border-color: rgba(255,255,255,.26); color: var(--white); }
+.escuro .btn-contorno:hover { background: rgba(255,255,255,.08); }
+
+.circulo {
+  width: 44px; height: 44px; flex: none; border-radius: 50%;
+  border: 1px solid var(--border-default); background: transparent; color: inherit;
+  display: grid; place-items: center; cursor: pointer;
+  transition: var(--transition-control, all .18s ease);
+}
+.escuro .circulo { border-color: rgba(255,255,255,.26); }
+.escuro .circulo:hover { background: rgba(255,255,255,.1); }
+.circulo:disabled { opacity: .3; cursor: default; }
+
+/* ── topo ───────────────────────────────────────────────────────────────── */
+.barra { display: flex; align-items: center; gap: 20px; position: relative; z-index: 3; }
+.barra .marca { height: 30px; width: auto; }
+.menu {
+  display: flex; align-items: center; gap: 2px; padding: 5px;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px; backdrop-filter: blur(10px);
+}
+.menu a { padding: 9px 16px; border-radius: 999px; font: var(--type-label); color: rgba(255,255,255,.74); transition: var(--transition-control, all .18s ease); }
+.menu a:hover { color: var(--white); background: rgba(255,255,255,.10); }
+.menu a[aria-current] { color: var(--ink-1000); background: var(--white); }
+.hamburger { display: none; }
+
+/* ── capa ───────────────────────────────────────────────────────────────── */
+.capa {
+  margin: 0; border-radius: 0;
+  padding: clamp(18px, 3vw, 34px) var(--pad-bloco) 0;
+}
+.capa-fundo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.capa-fundo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; }
+.capa-veu {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(100deg, rgba(16,16,18,.97) 0%, rgba(16,16,18,.93) 28%, rgba(16,16,18,.60) 46%, rgba(16,16,18,.30) 62%, rgba(16,16,18,.55) 100%),
+    linear-gradient(to bottom, rgba(16,16,18,.92) 0%, rgba(16,16,18,.30) 20%, rgba(16,16,18,.22) 54%, rgba(16,16,18,.88) 86%, var(--ink-950) 100%);
+}
+.capa-grade {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 272px);
+  gap: clamp(24px, 4vw, 56px); align-items: center;
+  min-height: clamp(380px, 48vh, 540px);
+  padding: clamp(36px, 5vw, 70px) 0 clamp(34px, 4vw, 54px);
+  position: relative; z-index: 2;
+}
+.capa-texto { max-width: min(660px, 100%); }
+.capa p.lead { font: var(--type-body-lg); color: rgba(255,255,255,.80); margin: 20px 0 0; max-width: 50ch; text-wrap: pretty; }
+.capa .acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+
+.selos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+.selo {
+  padding: 7px 13px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.24);
+  font: var(--type-caption); color: rgba(255,255,255,.84);
+  background: rgba(255,255,255,.05);
+}
+
+.cartao-capa {
+  justify-self: end; width: 100%;
+  background: rgba(255,255,255,.96); color: var(--ink-950);
+  border-radius: 18px; padding: 18px 20px;
+  box-shadow: 0 22px 54px rgba(0,0,0,.42); backdrop-filter: blur(6px);
+}
+.cartao-capa .n { font: var(--weight-black) 34px/1 var(--font-display); letter-spacing: var(--tracking-display); }
+
+.numeros {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: clamp(14px, 2.6vw, 40px);
+  border-top: 1px solid rgba(255,255,255,.14);
+  padding: clamp(22px, 3vw, 32px) 0 clamp(60px, 6vw, 76px);
+  position: relative; z-index: 2;
+}
+.numeros .item { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.numeros .r { font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: rgba(255,255,255,.50); }
+.numeros .v { font: var(--weight-bold) var(--text-body)/1.35 var(--font-sans); color: var(--white); text-wrap: pretty; }
+
+/* ── esteira ────────────────────────────────────────────────────────────── */
+.esteira { position: relative; z-index: 2; overflow: hidden; padding: 30px 0; margin: -58px 0 -46px; }
+.faixa-mov { overflow: hidden; width: 108%; margin-left: -4%; padding: 13px 0; border-block: 1px solid rgba(0,0,0,.14); }
+.faixa-mov.clara { background: var(--atto-yellow); color: var(--ink-1000); transform: rotate(-1.8deg); }
+.faixa-mov.escura { background: var(--ink-950); color: var(--white); transform: rotate(1.6deg); margin-top: -14px; border-color: rgba(255,255,255,.12); }
+.trilho-mov { display: flex; width: max-content; animation: correr 44s linear infinite; }
+.faixa-mov.escura .trilho-mov { animation-duration: 52s; animation-direction: reverse; }
+.faixa-mov:hover .trilho-mov { animation-play-state: paused; }
+@keyframes correr { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.trilho-mov .grupo { display: flex; flex: none; }
+.trilho-mov .termo {
+  display: inline-flex; align-items: center; gap: 22px; padding-right: 22px;
+  font: var(--weight-bold) clamp(12px, 1.25vw, 15px)/1 var(--font-sans);
+  letter-spacing: .13em; text-transform: uppercase; white-space: nowrap;
+}
+.trilho-mov .losango { font-size: .72em; opacity: .55; }
+.faixa-mov.escura .losango { color: var(--atto-yellow); opacity: 1; }
+
+/* ── cabeçalho de seção ─────────────────────────────────────────────────── */
+.cabeca { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr); gap: clamp(20px, 3vw, 56px); align-items: end; margin-bottom: clamp(28px, 4vw, 44px); }
+.cabeca .apoio { font: var(--type-body); max-width: 52ch; text-wrap: pretty; }
+
+/* ── o que entra ────────────────────────────────────────────────────────── */
+.sobre { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: start; }
+.sobre .frase { font: var(--type-body-lg); color: var(--ink-950); margin: 0; max-width: 58ch; text-wrap: pretty; }
+
+.blocos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: clamp(16px, 2.4vw, 28px); margin-top: clamp(30px, 4vw, 50px); }
+.blocos article { border-top: 2px solid var(--ink-950); padding-top: 16px; }
+.blocos .rotulo {
+  display: inline-block; margin-bottom: 10px; padding: 4px 11px;
+  background: var(--atto-yellow); border-radius: 999px;
+  font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--ink-1000);
+}
+.blocos h3 { font: var(--type-h3); margin: 0 0 8px; text-wrap: pretty; }
+.blocos p { font: var(--type-body-sm); color: var(--ink-600); margin: 0; text-wrap: pretty; }
+
+/* ── galeria ────────────────────────────────────────────────────────────── */
+.trilho {
+  display: flex; gap: 18px; overflow-x: auto;
+  scroll-snap-type: x proximity; scroll-behavior: smooth;
+  scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 4px;
+}
+.trilho::-webkit-scrollbar { display: none; }
+.foto-gal {
+  flex: 0 0 clamp(260px, 30vw, 400px); scroll-snap-align: start;
+  aspect-ratio: 4 / 3; object-fit: cover; border-radius: 18px;
+  transition: transform .3s ease;
+}
+.foto-gal:hover { transform: translateY(-4px); }
+
+.video-ata { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 28px; align-items: center; margin: 30px 0 0; }
+.video-ata video { width: 100%; max-width: 330px; border-radius: 18px; background: var(--ink-1000); aspect-ratio: 9 / 16; object-fit: cover; }
+.video-ata figcaption { font: var(--type-body); color: rgba(255,255,255,.72); margin: 0; max-width: 46ch; text-wrap: pretty; }
+
+/* ── itens ──────────────────────────────────────────────────────────────── */
+.itens { display: flex; flex-wrap: wrap; gap: 10px; }
+.itens span {
+  font: var(--weight-semibold) var(--text-body-sm)/1.3 var(--font-sans);
+  color: var(--ink-700); background: var(--white);
+  border: 1px solid var(--border-default); padding: 11px 19px; border-radius: 999px;
+}
+
+/* ── etapas ─────────────────────────────────────────────────────────────── */
+.etapas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: clamp(16px, 2.2vw, 26px); counter-reset: etapa; }
+.etapas article { border-top: 1px solid rgba(255,255,255,.16); padding-top: 16px; }
+.etapas .n { font: var(--weight-black) 26px/1 var(--font-display); color: var(--atto-yellow); letter-spacing: var(--tracking-display); }
+.etapas h3 { font: var(--type-h4); margin: 10px 0 6px; text-wrap: pretty; }
+.etapas p { font: var(--type-body-sm); color: rgba(255,255,255,.62); margin: 0; text-wrap: pretty; }
+
+/* ── faixa amarela ──────────────────────────────────────────────────────── */
+.faixa { background: var(--atto-yellow); color: var(--ink-1000); position: relative; }
+.faixa .foto {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: min(58%, 680px); height: 100%; object-fit: cover; object-position: 50% 42%;
+  mix-blend-mode: multiply; opacity: .9; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
+          mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
+}
+.faixa .interno { position: relative; z-index: 1; display: grid; grid-template-columns: 1.4fr auto; gap: 32px; align-items: center; }
+.faixa h2 { font: var(--weight-black) clamp(26px, 3.4vw, 40px)/1.1 var(--font-display); letter-spacing: var(--tracking-display); margin: 0; text-wrap: balance; }
+.faixa p { margin: 12px 0 0; font: var(--type-body); color: rgba(0,0,0,.68); }
+
+/* ── formulário ─────────────────────────────────────────────────────────── */
+.form-grade { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
+.vantagens { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 14px; }
+.vantagens li { display: flex; gap: 11px; align-items: flex-start; font: var(--type-body); color: rgba(255,255,255,.78); }
+.vantagens svg { flex: none; margin-top: 3px; color: var(--atto-yellow); }
+.campos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.campo { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.campo.largo { grid-column: 1 / -1; }
+.campo label { font: var(--type-label); color: rgba(255,255,255,.88); }
+.campo .req { color: var(--atto-yellow); margin-left: 3px; }
+.campo input, .campo textarea {
+  width: 100%; min-height: 46px; padding: 12px 14px;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.18);
+  border-radius: 12px; color: var(--white); font: var(--type-body);
+  transition: var(--transition-control, all .18s ease);
+}
+.campo textarea { resize: vertical; min-height: 104px; line-height: 1.5; }
+.campo input::placeholder, .campo textarea::placeholder { color: rgba(255,255,255,.38); }
+.campo :is(input, textarea):focus { border-color: var(--atto-yellow); background: rgba(255,255,255,.1); }
+.campo .ajuda { font: var(--type-caption); color: rgba(255,255,255,.54); margin: 0; }
+.aviso { margin-top: 18px; padding: 14px 16px; border-radius: 12px; font: var(--type-body-sm); background: rgba(217,56,46,.14); border: 1px solid rgba(217,56,46,.4); color: #FFC9C4; }
+.aviso.ok { background: rgba(26,164,99,.14); border-color: rgba(26,164,99,.42); color: #BDEBD2; }
+
+/* ── rodapé ─────────────────────────────────────────────────────────────── */
+.rodape { padding-top: clamp(32px, 4vw, 48px); }
+.rodape .topo-rodape { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,.12); }
+.rodape nav { display: flex; flex-wrap: wrap; gap: 8px 22px; font: var(--type-label); }
+.rodape nav a { color: rgba(255,255,255,.7); }
+.rodape nav a:hover { color: var(--white); }
+.legal { font: var(--type-caption); line-height: 1.55; color: rgba(255,255,255,.64); margin: 24px 0 0; max-width: 72ch; text-wrap: pretty; }
+
+/* ── entrada por rolagem ────────────────────────────────────────────────── */
+.rev { opacity: 0; transform: translateY(20px); will-change: opacity, transform;
+  transition: opacity .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms), transform .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms); }
+.rev.vis { opacity: 1; transform: none; will-change: auto; }
+
+/* ── responsivo ─────────────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  :root { --raio-bloco: 24px; }
+  .capa-grade, .sobre, .cabeca, .faixa .interno, .form-grade { grid-template-columns: 1fr; }
+  .cabeca { align-items: start; }
+  .capa-veu { background: linear-gradient(to bottom, rgba(16,16,18,.90) 0%, rgba(16,16,18,.62) 38%, rgba(16,16,18,.88) 76%, var(--ink-950) 100%); }
+  .capa-texto { max-width: none; }
+  .cartao-capa { justify-self: stretch; max-width: 340px; }
+  .numeros { grid-template-columns: 1fr 1fr; gap: 22px; padding-bottom: 36px; }
+  .menu { display: none; }
+  .menu.aberto { display: flex; flex-direction: column; align-items: stretch; position: absolute; top: 58px; left: 0; right: 0; background: var(--ink-900); border-radius: 18px; padding: 10px; z-index: 5; }
+  .hamburger { display: grid; }
+  .esteira { margin: -26px 0 -24px; padding: 26px 0; }
+  .faixa-mov.clara { transform: rotate(-2.4deg); }
+  .faixa-mov.escura { transform: rotate(2.2deg); margin-top: -10px; }
+  .faixa-mov { width: 122%; margin-left: -11%; }
+  .faixa { padding-bottom: 150px; }
+  .faixa .foto { top: auto; bottom: 0; right: 0; left: 0; width: 100%; height: 172px;
+    -webkit-mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%); }
+  .campos { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .numeros { grid-template-columns: 1fr; }
+  .barra .cta-topo { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  .trilho-mov { animation: none; }
+  .faixa-mov { overflow-x: auto; scrollbar-width: none; }
+  .rev { opacity: 1; transform: none; }
+}
+</style>
 </head>
 <body>
-<x-dc>
-<helmet>
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/fonts.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/colors.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/typography.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/spacing.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/radius.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/elevation.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/motion.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/tokens/layout.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/base.css">
-  <link rel="stylesheet" href="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/styles.css">
-  <script src="_ds/portal-atto-design-system-21a1e5ed-18a8-429d-b39f-c9455d4fde4f/_ds_bundle.js"></script>
-  <style>
-    html { scroll-behavior: smooth; }
-    body { margin: 0; overflow-x: hidden; background: var(--white); color: var(--text-primary); font: var(--type-body); -webkit-font-smoothing: antialiased; }
-    a { color: var(--text-link); text-decoration: none; }
-    a:hover { color: var(--text-link-hover); }
-    .atto-inverse a { color: var(--atto-yellow); }
-    .atto-inverse a:hover { color: var(--atto-yellow-tint); }
-    img { display: block; max-width: 100%; }
-    section[id] { scroll-margin-top: 88px; }
 
-    /* Campos em HTML nativo com a aparência do design system — o componente Input
-       não emite id/name/for, o que deixava os campos sem nome acessível. */
-    .campo { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-    .campo > label { font: var(--type-label); color: var(--text-primary); }
-    .campo .req { color: var(--red-500); margin-left: 3px; }
-    .campo .caixa { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 12px; background: var(--surface-card); border: 1px solid var(--border-default); border-radius: 10px; transition: var(--transition-control); }
-    .campo .caixa:focus-within { border-color: var(--ink-950); box-shadow: 0 0 0 3px rgba(0,0,0,.09); }
-    .campo input, .campo select, .campo textarea { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font: var(--type-body); color: var(--text-primary); }
-    .campo textarea { padding: 11px 0; resize: vertical; line-height: 1.5; }
-    .campo .ajuda { font: var(--type-caption); color: var(--ink-500); margin: 0; }
-    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--ink-950); outline-offset: 2px; }
-
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-    }
-  </style>
-</helmet>
-
-<div>
-
-  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: rgba(255,255,255,.86); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-subtle)">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 10px clamp(16px, 4vw, 32px); height: 72px; display: flex; align-items: center; gap: clamp(12px, 3vw, 40px); flex-wrap: nowrap">
-      <a href="index.html" style="display: flex; align-items: center; flex: 0 0 auto">
-        <img src="assets/brand/logo-lockup-black.png" alt="Portal Atto" style="height: 30px; width: auto">
-      </a>
-      <nav style="{{ navEstilo }}">
-        <a href="index.html" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Home</a>
-        <a href="index.html#atas" style="font: var(--type-label); color: var(--ink-950)">Atas de registro</a>
-        <a href="produtos.html" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Produtos</a>
-        <a href="quem-somos.html" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Quem somos</a>
-        <a href="#solicitar" style="font: var(--type-label); color: var(--ink-600)" style-hover="color: var(--ink-950)">Contato</a>
-      </nav>
-      <div style="flex: 1 1 auto"></div>
-      <button type="button" onClick="{{ alternarMenu }}" aria-label="Abrir menu" aria-expanded="{{ menuAberto }}" style="{{ estiloBotaoMenu }}">
-        <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Icon" name="menu" size="20" hint-size="20px,20px"></x-import>
-      </button>
-      <div style="flex: 0 0 auto; display: flex; gap: 12px; align-items: center">
-        <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Button" variant="primary" size="sm" icon-right="arrow-right" href="#solicitar" hint-size="auto,36px">Solicitar projeto</x-import>
-      </div>
-    </div>
-    <sc-if value="{{ menuAberto }}" hint-placeholder-val="{{ false }}">
-      <div style="background: var(--white); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm)">
-        <div style="max-width: 1280px; margin: 0 auto; padding: 8px clamp(16px, 4vw, 32px) 16px; display: flex; flex-direction: column">
-          <a href="index.html" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Home</a>
-          <a href="index.html#atas" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Atas de registro</a>
-          <a href="produtos.html" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Produtos</a>
-          <a href="quem-somos.html" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0; border-bottom: 1px solid var(--border-subtle)">Quem somos</a>
-          <a href="#solicitar" onClick="{{ fecharMenu }}" style="font: var(--type-h4); color: var(--ink-950); padding: 14px 0">Contato</a>
-        </div>
-      </div>
-    </sc-if>
-  </header>
-
-  <main id="conteudo">
-
-  <section class="atto-inverse" style="position: relative; overflow: hidden; background: var(--ink-1000); padding: 168px 0 72px">
-    <span role="img" aria-label="{{ heroAlt }}" style="{{ heroEstilo }}"></span>
-    <div style="position: absolute; inset: 0; background: rgba(0,0,0,.68)"></div>
-    <div style="position: relative; max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
-      <p style="font: var(--type-body-sm); color: rgba(255,255,255,.6); margin: 0 0 22px"><a href="index.html" style="color: rgba(255,255,255,.75)">Início</a> · <a href="index.html#atas" style="color: rgba(255,255,255,.75)">Atas de registro</a> · {{ titulo }}</p>
-      <p style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--atto-yellow); margin: 0 0 20px">{{ categoria }}</p>
-      <h1 style="font: var(--type-display-lg); font-size: clamp(30px, 5vw, 56px); letter-spacing: var(--tracking-display); color: var(--white); margin: 0; max-width: 24ch; text-wrap: balance">{{ manchete }}</h1>
-      <p style="font: var(--type-body-lg); color: rgba(255,255,255,.78); margin: 24px 0 0; max-width: 58ch; text-wrap: pretty">{{ chamada }}</p>
-      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 30px">
-        <sc-for list="{{ selos }}" as="s" hint-placeholder-count="3">
-          <span style="font: var(--type-label); color: var(--white); border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.12); padding: 9px 18px; border-radius: 999px">{{ s.texto }}</span>
-        </sc-for>
-      </div>
-      <div style="display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap">
-        <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Button" variant="primary" size="lg" icon-right="arrow-right" href="#solicitar" hint-size="auto,52px">Solicitar este projeto</x-import>
-        <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Button" variant="inverse" size="lg" href="#adesao" hint-size="auto,52px">Como aderir</x-import>
-      </div>
-    </div>
-  </section>
-
-  <div style="background: var(--white); border-bottom: 1px solid var(--border-subtle)">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 30px clamp(20px, 4vw, 32px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 28px">
-      <sc-for list="{{ dados }}" as="d" hint-placeholder-count="4">
-        <div>
-          <span style="display: block; font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--ink-500); margin-bottom: 6px">{{ d.rotulo }}</span>
-          <b style="font: var(--type-h4)">{{ d.valor }}</b>
-        </div>
-      </sc-for>
-    </div>
+<!-- ══ CAPA ═══════════════════════════════════════════════════════════════ -->
+<header class="bloco escuro capa" id="topo">
+  <div class="capa-fundo">
+    <!-- sem src no markup: src="" resolve para a própria URL da página e
+         dispara uma requisição inútil antes de o script preencher a foto -->
+    <img id="capa-img" fetchpriority="high" decoding="async" width="1600" height="900">
+    <div class="capa-veu"></div>
   </div>
 
-  <section style="padding: clamp(64px, 9vw, 112px) 0 clamp(48px, 6vw, 72px); background: var(--white)">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
-      <p style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--ink-500); margin: 0 0 16px">Sobre esta solução</p>
-      <h2 style="font: var(--type-display-md); font-size: clamp(26px, 4.2vw, 36px); letter-spacing: var(--tracking-heading); margin: 0; max-width: 22ch; text-wrap: balance">{{ sobreTitulo }}</h2>
-      <p style="font: var(--type-body-lg); color: var(--text-secondary); margin: 24px 0 0; max-width: 70ch; text-wrap: pretty">{{ sobreTexto }}</p>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 20px; margin-top: 48px">
-        <sc-for list="{{ blocos }}" as="b" hint-placeholder-count="4">
-          <div style="background: var(--ink-25); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 28px">
-            <span style="font: var(--type-mono); font-size: 15px; color: var(--ink-950)">{{ b.rotulo }}</span>
-            <h3 style="font: var(--type-h4); margin: 12px 0 6px">{{ b.titulo }}</h3>
-            <p style="font: var(--type-body-sm); color: var(--text-secondary); margin: 0">{{ b.texto }}</p>
-          </div>
-        </sc-for>
-      </div>
+  <div class="interno">
+    <div class="barra">
+      <a href="index.html" aria-label="Portal Atto — início">
+        <img class="marca" src="assets/brand/logo-lockup-reversed.png" alt="Portal Atto" width="108" height="30">
+      </a>
+      <div style="flex:1"></div>
+      <nav class="menu" id="menu" aria-label="Principal">
+        <a href="index.html">Home</a>
+        <a href="index.html#atas" aria-current="page">Atas de registro</a>
+        <a href="produtos.html">Produtos</a>
+        <a href="quem-somos.html">Quem somos</a>
+        <a href="#contato">Contato</a>
+      </nav>
+      <div style="flex:1"></div>
+      <button type="button" class="circulo hamburger" id="btn-menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <a href="#contato" class="btn btn-marca cta-topo">
+        Solicitar projeto
+        <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+      </a>
     </div>
-  </section>
 
-  <section style="padding: 0 0 clamp(64px, 9vw, 112px); background: var(--white)">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
-      <p style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--ink-500); margin: 0 0 24px">{{ tituloGaleria }}</p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 20px">
-        <sc-for list="{{ galeria }}" as="g" hint-placeholder-count="4">
-          <span role="img" aria-label="{{ g.alt }}" style="{{ g.estilo }}"></span>
-        </sc-for>
-      </div>
-      <sc-if value="{{ temVideo }}" hint-placeholder-val="{{ false }}">
-        <figure style="margin: 28px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 28px; align-items: center">
-          <video src="{{ video }}" poster="{{ videoPoster }}" controls="{{ true }}" playsInline="{{ true }}" preload="metadata" style="width: 100%; max-width: 340px; display: block; border-radius: 18px; background: var(--ink-950); aspect-ratio: 9 / 16; object-fit: cover"></video>
-          <figcaption style="font: var(--type-body); color: var(--ink-600); margin: 0; max-width: 46ch; text-wrap: pretty">{{ videoLegenda }}</figcaption>
-        </figure>
-      </sc-if>
-      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px">
-        <sc-for list="{{ itens }}" as="i" hint-placeholder-count="6">
-          <span style="font: var(--type-body-sm); font-weight: 600; color: var(--ink-700); background: var(--white); border: 1px solid var(--border-default); padding: 10px 18px; border-radius: 999px">{{ i.nome }}</span>
-        </sc-for>
-      </div>
-    </div>
-  </section>
-
-  <section id="adesao" class="atto-inverse" style="padding: clamp(64px, 9vw, 112px) 0; background: var(--ink-1000)">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
-      <p style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--atto-yellow); margin: 0 0 16px">Como aderir</p>
-      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: clamp(28px, 4vw, 48px); flex-wrap: wrap">
-        <h2 style="font: var(--type-display-md); font-size: clamp(26px, 4.2vw, 36px); letter-spacing: var(--tracking-heading); color: var(--white); margin: 0; max-width: 20ch; text-wrap: balance">Nove etapas até a entrega</h2>
-        <p style="font: var(--type-body-lg); color: rgba(255,255,255,.7); margin: 0; max-width: 46ch; text-wrap: pretty">O caminho da adesão a ata de registro de preços, do primeiro e-mail ao recebimento do objeto.</p>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 20px; margin-top: 52px">
-        <sc-for list="{{ etapas }}" as="e" hint-placeholder-count="9">
-          <div style="background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 26px">
-            <span style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 9px; background: var(--atto-yellow); color: var(--ink-1000); font: var(--type-mono); font-size: 14px">{{ e.n }}</span>
-            <h3 style="font: var(--type-h4); color: var(--white); margin: 16px 0 8px">{{ e.titulo }}</h3>
-            <p style="font: var(--type-body-sm); color: rgba(255,255,255,.66); margin: 0">{{ e.texto }}</p>
-          </div>
-        </sc-for>
-      </div>
-    </div>
-  </section>
-
-  <section id="solicitar" style="padding: clamp(64px, 9vw, 112px) 0; background: var(--white)">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: clamp(48px, 6vw, 80px); align-items: start">
-        <div>
-          <p style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--ink-500); margin: 0 0 16px">Solicitar este projeto</p>
-          <h2 style="font: var(--type-display-md); font-size: clamp(26px, 4.2vw, 36px); letter-spacing: var(--tracking-heading); margin: 0; max-width: 18ch; text-wrap: balance">{{ formTitulo }}</h2>
-          <p style="font: var(--type-body-lg); color: var(--text-secondary); margin: 24px 0 0; max-width: 46ch; text-wrap: pretty">A equipe analisa a demanda, confirma a cobertura em ata e devolve o projeto com valores, prazo e a documentação de adesão.</p>
-          <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 36px">
-            <div style="display: flex; gap: 12px; align-items: flex-start">
-              <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Icon" name="check" size="18" hint-size="18px,18px"></x-import>
-              <span style="font: var(--type-body); color: var(--text-secondary)">Projeto e cronograma antes do empenho</span>
-            </div>
-            <div style="display: flex; gap: 12px; align-items: flex-start">
-              <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Icon" name="check" size="18" hint-size="18px,18px"></x-import>
-              <span style="font: var(--type-body); color: var(--text-secondary)">Ficha técnica para a área técnica conferir</span>
-            </div>
-            <div style="display: flex; gap: 12px; align-items: flex-start">
-              <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Icon" name="check" size="18" hint-size="18px,18px"></x-import>
-              <span style="font: var(--type-body); color: var(--text-secondary)">Sem compromisso e sem custo de projeto</span>
-            </div>
-          </div>
-        </div>
-
-        <div style="background: var(--white); border: 1px solid var(--border-default); border-radius: 14px 14px 14px 28px; padding: clamp(24px, 4vw, 40px); box-shadow: var(--shadow-xs)">
-          <sc-if value="{{ enviado }}" hint-placeholder-val="{{ false }}">
-            <div role="status" style="display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px 0">
-              <span style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 28px; background: var(--atto-yellow); color: var(--ink-1000)">
-                <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Icon" name="check" size="26" hint-size="26px,26px"></x-import>
-              </span>
-              <h3 style="font: var(--type-h2); margin: 0">Solicitação enviada</h3>
-              <p style="font: var(--type-body); color: var(--text-secondary); margin: 0">A equipe responde em até um dia útil com o próximo passo.</p>
-            </div>
-          </sc-if>
-          <sc-if value="{{ formAberto }}" hint-placeholder-val="{{ true }}">
-            <form onSubmit="{{ enviar }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 20px">
-              <input type="hidden" name="solucao" value="{{ titulo }}">
-              <div class="campo" style="grid-column: 1 / -1">
-                <label for="f-nome">Nome<span class="req" aria-hidden="true">*</span></label>
-                <div class="caixa"><input id="f-nome" name="nome" type="text" autocomplete="name" required="required" placeholder="Como devemos chamar você"></div>
-              </div>
-              <div class="campo">
-                <label for="f-email">E-mail institucional<span class="req" aria-hidden="true">*</span></label>
-                <div class="caixa"><input id="f-email" name="email" type="email" autocomplete="email" required="required" placeholder="nome@prefeitura.gov.br"></div>
-              </div>
-              <div class="campo">
-                <label for="f-telefone">Telefone<span class="req" aria-hidden="true">*</span></label>
-                <div class="caixa"><input id="f-telefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" required="required" placeholder="(00) 00000-0000"></div>
-              </div>
-              <div class="campo">
-                <label for="f-municipio">Município<span class="req" aria-hidden="true">*</span></label>
-                <div class="caixa"><input id="f-municipio" name="municipio" type="text" autocomplete="address-level2" required="required" placeholder="Cidade e estado"></div>
-              </div>
-              <div class="campo">
-                <label for="f-cargo">Cargo</label>
-                <div class="caixa"><input id="f-cargo" name="cargo" type="text" autocomplete="organization-title" placeholder="Prefeito, secretário, gestor"></div>
-              </div>
-              <div class="campo" style="grid-column: 1 / -1">
-                <label for="f-demanda">Sobre a demanda</label>
-                <div class="caixa"><textarea id="f-demanda" name="demanda" rows="4" aria-describedby="f-demanda-ajuda" placeholder="{{ formPlaceholder }}"></textarea></div>
-                <p class="ajuda" id="f-demanda-ajuda">Quanto mais concreto, mais rápida a resposta.</p>
-              </div>
-              <div style="grid-column: 1 / -1; margin-top: 4px">
-                <x-import component-from-global-scope="PortalAttoDesignSystem_21a1e5.Button" variant="primary" size="lg" type="submit" full-width="{{ true }}" icon-right="arrow-right" hint-size="100%,52px">Enviar solicitação</x-import>
-              </div>
-              <p aria-live="polite" style="grid-column: 1 / -1; font: var(--type-caption); color: var(--ink-500); margin: 0">{{ statusEnvio }}</p>
-              <sc-if value="{{ temErro }}" hint-placeholder-val="{{ false }}">
-                <p role="alert" style="grid-column: 1 / -1; font: var(--type-body-sm); color: var(--red-500); margin: 0">{{ erro }}</p>
-              </sc-if>
-              <p style="grid-column: 1 / -1; font: var(--type-caption); color: var(--ink-500); margin: 0; text-wrap: pretty">Seus dados são usados apenas para responder a esta solicitação e não são compartilhados com terceiros.</p>
-            </form>
-          </sc-if>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section style="padding: 0 0 clamp(64px, 9vw, 112px); background: var(--white)">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
-      <p style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--ink-500); margin: 0 0 24px">Outras atas vigentes</p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 20px">
-        <sc-for list="{{ outras }}" as="o" hint-placeholder-count="4">
-          <a href="{{ o.href }}" style="display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--border-subtle); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-xs)" style-hover="box-shadow: var(--shadow-md)">
-            <span role="img" aria-label="{{ o.alt }}" style="{{ o.estilo }}"></span>
-            <span style="display: flex; flex-direction: column; flex: 1; padding: 22px">
-              <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--ink-500); margin-bottom: 8px">{{ o.categoria }}</span>
-              <h3 style="font: var(--type-h4); margin: 0">{{ o.titulo }}</h3>
-            </span>
+    <div class="capa-grade">
+      <div class="capa-texto">
+        <span class="etiqueta"><span class="ponto"></span><span id="capa-categoria"></span></span>
+        <span class="kicker" id="capa-titulo"></span>
+        <h1 class="titulo" id="capa-manchete" style="margin-top:4px"></h1>
+        <p class="lead" id="capa-chamada"></p>
+        <div class="selos" id="capa-selos"></div>
+        <div class="acoes">
+          <a href="#contato" class="btn btn-marca">
+            Solicitar projeto
+            <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
           </a>
-        </sc-for>
+          <a href="produtos.html" class="btn btn-contorno">Ver os produtos</a>
+        </div>
+      </div>
+
+      <div class="cartao-capa">
+        <div class="n" id="cartao-n"></div>
+        <p style="font:var(--type-body-sm); color:var(--ink-600); margin:5px 0 0" id="cartao-texto"></p>
+        <a href="#como-aderir" class="btn btn-marca" style="margin-top:16px">
+          Como aderir
+          <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
       </div>
     </div>
-  </section>
 
-  </main>
+    <div class="numeros" id="capa-dados"></div>
+  </div>
+</header>
 
-  <footer class="atto-inverse" style="background: var(--ink-1000); padding: 72px 0 40px">
-    <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 32px)">
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 185px), 1fr)); gap: clamp(32px, 4vw, 48px)">
-        <div>
-          <img loading="lazy" decoding="async" src="assets/brand/logo-lockup-reversed.png" alt="Portal Atto" style="height: 32px; width: auto; margin-bottom: 20px">
-          <p style="font: var(--type-body-sm); color: rgba(255,255,255,.6); margin: 0; max-width: 34ch">Projetos completos para a gestão pública, homologados em ata de registro de preços.</p>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 12px">
-          <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: rgba(255,255,255,.4)">Catálogo</span>
-          <a href="index.html#atas" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Todas as atas</a>
-          <a href="produtos.html" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Produtos</a>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 12px">
-          <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: rgba(255,255,255,.4)">Institucional</span>
-          <a href="quem-somos.html" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Quem somos</a>
-          <a href="index.html#projetos" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Projetos entregues</a>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 12px">
-          <span style="font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: rgba(255,255,255,.4)">Contato</span>
-          <a href="#solicitar" style="font: var(--type-body-sm); color: rgba(255,255,255,.72)">Solicitar projeto</a>
-        </div>
-      </div>
-      <p style="font: var(--type-caption); color: rgba(255,255,255,.42); margin: 48px 0 0; max-width: 92ch; text-wrap: pretty">A adesão a ata de registro de preços depende da ata aplicável, da autorização do órgão gerenciador, da vigência, do saldo disponível e da análise do órgão interessado, nos termos da Lei 14.133/2021. As informações deste site têm caráter informativo e não substituem parecer jurídico.</p>
-      <div style="display: flex; justify-content: space-between; gap: 24px; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); flex-wrap: wrap">
-        <span style="font: var(--type-caption); color: rgba(255,255,255,.4)">© 2026 Portal Atto. Todos os direitos reservados.</span>
-        <span style="font: var(--type-caption); color: rgba(255,255,255,.4)">Adesão a ata de registro de preços · Lei 14.133/2021</span>
-      </div>
-    </div>
-  </footer>
+<main>
 
+<!-- ══ ESTEIRA ════════════════════════════════════════════════════════════ -->
+<div class="esteira">
+  <div class="faixa-mov clara"><div class="trilho-mov" data-termos="itens"></div></div>
+  <div class="faixa-mov escura"><div class="trilho-mov" data-termos="garantias"></div></div>
 </div>
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props="{}">
-// ─── Destino das solicitações do formulário ──────────────────────────────────
-// Mantenha igual ao definido em index.html. Enquanto os dois estiverem vazios,
-// o formulário avisa o visitante em vez de fingir que enviou.
+
+<!-- ══ O QUE ENTRA ════════════════════════════════════════════════════════ -->
+<section class="bloco claro">
+  <div class="interno">
+    <div class="sobre">
+      <div>
+        <span class="etiqueta">O que entra na ata</span>
+        <h2 class="titulo" id="sobre-titulo"></h2>
+      </div>
+      <div>
+        <p class="frase" id="sobre-texto"></p>
+      </div>
+    </div>
+    <div class="blocos" id="blocos"></div>
+  </div>
+</section>
+
+<!-- ══ GALERIA ════════════════════════════════════════════════════════════ -->
+<section class="bloco escuro" id="galeria-secao">
+  <div class="interno">
+    <div class="cabeca">
+      <div>
+        <!-- rótulo neutro: a mesma página serve sala de aula e almoxarifado de prefeitura -->
+        <span class="etiqueta">Em uso</span>
+        <h2 class="titulo" id="galeria-titulo"></h2>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end">
+        <button type="button" class="circulo" id="gal-ant" aria-label="Fotos anteriores">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button type="button" class="circulo" id="gal-prox" aria-label="Próximas fotos">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="trilho" id="galeria" tabindex="0" role="region" aria-label="Fotos da solução"></div>
+    <figure class="video-ata" id="video-ata" hidden></figure>
+  </div>
+</section>
+
+<!-- ══ ITENS ══════════════════════════════════════════════════════════════ -->
+<section class="bloco claro sem-cartao">
+  <div class="interno">
+    <div class="cabeca">
+      <div>
+        <span class="etiqueta">Composição</span>
+        <h2 class="titulo-md">O que está<br>registrado nesta ata</h2>
+      </div>
+      <div>
+        <p class="apoio secundario" style="margin:0 0 18px">
+          Cada item tem ficha técnica e documentação de adesão. A lista completa, com foto de cada um, está na vitrine de produtos.
+        </p>
+        <a href="produtos.html" class="btn btn-marca">
+          Ver todos os produtos
+          <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
+      </div>
+    </div>
+    <div class="itens" id="itens"></div>
+  </div>
+</section>
+
+<!-- ══ COMO ADERIR ════════════════════════════════════════════════════════ -->
+<section class="bloco escuro" id="como-aderir">
+  <div class="interno">
+    <div class="cabeca">
+      <div>
+        <span class="etiqueta">Passo a passo</span>
+        <h2 class="titulo">Como aderir<br>a esta ata</h2>
+      </div>
+      <p class="apoio secundario" style="margin:0">
+        A adesão dispensa novo processo licitatório, mas passa pelo órgão gerenciador. A Atto acompanha cada etapa e devolve a documentação pronta.
+      </p>
+    </div>
+    <div class="etapas" id="etapas"></div>
+  </div>
+</section>
+
+<!-- ══ FAIXA ══════════════════════════════════════════════════════════════ -->
+<section class="bloco faixa">
+  <img class="foto" loading="lazy" decoding="async" src="assets/img/convivencia-01.jpeg" alt="" aria-hidden="true" width="1200" height="800">
+  <div class="interno">
+    <div>
+      <h2>Sua equipe adere.<br>A gente entrega, monta e treina.</h2>
+      <p>Sem abrir novo processo licitatório e sem custo para montar o projeto.</p>
+    </div>
+    <a href="#contato" class="btn btn-preto">
+      Solicitar projeto
+      <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+    </a>
+  </div>
+</section>
+
+<!-- ══ CONTATO ════════════════════════════════════════════════════════════ -->
+<section class="bloco escuro" id="contato">
+  <div class="interno form-grade">
+    <div>
+      <span class="etiqueta">Solicitar projeto</span>
+      <h2 class="titulo-md" id="form-titulo"></h2>
+      <p class="secundario" style="margin:18px 0 0; max-width:52ch; text-wrap:pretty">
+        A equipe analisa a demanda, confirma a ata aplicável e devolve o projeto com valores, prazo e documentação de adesão.
+      </p>
+      <ul class="vantagens">
+        <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Resposta com a ata compatível e a minuta de adesão</li>
+        <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Ficha técnica e certificações para a área técnica</li>
+        <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Sem compromisso e sem custo de projeto</li>
+      </ul>
+    </div>
+
+    <form id="form" novalidate>
+      <input type="hidden" name="solucao" id="form-solucao" value="">
+      <div class="campos">
+        <div class="campo">
+          <label for="f-nome">Nome<span class="req" aria-hidden="true">*</span></label>
+          <input id="f-nome" name="nome" type="text" autocomplete="name" required placeholder="Como devemos chamar você">
+        </div>
+        <div class="campo">
+          <label for="f-email">E-mail institucional<span class="req" aria-hidden="true">*</span></label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required placeholder="nome@municipio.gov.br">
+        </div>
+        <div class="campo">
+          <label for="f-telefone">Telefone<span class="req" aria-hidden="true">*</span></label>
+          <input id="f-telefone" name="telefone" type="tel" autocomplete="tel" required placeholder="(00) 00000-0000">
+        </div>
+        <div class="campo">
+          <label for="f-municipio">Município<span class="req" aria-hidden="true">*</span></label>
+          <input id="f-municipio" name="municipio" type="text" autocomplete="address-level2" required placeholder="Cidade e estado">
+        </div>
+        <div class="campo largo">
+          <label for="f-cargo">Cargo</label>
+          <input id="f-cargo" name="cargo" type="text" autocomplete="organization-title" placeholder="Secretário, pregoeiro, diretor…">
+        </div>
+        <div class="campo largo">
+          <label for="f-mensagem">Descreva a demanda</label>
+          <textarea id="f-mensagem" name="mensagem" rows="4" placeholder=""></textarea>
+          <p class="ajuda">Quanto mais concreto, mais rápida a resposta.</p>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-top:22px">
+        <button type="submit" class="btn btn-marca" id="btn-enviar">
+          Enviar solicitação
+          <span class="seta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </button>
+        <p class="ajuda" style="margin:0; max-width:40ch">
+          Seus dados são usados apenas para responder a esta solicitação e não são compartilhados com terceiros.
+        </p>
+      </div>
+      <div id="retorno" role="alert" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- ══ RODAPÉ ═════════════════════════════════════════════════════════════ -->
+<footer class="bloco escuro rodape">
+  <div class="interno">
+    <div class="topo-rodape">
+      <img src="assets/brand/logo-lockup-reversed.png" alt="Portal Atto" width="120" height="33" style="height:33px;width:auto">
+      <nav aria-label="Rodapé">
+        <a href="index.html">Home</a>
+        <a href="index.html#atas">Atas de registro</a>
+        <a href="produtos.html">Produtos</a>
+        <a href="quem-somos.html">Quem somos</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </div>
+    <p class="legal">
+      A adesão a ata de registro de preços depende da ata aplicável, da autorização do órgão gerenciador, da vigência, da disponibilidade de saldo e da análise do órgão interessado. As informações deste site são informativas e não substituem parecer jurídico nem a consulta ao documento oficial da ata.
+    </p>
+    <p class="legal" style="margin-top:14px">© <span id="ano"></span> Portal Atto. Projetos completos para a gestão pública, homologados em ata de registro de preços.</p>
+  </div>
+</footer>
+
+<script>
+/* ─── Destino das solicitações ─────────────────────────────────────────────
+   Mesmo contrato das outras páginas: enquanto os dois estiverem vazios, o
+   formulário avisa que o envio está indisponível em vez de fingir sucesso. */
 const ENDPOINT_FORMULARIO = "";
 const EMAIL_CONTATO = "";
 
-// O conteúdo das atas, ETAPAS e SELOS_PADRAO saíram daqui para
-// assets/atas-dados.js: fonte única, lida também pelo ata-v2.html.
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
+  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+));
 
-class Component extends DCLogic {
-  state = { enviado: false, enviando: false, erro: "", slug: "sala-multissensorial", compacto: false, menuAberto: false };
+/* ─── Qual ata ─────────────────────────────────────────────────────────── */
+let slug = new URLSearchParams(location.search).get("ata") || ORDEM[0];
+if (ANTIGOS_ATA[slug]) {
+  // slug antigo que já circulou: corrige a barra de endereço sem recarregar
+  slug = ANTIGOS_ATA[slug];
+  history.replaceState(null, "", `ata.html?ata=${slug}`);
+}
+if (!ATAS[slug]) slug = ORDEM[0];
+const a = ATAS[slug];
 
-  aoRedimensionar = () => {
-    const compacto = window.innerWidth < 760;
-    if (compacto !== this.state.compacto) this.setState({ compacto, menuAberto: false });
-  };
+/* ─── Capa ─────────────────────────────────────────────────────────────── */
+/* Vinte e cinco atas no mesmo endereço, separadas só pelo ?ata=. Sem atualizar
+   canonical e og aqui, compartilhar qualquer uma delas mostraria o título
+   genérico da página e o buscador veria 25 URLs com a mesma identidade. */
+const SITE = "https://portal-atto.vercel.app";
+const porMeta = (sel, valor) => { const el = document.querySelector(sel); if (el) el.setAttribute("content", valor); };
 
+document.title = `${a.titulo} — Portal Atto`;
+porMeta('meta[name="description"]', a.chamada);
+porMeta('meta[property="og:title"]', `${a.titulo} — Portal Atto`);
+porMeta('meta[property="og:description"]', a.chamada);
+porMeta('meta[property="og:url"]', `${SITE}/ata?ata=${slug}`);
+porMeta('meta[property="og:image"]', `${SITE}/${a.imagem}`);
+porMeta('meta[property="og:image:alt"]', a.alt);
+document.querySelector('link[rel="canonical"]')?.setAttribute("href", `${SITE}/ata?ata=${slug}`);
 
-  componentWillUnmount() { window.removeEventListener("resize", this.aoRedimensionar); }
+const capaImg = document.getElementById("capa-img");
+capaImg.src = a.imagem;
+capaImg.alt = a.alt;
 
-  menuVals() {
-    const compacto = this.state.compacto;
-    return {
-      navEstilo: { display: compacto ? "none" : "flex", gap: "clamp(14px, 2.2vw, 28px)", alignItems: "center", flexWrap: "nowrap", whiteSpace: "nowrap" },
-      estiloBotaoMenu: {
-        display: compacto ? "inline-flex" : "none", alignItems: "center", justifyContent: "center", flex: "0 0 auto",
-        width: 42, height: 42, marginRight: 4, padding: 0, cursor: "pointer",
-        borderRadius: 10, border: "1px solid var(--border-default)", background: "var(--white)", color: "var(--ink-950)"
-      },
-      menuAberto: compacto && this.state.menuAberto,
-      alternarMenu: () => this.setState(s => ({ menuAberto: !s.menuAberto })),
-      fecharMenu: () => this.setState({ menuAberto: false })
-    };
-  }
+document.getElementById("capa-categoria").textContent = a.categoria;
+document.getElementById("capa-titulo").textContent = a.titulo;
+document.getElementById("capa-manchete").textContent = a.manchete;
+document.getElementById("capa-chamada").textContent = a.chamada;
 
-  componentDidMount() {
-    window.addEventListener("resize", this.aoRedimensionar);
-    this.aoRedimensionar();
-    // Slugs antigos: sem isso o link salvo cai silenciosamente na sala multissensorial.
-    const ANTIGOS = { "mochila-inclusiva": "kit-inclusivo", "material-kit-escolar": "materiais-escolares" };
-    let q = new URLSearchParams(window.location.search).get("ata");
-    if (q && ANTIGOS[q]) {
-      q = ANTIGOS[q];
-      history.replaceState(null, "", "ata.html?ata=" + q);
-    }
-    if (q && ATAS[q]) {
-      this.setState({ slug: q });
-      document.title = ATAS[q].titulo + " — Portal Atto";
-      this.atualizarMeta(q, ATAS[q]);
-    }
-  }
+// só afirma "Ata vigente" onde a própria ata não declarou outra coisa
+document.getElementById("capa-selos").innerHTML =
+  (a.selos || SELOS_PADRAO).map((s) => `<span class="selo">${esc(s)}</span>`).join("");
 
-  // Cada ?ata= é conteúdo distinto: canonical, og:url e og:image precisam acompanhar,
-  // senão todas as atas compartilham o mesmo card de compartilhamento e o mesmo canônico.
-  atualizarMeta(slug, a) {
-    const BASE = "https://portal-atto.vercel.app";
-    const url = BASE + "/ata?ata=" + slug;
-    const def = (sel, attr, valor) => {
-      const el = document.head.querySelector(sel);
-      if (el) el.setAttribute(attr, valor);
-    };
-    def('link[rel="canonical"]', "href", url);
-    def('meta[property="og:url"]', "content", url);
-    def('meta[property="og:title"]', "content", a.titulo + " — Portal Atto");
-    def('meta[property="og:description"]', "content", a.chamada);
-    def('meta[name="description"]', "content", a.chamada);
-    def('meta[property="og:image"]', "content", BASE + "/" + a.imagem);
-    def('meta[property="og:image:alt"]', "content", a.alt);
-  }
+document.getElementById("capa-dados").innerHTML = a.dados.map(([r, v]) => `
+  <div class="item">
+    <span class="r">${esc(r)}</span>
+    <span class="v">${esc(v)}</span>
+  </div>`).join("");
 
-  renderVals() {
-    const slug = this.state.slug;
-    const a = ATAS[slug] || ATAS["sala-multissensorial"];
-    const i = ORDEM.indexOf(slug);
-    const foto = (src, extra) => Object.assign({
-      display: "block",
-      backgroundImage: "url(" + src + ")",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundColor: "#13131a"
-    }, extra);
-    const outras = [1, 2, 3, 4].map(n => ORDEM[(i + n) % ORDEM.length]).map(s => ({
-      href: "ata.html?ata=" + s,
-      alt: ATAS[s].alt,
-      estilo: foto(ATAS[s].imagem, { aspectRatio: "16 / 10" }),
-      categoria: ATAS[s].categoria, titulo: ATAS[s].titulo
-    }));
-    return Object.assign(this.menuVals(), {
-      titulo: a.titulo, categoria: a.categoria, manchete: a.manchete, chamada: a.chamada,
-      selos: (a.selos || SELOS_PADRAO).map(s => ({ texto: s })),
-      heroAlt: a.alt,
-      heroEstilo: foto(a.imagem, { position: "absolute", inset: 0, width: "100%", height: "100%" }),
-      dados: a.dados.map(d => ({ rotulo: d[0], valor: d[1] })),
-      sobreTitulo: a.sobreTitulo, sobreTexto: a.sobreTexto,
-      blocos: a.blocos.map(b => ({ rotulo: b[0], titulo: b[1], texto: b[2] })),
-      tituloGaleria: a.tituloGaleria,
-      temVideo: !!a.video,
-      video: a.video ? a.video[0] : "",
-      videoPoster: a.video ? a.video[1] : "",
-      videoLegenda: a.video ? a.video[2] : "",
-      galeria: a.galeria.map(g => ({
-        alt: g[1],
-        estilo: foto(g[0], { width: "100%", height: "clamp(200px, 26vw, 280px)", borderRadius: 14 })
-      })),
-      itens: a.itens.map(n => ({ nome: n })),
-      formTitulo: a.formTitulo, formPlaceholder: a.formPlaceholder,
-      etapas: ETAPAS.map(e => ({ n: e[0], titulo: e[1], texto: e[2] })),
-      outras,
-      enviado: this.state.enviado,
-      formAberto: !this.state.enviado,
-      statusEnvio: this.state.enviando ? "Enviando a solicitação…" : "",
-      temErro: !!this.state.erro,
-      erro: this.state.erro,
-      enviar: (e) => {
-        e.preventDefault();
-        if (this.state.enviando) return;
-        const dados = new FormData(e.target);
+/* Onde a lista de itens é amostra e não o total — Pikler tem 154 peças e a
+   página mostra 15 famílias —, a ata declara totalItens. Sem isso o cartão
+   contradiz a barra de dados logo abaixo dele. */
+const totalItens = a.totalItens ?? a.itens.length;
+document.getElementById("cartao-n").textContent = totalItens;
+document.getElementById("cartao-texto").textContent =
+  totalItens === 1 ? "item registrado nesta ata, com ficha técnica e documentação de adesão."
+                   : "itens registrados nesta ata, cada um com ficha técnica e documentação de adesão.";
 
-        if (ENDPOINT_FORMULARIO) {
-          this.setState({ enviando: true, erro: "" });
-          fetch(ENDPOINT_FORMULARIO, { method: "POST", headers: { Accept: "application/json" }, body: dados })
-            .then(r => {
-              if (!r.ok) throw new Error("HTTP " + r.status);
-              this.setState({ enviado: true, enviando: false, erro: "" });
-            })
-            .catch(() => this.setState({
-              enviando: false,
-              erro: "Não foi possível enviar agora. Tente novamente em instantes — os dados que você preencheu continuam aqui."
-            }));
-          return;
-        }
+/* ─── O que entra ──────────────────────────────────────────────────────── */
+document.getElementById("sobre-titulo").textContent = a.sobreTitulo;
+document.getElementById("sobre-texto").textContent = a.sobreTexto;
+document.getElementById("blocos").innerHTML = a.blocos.map(([rot, tit, txt]) => `
+  <article>
+    <span class="rotulo">${esc(rot)}</span>
+    <h3>${esc(tit)}</h3>
+    <p>${esc(txt)}</p>
+  </article>`).join("");
 
-        if (EMAIL_CONTATO) {
-          const linhas = [];
-          dados.forEach((v, k) => linhas.push(k + ": " + v));
-          window.location.href = "mailto:" + EMAIL_CONTATO
-            + "?subject=" + encodeURIComponent("Solicitação — " + (dados.get("solucao") || "Portal Atto"))
-            + "&body=" + encodeURIComponent(linhas.join("\n"));
-          this.setState({ enviado: true, erro: "" });
-          return;
-        }
+/* ─── Galeria ──────────────────────────────────────────────────────────── */
+document.getElementById("galeria-titulo").textContent = a.tituloGaleria;
+const galeria = document.getElementById("galeria");
+galeria.innerHTML = a.galeria.map(([src, alt], i) => `
+  <img class="foto-gal" loading="${i < 3 ? "eager" : "lazy"}" decoding="async"
+       src="${esc(src)}" alt="${esc(alt)}" width="520" height="390">`).join("");
 
-        this.setState({
-          erro: "O envio pelo site está temporariamente indisponível. Por favor, entre em contato pelos canais da Atto — sua solicitação não foi registrada."
-        });
-      }
+if (a.video) {
+  const [src, poster, legenda] = a.video;
+  const fig = document.getElementById("video-ata");
+  fig.hidden = false;
+  fig.innerHTML = `
+    <video src="${esc(src)}" poster="${esc(poster)}" controls playsinline preload="metadata"></video>
+    <figcaption>${esc(legenda)}</figcaption>`;
+}
+
+/* ─── Itens ────────────────────────────────────────────────────────────── */
+document.getElementById("itens").innerHTML =
+  a.itens.map((i) => `<span>${esc(i)}</span>`).join("");
+
+/* ─── Etapas ───────────────────────────────────────────────────────────── */
+document.getElementById("etapas").innerHTML = ETAPAS.map(([n, tit, txt]) => `
+  <article>
+    <span class="n">${esc(n)}</span>
+    <h3>${esc(tit)}</h3>
+    <p>${esc(txt)}</p>
+  </article>`).join("");
+
+/* ─── Formulário ───────────────────────────────────────────────────────── */
+document.getElementById("form-titulo").textContent = a.formTitulo;
+document.getElementById("f-mensagem").placeholder = a.formPlaceholder;
+document.getElementById("form-solucao").value = a.titulo;
+document.getElementById("ano").textContent = new Date().getFullYear();
+
+/* ─── Galeria: setas ───────────────────────────────────────────────────── */
+const galAnt = document.getElementById("gal-ant");
+const galProx = document.getElementById("gal-prox");
+// atribuir scrollLeft deixa a animação a cargo do CSS: scrollBy com behavior
+// smooth não anima em container com overflow e devolve o trilho para zero
+const passoGal = () => (galeria.querySelector(".foto-gal")?.offsetWidth ?? 300) + 18;
+const andarGal = (s) => {
+  const fim = galeria.scrollWidth - galeria.clientWidth;
+  galeria.scrollLeft = Math.max(0, Math.min(fim, galeria.scrollLeft + s * passoGal() * 2));
+};
+galAnt.addEventListener("click", () => andarGal(-1));
+galProx.addEventListener("click", () => andarGal(1));
+
+const limitesGal = () => {
+  const fim = galeria.scrollWidth - galeria.clientWidth;
+  galAnt.disabled = galeria.scrollLeft < 8;
+  galProx.disabled = galeria.scrollLeft > fim - 8;
+};
+galeria.addEventListener("scroll", limitesGal, { passive: true });
+addEventListener("resize", limitesGal);
+limitesGal();
+
+/* ─── Esteira ──────────────────────────────────────────────────────────── */
+const TERMOS = {
+  itens: a.itens,
+  garantias: ["Adesão sem nova licitação", "Lei 14.133/2021", "Ficha técnica pronta",
+              "Entrega, montagem e treinamento", "Projeto sem custo", a.categoria]
+};
+for (const trilho of document.querySelectorAll(".trilho-mov")) {
+  const grupo = (TERMOS[trilho.dataset.termos] || [])
+    .map((t) => `<span class="termo">${esc(t)}<span class="losango" aria-hidden="true">&#9670;</span></span>`)
+    .join("");
+  // a segunda cópia é o que fecha o laço; para o leitor de tela ela não existe
+  trilho.innerHTML = `<span class="grupo">${grupo}</span><span class="grupo" aria-hidden="true">${grupo}</span>`;
+}
+
+/* ─── Menu ─────────────────────────────────────────────────────────────── */
+const btnMenu = document.getElementById("btn-menu");
+const menu = document.getElementById("menu");
+btnMenu.addEventListener("click", () => {
+  const aberto = menu.classList.toggle("aberto");
+  btnMenu.setAttribute("aria-expanded", String(aberto));
+  btnMenu.setAttribute("aria-label", aberto ? "Fechar menu" : "Abrir menu");
+});
+menu.addEventListener("click", (e) => {
+  if (e.target.tagName === "A") { menu.classList.remove("aberto"); btnMenu.setAttribute("aria-expanded", "false"); }
+});
+
+/* ─── Entrada por rolagem ──────────────────────────────────────────────── */
+const semMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!semMovimento) {
+  const GRUPOS = [
+    [".capa-texto > *", "rev", 80],
+    [".cartao-capa", "rev", 0],
+    [".numeros .item", "rev", 70],
+    [".sobre > *", "rev", 110],
+    [".blocos article", "rev", 90],
+    ["#galeria-secao .cabeca > *", "rev", 110],
+    [".sem-cartao .cabeca > *", "rev", 110],
+    ["#como-aderir .cabeca > *", "rev", 110],
+    [".etapas article", "rev", 50],
+    [".faixa .interno > *", "rev", 110],
+    ["#contato .form-grade > *", "rev", 130]
+  ];
+  const pendentes = new Set();
+  for (const [sel, cls, passo] of GRUPOS) {
+    document.querySelectorAll(sel).forEach((el, i) => {
+      if (el.classList.contains("rev")) return;
+      el.classList.add(cls);
+      el.style.setProperty("--atraso", `${Math.min(i, 5) * passo}ms`);
+      pendentes.add(el);
     });
   }
+  /* Varredura por posição, e não IntersectionObserver: numa rolagem rápida o
+     observer entrega o callback quando o elemento já saiu da vista, e o
+     conteúdo ficaria oculto para sempre. */
+  let agendado = false;
+  const varrer = () => {
+    agendado = false;
+    const linha = innerHeight * 0.92;
+    for (const el of pendentes) {
+      if (el.getBoundingClientRect().top < linha) { el.classList.add("vis"); pendentes.delete(el); }
+    }
+    if (!pendentes.size) { removeEventListener("scroll", aoMover); removeEventListener("resize", aoMover); }
+  };
+  const aoMover = () => { if (!agendado) { agendado = true; requestAnimationFrame(varrer); } };
+  addEventListener("scroll", aoMover, { passive: true });
+  addEventListener("resize", aoMover);
+  varrer();
 }
+
+/* ─── Envio ────────────────────────────────────────────────────────────── */
+const form = document.getElementById("form");
+const retorno = document.getElementById("retorno");
+const btnEnviar = document.getElementById("btn-enviar");
+const dizer = (texto, ok) => { retorno.innerHTML = `<p class="aviso${ok ? " ok" : ""}">${esc(texto)}</p>`; };
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!form.reportValidity()) return;
+  const dados = new FormData(form);
+
+  if (ENDPOINT_FORMULARIO) {
+    btnEnviar.disabled = true;
+    try {
+      const r = await fetch(ENDPOINT_FORMULARIO, { method: "POST", headers: { Accept: "application/json" }, body: dados });
+      if (!r.ok) throw new Error(r.status);
+      form.reset();
+      dizer("Solicitação recebida. A equipe responde com a ata compatível e a minuta de adesão.", true);
+    } catch {
+      dizer("Não foi possível enviar agora. Tente novamente em instantes ou procure a Atto pelos canais diretos — sua solicitação não foi registrada.", false);
+    } finally { btnEnviar.disabled = false; }
+    return;
+  }
+
+  if (EMAIL_CONTATO) {
+    const linhas = [];
+    for (const [k, v] of dados.entries()) if (v) linhas.push(`${k}: ${v}`);
+    location.href = `mailto:${EMAIL_CONTATO}?subject=${encodeURIComponent("Solicitação de projeto pelo site")}&body=${encodeURIComponent(linhas.join("\n"))}`;
+    return;
+  }
+
+  dizer("O envio pelo site está temporariamente indisponível. Por favor, entre em contato pelos canais da Atto — sua solicitação não foi registrada.", false);
+});
 </script>
 </body>
 </html>

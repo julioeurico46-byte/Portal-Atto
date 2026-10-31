@@ -181,11 +181,21 @@ mark { background: var(--atto-yellow-tint); color: inherit; padding: 0 2px; bord
 
 /* ── grade de cards ─────────────────────────────────────────────────────── */
 .grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 248px), 1fr)); gap: clamp(14px, 1.8vw, 22px); }
+/* Entrada por keyframes, não por transição: o card já usa transform no hover,
+   e duas transições na mesma propriedade se atropelam. A animação roda uma vez
+   e devolve o elemento ao estado base, deixando o hover livre.
+   O "backwards" segura o card invisível durante o atraso dele. */
+@keyframes entrar-carta {
+  from { opacity: 0; transform: translateY(14px) scale(.985); }
+  to   { opacity: 1; transform: none; }
+}
 .carta {
   display: flex; flex-direction: column; gap: 11px;
   background: var(--white); border: 1px solid var(--border-subtle);
   border-radius: 18px; padding: 13px; overflow: hidden;
   transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+  animation: entrar-carta .44s cubic-bezier(.22,.61,.36,1) backwards;
+  animation-delay: var(--d, 0ms);
 }
 .carta:hover { transform: translateY(-4px); border-color: var(--border-default); box-shadow: 0 16px 34px rgba(0,0,0,.09); }
 .carta .capa-item { width: 100%; height: auto; aspect-ratio: 4 / 3; border-radius: 12px; }
@@ -251,6 +261,8 @@ mark { background: var(--atto-yellow-tint); color: inherit; padding: 0 2px; bord
   .trilho-mov { animation: none; }
   .faixa-mov { overflow-x: auto; scrollbar-width: none; }
   .rev { opacity: 1; transform: none; }
+  /* os cards aparecem direto: sem subida, sem escalonamento, sem espera */
+  .carta { animation: none; }
 }
 </style>
 </head>
@@ -596,7 +608,12 @@ const FATIA = 48;
 let lista = [];        // índices em ITENS, já filtrados e ordenados
 let mostrados = 0;
 
-const cartaHtml = ([cat, nome, spec, img, slug, ajuste], i) => {
+/* O escalonamento acompanha a ordem de leitura, mas trava no 14º: com 48
+   cards, um atraso por card faria o último entrar quase dois segundos depois
+   do primeiro, e a vitrine pareceria lenta em vez de suave. */
+const atrasoDe = (pos) => `${Math.min(pos, 14) * 26}ms`;
+
+const cartaHtml = ([cat, nome, spec, img, slug, ajuste], i, pos) => {
   const solto = ajuste === "contain";
   // render de produto em fundo branco entra inteiro, com respiro;
   // foto de cena preenche o quadro
@@ -604,7 +621,7 @@ const cartaHtml = ([cat, nome, spec, img, slug, ajuste], i) => {
     ? "object-fit:contain; padding:10px; background:var(--white); border:1px solid var(--border-subtle)"
     : "object-fit:cover; background:var(--ink-25)";
   return `
-  <a class="carta" href="ata-v2.html?ata=${esc(slug)}">
+  <a class="carta" href="ata-v2.html?ata=${esc(slug)}" style="--d:${atrasoDe(pos)}">
     <span class="cat">${esc(cat)}</span>
     <img class="capa-item" loading="${i < 12 ? "eager" : "lazy"}" decoding="async"
          src="assets/img/${esc(img)}" alt="${esc(nome)}" width="420" height="315" style="${estilo}">
@@ -616,7 +633,9 @@ const cartaHtml = ([cat, nome, spec, img, slug, ajuste], i) => {
 
 const pintarFatia = () => {
   const fim = Math.min(lista.length, mostrados + FATIA);
-  const pedaco = lista.slice(mostrados, fim).map((i, k) => cartaHtml(ITENS[i], mostrados + k)).join("");
+  // o escalonamento conta a partir desta fatia: ao carregar mais, os novos
+  // entram como se fossem os primeiros, e não com o atraso do card 48
+  const pedaco = lista.slice(mostrados, fim).map((i, k) => cartaHtml(ITENS[i], mostrados + k, k)).join("");
   elGrade.insertAdjacentHTML("beforeend", pedaco);
   mostrados = fim;
 

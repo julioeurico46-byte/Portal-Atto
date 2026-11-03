@@ -1197,6 +1197,9 @@ a { color: inherit; text-decoration: none; }
     </div>
 
     <form id="form" novalidate>
+      <!-- Armadilha de robô: invisível e fora da ordem de tabulação, só script
+           automático marca. Fica fora da árvore de acessibilidade. -->
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
       <div class="campos">
         <div class="campo">
           <label for="f-nome">Nome<span class="req" aria-hidden="true">*</span></label>
@@ -1308,11 +1311,12 @@ const FRENTES = [
   ["Tecnologias", "Laboratório móvel", 8, "notebooks-tablets"]
 ];
 
-/* ─── Destino das solicitações ───────────────────────────────────────────
-   Mesmo contrato da index: enquanto os dois estiverem vazios, o formulário
-   avisa que o envio está indisponível em vez de fingir que deu certo.      */
-const ENDPOINT_FORMULARIO = "";
+/* ─── Destino das solicitações ─────────────────────────────────────────── */
+// O FormSubmit entrega o formulário por e-mail sem servidor nosso e sem chave:
+// o endereço de destino é o próprio endpoint. A caixa precisa confirmar uma vez,
+// no primeiro envio. Se o envio falhar, cai no caminho alternativo abaixo.
 const EMAIL_CONTATO = "attoportal@gmail.com";
+const ENDPOINT_FORMULARIO = `https://formsubmit.co/ajax/${EMAIL_CONTATO}`;
 
 /* ─── Montagem ───────────────────────────────────────────────────────────── */
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
@@ -1681,40 +1685,59 @@ const dizer = (texto, ok) => {
   retorno.innerHTML = `<p class="aviso${ok ? " ok" : ""}">${esc(texto)}</p>`;
 };
 
+const ASSUNTO = "Solicitação de projeto pelo site";
+
+const ROTULOS = {
+  nome: "Nome", email: "E-mail", telefone: "Telefone",
+  municipio: "Município", cargo: "Cargo", mensagem: "Demanda"
+};
+
+// Quando o envio falha, a solicitação não pode sumir em silêncio: mostramos o
+// endereço por extenso e um link que abre o e-mail já preenchido. Como link e
+// não como redirecionamento — em máquina sem cliente de e-mail configurado, o
+// redirecionamento não faz nada e o visitante fica sem saber o que houve.
+const dizerFalha = (dados) => {
+  const linhas = [];
+  for (const [k, v] of dados.entries()) {
+    if (v && ROTULOS[k]) linhas.push(`${ROTULOS[k]}: ${v}`);
+  }
+  const link = `mailto:${EMAIL_CONTATO}?subject=${encodeURIComponent(ASSUNTO)}`
+             + `&body=${encodeURIComponent(linhas.join("\n"))}`;
+  retorno.innerHTML = `<p class="aviso">Não foi possível enviar pelo site e sua solicitação
+    não foi registrada. Escreva para <strong>${esc(EMAIL_CONTATO)}</strong> ou
+    <a href="${link}" style="color:inherit">abra o e-mail já preenchido</a>.</p>`;
+};
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   if (!form.reportValidity()) return;
 
   const dados = new FormData(form);
+  if (dados.get("_honey")) return;
 
-  if (ENDPOINT_FORMULARIO) {
-    btnEnviar.disabled = true;
-    try {
-      const r = await fetch(ENDPOINT_FORMULARIO, {
-        method: "POST",
-        headers: { Accept: "application/json" },
-        body: dados
-      });
-      if (!r.ok) throw new Error(r.status);
-      form.reset();
-      dizer("Solicitação recebida. A equipe responde com a ata compatível e a minuta de adesão.", true);
-    } catch {
-      dizer("Não foi possível enviar agora. Tente novamente em instantes ou procure a Atto pelos canais diretos — sua solicitação não foi registrada.", false);
-    } finally {
-      btnEnviar.disabled = false;
-    }
-    return;
+  dados.set("_subject", ASSUNTO);
+  dados.set("_template", "table");
+  dados.set("_captcha", "false");
+  dados.set("_replyto", dados.get("email") || "");
+
+  btnEnviar.disabled = true;
+  dizer("Enviando…", true);
+  try {
+    const r = await fetch(ENDPOINT_FORMULARIO, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: dados
+    });
+    const resposta = await r.json().catch(() => ({}));
+    if (!r.ok || String(resposta.success) === "false") throw new Error(resposta.message || r.status);
+    form.reset();
+    dizer("Solicitação recebida. A equipe responde com a ata compatível e a minuta de adesão.", true);
+  } catch {
+    dizerFalha(dados);
+  } finally {
+    btnEnviar.disabled = false;
   }
-
-  if (EMAIL_CONTATO) {
-    const linhas = [];
-    for (const [k, v] of dados.entries()) if (v) linhas.push(`${k}: ${v}`);
-    location.href = `mailto:${EMAIL_CONTATO}?subject=${encodeURIComponent("Solicitação de projeto pelo site")}&body=${encodeURIComponent(linhas.join("\n"))}`;
-    return;
-  }
-
-  dizer("O envio pelo site está temporariamente indisponível. Por favor, entre em contato pelos canais da Atto — sua solicitação não foi registrada.", false);
 });
 </script>
 </body>

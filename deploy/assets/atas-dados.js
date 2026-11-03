@@ -111,7 +111,7 @@ const ATAS = {
   "telas-interativas": {
     categoria: "Sala conectada", titulo: "Telas interativas",
     // ARP 009.2024 (lousas digitais) vencida (portfólio, 30/10/2026).
-    selos: ["Consulte a ata aplicável", "Adesão sem nova licitação", "Lei 14.133/2021"],
+    selos: ["Consulte a ata aplicável", "Compra por adesão", "Lei 14.133/2021"],
     manchete: "Tecnologia que a professora usa no primeiro dia",
     chamada: "Telas Ultra HD 4K com inteligência artificial e software de colaboração.",
     imagem: "assets/img/tela-interativa-01.jpeg", alt: "Professor conduzindo aula de geografia na tela interativa com a turma",
@@ -327,7 +327,7 @@ const ATAS = {
     categoria: "Coleção paradidática", titulo: "Cultura de paz",
     // ARP 010.2024 vencida (portfólio, 30/10/2026). Enquanto não houver ata nova
     // registrada, esta página não pode afirmar vigência.
-    selos: ["Consulte a ata aplicável", "Adesão sem nova licitação", "Lei 14.133/2021"],
+    selos: ["Consulte a ata aplicável", "Compra por adesão", "Lei 14.133/2021"],
     manchete: "Convivência ensinada pela literatura",
     chamada: "Livros que ensinam convivência, empatia e resolução de conflitos, do infantil ao fundamental.",
     imagem: "assets/img/cultura-paz-01.jpeg", alt: "Coleção paradidática de cultura de paz com oito títulos ilustrados",
@@ -420,7 +420,7 @@ const ORDEM = Object.keys(ATAS);
 
 // Selos exibidos no topo da página. Só afirme "Ata vigente" onde existe ARP registrada:
 // para declarar isso em uma solução, basta remover o campo `selos` dela e ela volta ao padrão.
-const SELOS_PADRAO = ["Ata vigente", "Adesão sem nova licitação", "Lei 14.133/2021"];
+const SELOS_PADRAO = ["Ata vigente", "Compra por adesão", "Lei 14.133/2021"];
 
 const ETAPAS = [
   ["1", "Solicitação da adesão", "O órgão ou entidade pública interessada encaminha o pedido por e-mail."],

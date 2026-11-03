@@ -340,6 +340,12 @@ a { color: inherit; text-decoration: none; }
   scroll-padding-left: 0;
 }
 .trilho::-webkit-scrollbar { display: none; }
+/* Com a deriva ligada o encaixe perde sentido — o trilho nunca repousa — e
+   daria um salto no instante em que a pessoa passa o cursor e a deriva para. */
+.trilho.deriva { scroll-snap-type: none; }
+/* Enquanto desliza, a rolagem é escrita quadro a quadro: o scroll suave do CSS
+   brigaria com isso. Ele volta assim que a deriva para, para as setas animarem. */
+.trilho.deslizando { scroll-behavior: auto; }
 
 /* Em repouso a foto fica embutida com respiro. Sob o cursor ela cresce até
    preencher o card, entra o degradê e o título desce para cima da imagem.
@@ -1358,16 +1364,23 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
 
 const SETA_CANTO = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>';
 
-document.getElementById("trilho").innerHTML = ATAS.map(([cat, nome, desc, img, slug], i) => `
-  <a class="carta" href="ata.html?ata=${esc(slug)}">
+// A lista entra duas vezes: é a segunda cópia que fecha o laço da deriva, para
+// que ao voltar um ciclo inteiro ninguém veja a emenda. Para leitor de tela e
+// para o teclado a cópia não existe — seriam 24 atas repetidas.
+const carta = ([cat, nome, desc, img, slug], i, copia) => `
+  <a class="carta" href="ata.html?ata=${esc(slug)}"${copia ? ' data-copia aria-hidden="true" tabindex="-1"' : ""}>
     <span class="cat">${esc(cat)}</span>
     <h3>${esc(nome)}</h3>
     <div class="capa-vao" aria-hidden="true"></div>
     <p>${esc(desc)}</p>
     <div class="pe"><span>${SETA_CANTO}</span></div>
-    <img class="capa" loading="${i < 4 ? "eager" : "lazy"}" decoding="async" src="assets/img/${esc(img)}.jpeg" alt="${esc(nome)}" width="420" height="290">
+    <img class="capa" loading="${!copia && i < 4 ? "eager" : "lazy"}" decoding="async" src="assets/img/${esc(img)}.jpeg" alt="${copia ? "" : esc(nome)}" width="420" height="290">
     <span class="veu" aria-hidden="true"></span>
-  </a>`).join("");
+  </a>`;
+
+document.getElementById("trilho").innerHTML =
+  ATAS.map((a, i) => carta(a, i, false)).join("") +
+  ATAS.map((a, i) => carta(a, i, true)).join("");
 
 /* ─── Roda de frentes ─────────────────────────────────────────────────────
    A escala de cada item sai da distância dele até o centro do trilho, lida a
@@ -1575,32 +1588,119 @@ const andar = (sentido) => {
   trilho.scrollLeft = Math.max(0, Math.min(fim, trilho.scrollLeft + sentido * passo() * 2));
 };
 
-ant.addEventListener("click", () => andar(-1));
-prox.addEventListener("click", () => andar(1));
-
 const caixa = document.getElementById("trilho-caixa");
 
-const limites = () => {
-  const fim = trilho.scrollWidth - trilho.clientWidth;
-  ant.disabled = trilho.scrollLeft < 8;
-  prox.disabled = trilho.scrollLeft > fim - 8;
-  // o selo cumpriu o papel assim que a pessoa descobre que o trilho anda
-  if (trilho.scrollLeft > 4) caixa.classList.add("mexeu");
+/* ─── Deriva contínua ─────────────────────────────────────────────────────
+   O trilho anda sozinho, devagar, para a esquerda. O laço fecha porque a lista
+   está duas vezes no DOM: ao andar um ciclo inteiro, volta-se exatamente um
+   ciclo e a emenda cai sobre conteúdo idêntico.
+
+   A deriva para sob o cursor, com o foco dentro e fora do campo de visão — card
+   que foge do ponteiro é card que não se lê nem se clica. Quem pede menos
+   movimento no sistema não recebe deriva nenhuma.                            */
+const semDeriva = matchMedia("(prefers-reduced-motion: reduce)");
+const VELOCIDADE = 26;        // px por segundo
+const ESPERA = 2600;          // retomada depois de mexerem no trilho
+
+// a posição é contada aqui em float, e não lida de volta do scrollLeft: a 26px
+// por segundo cada quadro anda 0,43px, e o arredondamento da leitura engoliria
+// o avanço inteiro — o trilho ficaria parado
+let ciclo = 0, rodando = false, ultimo = 0, agendado = 0, visivel = true, pos = 0;
+
+// um ciclo é a distância até a primeira cópia, não metade da largura: entre as
+// duas listas há mais um gap, e meia largura erraria por alguns pixels a cada
+// volta — erro que se acumularia em um salto visível
+const medir = () => {
+  const inicio = trilho.firstElementChild;
+  const copia = trilho.querySelector("[data-copia]");
+  ciclo = inicio && copia ? copia.offsetLeft - inicio.offsetLeft : trilho.scrollWidth / 2;
 };
-trilho.addEventListener("scroll", limites, { passive: true });
-addEventListener("resize", limites);
-limites();
+
+const quadro = (agora) => {
+  if (!rodando) return;
+  const dt = ultimo ? (agora - ultimo) / 1000 : 0;
+  ultimo = agora;
+  // aba em segundo plano devolve um salto de vários segundos no primeiro quadro
+  pos += VELOCIDADE * Math.min(dt, 0.1);
+  if (ciclo && pos >= ciclo) pos -= ciclo;
+  trilho.scrollLeft = pos;
+  requestAnimationFrame(quadro);
+};
+
+const derivar = () => {
+  if (rodando || semDeriva.matches || !visivel) return;
+  if (!ciclo) medir();
+  // retoma de onde a pessoa deixou, não de onde a deriva parou
+  pos = trilho.scrollLeft;
+  rodando = true; ultimo = 0;
+  trilho.classList.add("deslizando");
+  requestAnimationFrame(quadro);
+};
+
+const pausar = (retomarEm = 0) => {
+  rodando = false;
+  trilho.classList.remove("deslizando");
+  clearTimeout(agendado);
+  if (retomarEm) agendado = setTimeout(derivar, retomarEm);
+};
+
+ant.addEventListener("click", () => { pausar(ESPERA); andar(-1); });
+prox.addEventListener("click", () => { pausar(ESPERA); andar(1); });
+
+if (!semDeriva.matches) {
+  trilho.classList.add("deriva");
+  medir();
+  addEventListener("resize", medir);
+  // imagem que chega depois muda a largura do ciclo
+  for (const img of trilho.querySelectorAll("img")) img.addEventListener("load", medir, { once: true });
+
+  trilho.addEventListener("mouseenter", () => pausar());
+  trilho.addEventListener("mouseleave", () => derivar());
+  trilho.addEventListener("focusin", () => pausar());
+  trilho.addEventListener("focusout", () => derivar());
+  trilho.addEventListener("pointerdown", () => pausar(ESPERA));
+  trilho.addEventListener("wheel", () => pausar(ESPERA), { passive: true });
+  trilho.addEventListener("keydown", () => pausar(ESPERA));
+
+  // fora do campo de visão a deriva só gastaria quadro
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(([e]) => {
+      visivel = e.isIntersecting;
+      visivel ? derivar() : pausar();
+    }, { threshold: 0 }).observe(caixa);
+  } else {
+    derivar();
+  }
+}
+
+// o selo cumpriu o papel assim que a pessoa mexe no trilho por conta própria.
+// Não serve olhar o scrollLeft: a deriva o move sozinha logo no primeiro quadro.
+for (const evento of ["pointerdown", "wheel", "keydown"]) {
+  trilho.addEventListener(evento, () => caixa.classList.add("mexeu"), { passive: true, once: true });
+}
+ant.addEventListener("click", () => caixa.classList.add("mexeu"), { once: true });
+prox.addEventListener("click", () => caixa.classList.add("mexeu"), { once: true });
 
 // o navegador só sai do lazy quando a carta entra no campo de visão, e carta
 // fora do trilho visível nunca entra: ao rolar o trilho, adianta as vizinhas
 const adiantar = () => {
+  const t = trilho.getBoundingClientRect();
   for (const img of trilho.querySelectorAll('img[loading="lazy"]')) {
     const c = img.closest(".carta").getBoundingClientRect();
-    const t = trilho.getBoundingClientRect();
     if (c.left < t.right + 400 && c.right > t.left - 400) img.loading = "eager";
   }
 };
-trilho.addEventListener("scroll", adiantar, { passive: true });
+
+// a deriva dispara scroll a cada quadro: sem freio seriam dezenas de medições
+// de layout por segundo, e 400px de antecedência dão folga de sobra
+let adianteiEm = 0;
+const adiantarComFreio = () => {
+  const agora = performance.now();
+  if (agora - adianteiEm < 400) return;
+  adianteiEm = agora;
+  adiantar();
+};
+trilho.addEventListener("scroll", adiantarComFreio, { passive: true });
 adiantar();
 
 /* ─── Menu móvel ─────────────────────────────────────────────────────────── */
@@ -1631,7 +1731,9 @@ if (!semMovimento && "IntersectionObserver" in window) {
     [".numeros .item", "rev", 80],
     [".sobre > *", "rev", 110],
     ["#atas .cabeca > *", "rev", 110],
-    [".carta", "rev-f", 70],
+    // a cópia do trilho não entra: sem ninguém para observá-la ela ficaria
+    // invisível para sempre e abriria um buraco no laço da deriva
+    [".carta:not([data-copia])", "rev-f", 70],
     [".bloco.claro .cabeca > *", "rev", 110],
     [".roda-detalhe > *", "rev", 90],
     [".faixa .interno > *", "rev", 110],

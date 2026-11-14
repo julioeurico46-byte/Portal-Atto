@@ -19,7 +19,11 @@ Conecte este repositório em vercel.com/new. Nas configurações do projeto:
 - Build Command: *(vazio)*
 - Output Directory: *(vazio — raiz)*
 
-O `vercel.json` já ativa URLs sem `.html` e cache longo para `assets/` e `_ds/`.
+O `vercel.json` já ativa URLs sem `.html` e cache longo para as pastas de mídia
+(`assets/brand`, `assets/email`, `assets/img`, `assets/video`) e para `_ds/`.
+Os arquivos soltos em `assets/` (`base.css`, `base.js` e os dois de dados) ficam
+de fora de propósito: mudam sem mudar de nome, e com cache de um ano uma correção
+neles não chegaria a quem já visitou o site.
 
 Pela CLI:
 
@@ -31,6 +35,9 @@ vercel --prod
 ## Estrutura
 
 ```
+assets/base.css CSS comum às quatro páginas; cada página carrega e acrescenta só o que é dela
+assets/base.js  JS comum: menu móvel, esteira, entrada por rolagem, envio do formulário
+assets/*-dados.js  conteúdo das atas e do catálogo
 assets/brand/   logotipos
 assets/img/     fotos de produtos e projetos entregues
 assets/video/   vídeos do carrossel da home

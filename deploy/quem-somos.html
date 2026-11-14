@@ -28,91 +28,28 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=Instrument+Serif:ital@0;1&display=swap">
 
+<!-- o que é comum às quatro páginas; o script fica aqui no <head> para chegar
+     antes da primeira pintura (ver o cabeçalho de base.js) -->
+<link rel="stylesheet" href="assets/base.css">
+<script src="assets/base.js"></script>
 <style>
 /* ══ Quem somos ═════════════════════════════════════════════════
    Mesma gramática das outras páginas: pilha de blocos arredondados sobre cinza,
    capa escura sangrada, serifa só como acento.
 
-   O CSS de base segue duplicado entre as quatro páginas. Agora que o
-   desenho estabilizou, vale extrair para assets/base.css — é a dívida que
-   fecha este conjunto.                                                      */
-
-:root {
-  --fonte-titulo: "Instrument Serif", "Playfair Display", Georgia, serif;
-  --pagina: #ECEDEF;
-  --raio-bloco: 32px;
-  --respiro: clamp(12px, 1.2vw, 18px);
-  --coluna: 1240px;
-  --pad-bloco: clamp(24px, 5vw, 76px);
-
-  --text-body-lg: 18px;
-  --text-body: 16px;
-  --text-body-sm: 14px;
-  --text-caption: 13px;
-  --text-overline: 12px;
-}
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--pagina); color: var(--text-primary); font: var(--type-body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-img { display: block; max-width: 100%; }
-a { color: inherit; text-decoration: none; }
-button, input, select, textarea { font-family: inherit; }
-:where(a, button, input, select, textarea):focus-visible { outline: 3px solid var(--ink-950); outline-offset: 3px; border-radius: 6px; }
-.escuro :where(a, button, input, select, textarea):focus-visible { outline-color: var(--atto-yellow); }
-
-.bloco { margin: var(--respiro); border-radius: var(--raio-bloco); padding: var(--pad-bloco); overflow: hidden; position: relative; }
-.bloco > .interno { max-width: var(--coluna); margin: 0 auto; }
-.claro { background: var(--white); }
-.escuro { background: var(--ink-950); color: var(--white); }
-.escuro .secundario { color: rgba(255,255,255,.68); }
-.secundario { color: var(--text-secondary); }
-.sem-cartao { margin: 0; border-radius: 0; padding-block: clamp(44px, 6vw, 86px); }
-
-.etiqueta { display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; border: 1px solid var(--border-default); border-radius: 999px; font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--ink-600); background: var(--white); }
-.escuro .etiqueta { border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.80); background: rgba(255,255,255,.05); }
-.etiqueta .ponto { width: 6px; height: 6px; border-radius: 50%; background: var(--atto-yellow); flex: none; }
-
-.titulo { font: var(--weight-black) clamp(32px, 4.8vw, 58px)/1.08 var(--font-display); letter-spacing: var(--tracking-display); margin: 16px 0 0; text-wrap: balance; }
-.titulo-md { font: var(--weight-black) clamp(26px, 3.4vw, 40px)/1.1 var(--font-display); letter-spacing: var(--tracking-display); margin: 14px 0 0; text-wrap: balance; }
-.realce { color: var(--atto-yellow); font-family: var(--fonte-titulo); font-style: italic; font-weight: 400; font-size: 1.06em; letter-spacing: -0.005em; }
-.claro .realce { color: var(--ink-950); }
-
-.btn { display: inline-flex; align-items: center; gap: 10px; padding: 7px 7px 7px 20px; border-radius: 999px; border: 1px solid transparent; font: var(--type-label); cursor: pointer; white-space: nowrap; transition: var(--transition-control, all .18s ease); }
-.btn .seta { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; flex: none; transition: transform .18s ease; }
-.btn:hover .seta { transform: translate(2px, -2px); }
-.btn-marca { background: var(--atto-yellow); color: var(--ink-1000); }
-.btn-marca .seta { background: var(--ink-1000); color: var(--atto-yellow); }
-.btn-marca:hover { background: var(--atto-yellow-press); }
-.btn-preto { background: var(--ink-1000); color: var(--white); }
-.btn-preto .seta { background: var(--atto-yellow); color: var(--ink-1000); }
-.btn-contorno { border-color: var(--border-default); color: var(--ink-950); padding-right: 20px; background: transparent; }
-.escuro .btn-contorno { border-color: rgba(255,255,255,.26); color: var(--white); }
-.escuro .btn-contorno:hover { background: rgba(255,255,255,.08); }
-.circulo { width: 44px; height: 44px; flex: none; border-radius: 50%; border: 1px solid var(--border-default); background: transparent; color: inherit; display: grid; place-items: center; cursor: pointer; }
-.escuro .circulo { border-color: rgba(255,255,255,.26); }
-
-.barra { display: flex; align-items: center; gap: 20px; position: relative; z-index: 3; }
-.barra .marca { height: 30px; width: auto; }
-.menu { display: flex; align-items: center; gap: 2px; padding: 5px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: 999px; backdrop-filter: blur(10px); }
-.menu a { padding: 9px 16px; border-radius: 999px; font: var(--type-label); color: rgba(255,255,255,.74); transition: var(--transition-control, all .18s ease); }
-.menu a:hover { color: var(--white); background: rgba(255,255,255,.10); }
-.menu a[aria-current] { color: var(--ink-1000); background: var(--white); }
-.hamburger { display: none; }
+   O que é comum às quatro páginas mora em assets/base.css. Aqui fica só o
+   que é desta página.                                                       */
 
 /* ── capa ───────────────────────────────────────────────────────────────── */
-.capa { margin: 0; border-radius: 0; padding: clamp(18px, 3vw, 34px) var(--pad-bloco) 0; }
-.capa-fundo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
-.capa-fundo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 44%; }
+/* enquadramento e véu desta foto; a estrutura da capa vem da base */
+.capa-fundo img { object-position: 50% 44%; }
 .capa-veu {
-  position: absolute; inset: 0;
-  background:
+  --capa-veu:
     linear-gradient(100deg, rgba(16,16,18,.97) 0%, rgba(16,16,18,.93) 30%, rgba(16,16,18,.58) 48%, rgba(16,16,18,.28) 64%, rgba(16,16,18,.55) 100%),
     linear-gradient(to bottom, rgba(16,16,18,.92) 0%, rgba(16,16,18,.30) 20%, rgba(16,16,18,.24) 56%, rgba(16,16,18,.88) 88%, var(--ink-950) 100%);
 }
 .capa-grade { position: relative; z-index: 2; padding: clamp(40px, 5.5vw, 76px) 0 clamp(34px, 4vw, 54px); max-width: 760px; }
-.capa p.lead { font: var(--type-body-lg); color: rgba(255,255,255,.80); margin: 22px 0 0; max-width: 56ch; text-wrap: pretty; }
-.capa .acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.capa p.lead { margin: 22px 0 0; max-width: 56ch; }
 
 /* a frase que a Atto assina: fica como citação da casa, sem autoria externa */
 .lema {
@@ -122,28 +59,8 @@ button, input, select, textarea { font-family: inherit; }
   font-style: italic; color: var(--white); max-width: 42ch;
 }
 
-.numeros { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(14px, 2.6vw, 40px); border-top: 1px solid rgba(255,255,255,.14); padding: clamp(22px, 3vw, 32px) 0 clamp(60px, 6vw, 76px); position: relative; z-index: 2; }
-.numeros .item { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+/* ── números ────────────────────────────────────────────────────────────── */
 .numeros .n { font: var(--weight-black) clamp(24px, 3vw, 34px)/1 var(--font-display); letter-spacing: var(--tracking-display); }
-.numeros .r { font: var(--type-body-sm); color: rgba(255,255,255,.58); }
-
-/* ── esteira ────────────────────────────────────────────────────────────── */
-.esteira { position: relative; z-index: 2; overflow: hidden; padding: 30px 0; margin: -58px 0 -46px; }
-.faixa-mov { overflow: hidden; width: 108%; margin-left: -4%; padding: 13px 0; border-block: 1px solid rgba(0,0,0,.14); }
-.faixa-mov.clara { background: var(--atto-yellow); color: var(--ink-1000); transform: rotate(-1.8deg); }
-.faixa-mov.escura { background: var(--ink-950); color: var(--white); transform: rotate(1.6deg); margin-top: -14px; border-color: rgba(255,255,255,.12); }
-.trilho-mov { display: flex; width: max-content; animation: correr 44s linear infinite; }
-.faixa-mov.escura .trilho-mov { animation-duration: 52s; animation-direction: reverse; }
-.faixa-mov:hover .trilho-mov { animation-play-state: paused; }
-@keyframes correr { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.trilho-mov .grupo { display: flex; flex: none; }
-.trilho-mov .termo { display: inline-flex; align-items: center; gap: 22px; padding-right: 22px; font: var(--weight-bold) clamp(12px, 1.25vw, 15px)/1 var(--font-sans); letter-spacing: .13em; text-transform: uppercase; white-space: nowrap; }
-.trilho-mov .losango { font-size: .72em; opacity: .55; }
-.faixa-mov.escura .losango { color: var(--atto-yellow); opacity: 1; }
-
-/* ── cabeçalho de seção ─────────────────────────────────────────────────── */
-.cabeca { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr); gap: clamp(20px, 3vw, 56px); align-items: end; margin-bottom: clamp(28px, 4vw, 44px); }
-.cabeca .apoio { font: var(--type-body); max-width: 52ch; text-wrap: pretty; }
 
 /* ── compromissos ───────────────────────────────────────────────────────── */
 .compromissos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: clamp(16px, 2.4vw, 28px); }
@@ -163,85 +80,9 @@ button, input, select, textarea { font-family: inherit; }
 .mosaico img:nth-child(2) { border-radius: 16px 32px 16px 16px; }
 .mosaico img:nth-child(3) { border-radius: 16px 16px 16px 32px; }
 
-/* ── faixa amarela ──────────────────────────────────────────────────────── */
-.faixa { background: var(--atto-yellow); color: var(--ink-1000); position: relative; }
-.faixa .foto {
-  position: absolute; top: 0; right: 0; bottom: 0; width: min(58%, 680px); height: 100%;
-  object-fit: cover; object-position: 50% 42%; mix-blend-mode: multiply; opacity: .9; pointer-events: none;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
-          mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
-}
-.faixa .interno { position: relative; z-index: 1; display: grid; grid-template-columns: 1.4fr auto; gap: 32px; align-items: center; }
-.faixa h2 { font: var(--weight-black) clamp(26px, 3.4vw, 40px)/1.1 var(--font-display); letter-spacing: var(--tracking-display); margin: 0; text-wrap: balance; }
-.faixa p { margin: 12px 0 0; font: var(--type-body); color: rgba(0,0,0,.68); }
-
-/* ── rodapé ─────────────────────────────────────────────────────────────── */
-.rodape { padding-top: clamp(32px, 4vw, 48px); }
-.rodape .topo-rodape { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,.12); }
-.rodape nav { display: flex; flex-wrap: wrap; gap: 8px 22px; font: var(--type-label); }
-.rodape nav a { color: rgba(255,255,255,.7); }
-.rodape nav a:hover { color: var(--white); }
-.legal { font: var(--type-caption); line-height: 1.55; color: rgba(255,255,255,.64); margin: 24px 0 0; max-width: 72ch; text-wrap: pretty; }
-
-/* ── entrada por rolagem ────────────────────────────────────────────────── */
-.rev { opacity: 0; transform: translateY(20px); will-change: opacity, transform;
-  transition: opacity .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms), transform .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms); }
-.rev.vis { opacity: 1; transform: none; will-change: auto; }
-
 /* ── responsivo ─────────────────────────────────────────────────────────── */
 @media (max-width: 960px) {
-  :root { --raio-bloco: 24px; }
-  .cabeca, .publico, .faixa .interno { grid-template-columns: 1fr; }
-  .cabeca { align-items: start; }
-  .capa-veu { background: linear-gradient(to bottom, rgba(16,16,18,.90) 0%, rgba(16,16,18,.62) 38%, rgba(16,16,18,.88) 76%, var(--ink-950) 100%); }
-  .numeros { grid-template-columns: 1fr 1fr; gap: 22px; padding-bottom: 36px; }
-  .menu { display: none; }
-  .menu.aberto { display: flex; flex-direction: column; align-items: stretch; position: absolute; top: 58px; left: 0; right: 0; background: var(--ink-900); border-radius: 18px; padding: 10px; z-index: 5; }
-  .hamburger { display: grid; }
-  .esteira { margin: -26px 0 -24px; padding: 26px 0; }
-  .faixa-mov.clara { transform: rotate(-2.4deg); }
-  .faixa-mov.escura { transform: rotate(2.2deg); margin-top: -10px; }
-  .faixa-mov { width: 122%; margin-left: -11%; }
-  .faixa { padding-bottom: 150px; }
-  .faixa .foto { top: auto; bottom: 0; right: 0; left: 0; width: 100%; height: 172px;
-    -webkit-mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%);
-            mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%); }
-}
-@media (max-width: 560px) { .numeros { grid-template-columns: 1fr; } .barra .cta-topo { display: none; } }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-  .trilho-mov { animation: none; }
-  .faixa-mov { overflow-x: auto; scrollbar-width: none; }
-  .rev { opacity: 1; transform: none; }
-}
-
-/* ── WhatsApp flutuante ─────────────────────────────────────────────────────
-   Acompanha a página inteira, no canto inferior direito. Verde da própria
-   marca: é o que torna o botão reconhecível sem precisar de rótulo, e não
-   disputa com o amarelo, que aqui sempre significa "ação do site".
-   56px de alvo, acima do mínimo de 44 da WCAG 2.2.                          */
-.zap {
-  position: fixed;
-  right: clamp(14px, 3vw, 28px);
-  bottom: clamp(14px, 3vw, 28px);
-  z-index: 20;
-  display: grid; place-items: center;
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  background: #25D366; color: #fff;
-  box-shadow: 0 6px 20px rgba(16, 16, 18, .26);
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-.zap:hover, .zap:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(16, 16, 18, .34);
-}
-.zap svg { width: 29px; height: 29px; display: block; }
-@media (prefers-reduced-motion: reduce) {
-  .zap { transition: none; }
-  .zap:hover, .zap:focus-visible { transform: none; }
+  .publico { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -422,76 +263,26 @@ button, input, select, textarea { font-family: inherit; }
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
+<!-- menu móvel, ano do rodapé, esteira, entrada por rolagem: assets/base.js, no <head> -->
 <script>
-const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
-  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
-));
-
-document.getElementById("ano").textContent = new Date().getFullYear();
-
 /* ─── Esteira ──────────────────────────────────────────────────────────── */
-const TERMOS = {
+Atto.esteira({
   frentes: ["Mobiliário escolar", "Sala sensorial", "Playground", "Piso modular",
             "Uniformes escolares", "Laboratório Maker", "Tecnologia educacional",
             "Kit escolar", "Cultura de paz", "Uniformes profissionais"],
   garantias: ["Compra por adesão", "Lei 14.133/2021", "24 atas vigentes",
               "541 itens registrados", "Ficha técnica pronta",
               "Entrega, montagem e treinamento", "Projeto sem custo"]
-};
-for (const trilho of document.querySelectorAll(".trilho-mov")) {
-  const grupo = (TERMOS[trilho.dataset.termos] || [])
-    .map((t) => `<span class="termo">${esc(t)}<span class="losango" aria-hidden="true">&#9670;</span></span>`).join("");
-  // a segunda cópia fecha o laço; para o leitor de tela ela não existe
-  trilho.innerHTML = `<span class="grupo">${grupo}</span><span class="grupo" aria-hidden="true">${grupo}</span>`;
-}
-
-/* ─── Menu ─────────────────────────────────────────────────────────────── */
-const btnMenu = document.getElementById("btn-menu");
-const menu = document.getElementById("menu");
-btnMenu.addEventListener("click", () => {
-  const aberto = menu.classList.toggle("aberto");
-  btnMenu.setAttribute("aria-expanded", String(aberto));
-  btnMenu.setAttribute("aria-label", aberto ? "Fechar menu" : "Abrir menu");
-});
-menu.addEventListener("click", (e) => {
-  if (e.target.tagName === "A") { menu.classList.remove("aberto"); btnMenu.setAttribute("aria-expanded", "false"); }
 });
 
 /* ─── Entrada por rolagem ──────────────────────────────────────────────── */
-const semMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
-if (!semMovimento) {
-  const pendentes = new Set();
-  const GRUPOS = [
-    [".capa-grade > *", 80], [".numeros .item", 70],
-    [".cabeca > *", 110], [".compromissos article", 90],
-    [".publico > div > *", 100], [".mosaico img", 90],
-    [".faixa .interno > *", 110]
-  ];
-  for (const [sel, passo] of GRUPOS) {
-    document.querySelectorAll(sel).forEach((el, i) => {
-      if (el.classList.contains("rev")) return;
-      el.classList.add("rev");
-      el.style.setProperty("--atraso", `${Math.min(i, 5) * passo}ms`);
-      pendentes.add(el);
-    });
-  }
-  /* Varredura por posição, e não IntersectionObserver: numa rolagem rápida o
-     observer entrega o callback quando o elemento já saiu da vista, e o
-     conteúdo ficaria oculto para sempre. */
-  let agendado = false;
-  const varrer = () => {
-    agendado = false;
-    const linha = innerHeight * 0.92;
-    for (const el of pendentes) {
-      if (el.getBoundingClientRect().top < linha) { el.classList.add("vis"); pendentes.delete(el); }
-    }
-    if (!pendentes.size) { removeEventListener("scroll", aoMover); removeEventListener("resize", aoMover); }
-  };
-  const aoMover = () => { if (!agendado) { agendado = true; requestAnimationFrame(varrer); } };
-  addEventListener("scroll", aoMover, { passive: true });
-  addEventListener("resize", aoMover);
-  varrer();
-}
+// [seletor, atraso entre irmãos em ms]
+Atto.revelar([
+  [".capa-grade > *", 80], [".numeros .item", 70],
+  [".cabeca > *", 110], [".compromissos article", 90],
+  [".publico > div > *", 100], [".mosaico img", 90],
+  [".faixa .interno > *", 110]
+]);
 </script>
 </body>
 </html>

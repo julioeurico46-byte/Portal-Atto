@@ -34,203 +34,56 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=Instrument+Serif:ital@0;1&display=swap">
 
+<!-- o que é comum às quatro páginas; o script fica aqui no <head> para chegar
+     antes da primeira pintura (ver o cabeçalho de base.js) -->
+<link rel="stylesheet" href="assets/base.css">
+<script src="assets/base.js"></script>
 <style>
 /* ══ Home ═══════════════════════════════════════════════════════════════
    Mesmos tokens da marca, outra gramática de layout: a página é uma pilha de
    blocos arredondados flutuando sobre um cinza frio, alternando claro e escuro.
    HTML nativo em vez dos componentes x-dc — a variação precisa ser lida e
-   ajustada à mão enquanto se decide entre os dois desenhos.             */
+   ajustada à mão enquanto se decide entre os dois desenhos.
 
-:root {
-  /* Serifa de destaque, usada só na palavra em evidência de cada título (.realce).
-     Archivo segue como a voz do site — títulos, cards, listas e interface —
-     porque é ela que puxa a letra do logotipo. Duas famílias no total. */
-  --fonte-titulo: "Instrument Serif", "Playfair Display", Georgia, "Times New Roman", serif;
+   O que é comum às quatro páginas mora em assets/base.css. Aqui fica só o
+   que é desta página.                                                   */
 
-  /* Escala corrigida para o padrão de leitura em tela. O design system fixa o
-     corpo em 15px e o auxiliar em 13px — abaixo dos 16px de base e do piso de
-     14px para texto corrido. Redefinir os tokens de tamanho basta: os pares
-     --type-* do design system são compostos com var(), que só resolve na hora
-     do uso, então toda a página acompanha sem reescrever regra por regra. */
-  --text-body-lg: 18px;   /* era 17 — linha de apoio da capa e do "como funciona" */
-  --text-body: 16px;      /* era 15 — base de leitura */
-  --text-body-sm: 14px;   /* era 13 — descrição de card, rótulos de interface */
-  --text-caption: 13px;   /* era 12 — microcopy: ajuda de campo, aviso legal */
-  --text-overline: 12px;  /* era 11 — etiquetas em caixa alta */
+/* ── onde a home difere da base ─────────────────────────────────────────────
+   As outras três páginas usam o valor de base.css; a home sempre teve o dela.
+   Estas linhas conservam a home exatamente como era antes de o CSS comum sair
+   para a base — nenhuma foi decidida na extração. Para alinhar um ponto às
+   outras páginas, basta apagar a linha dele (o valor da base está ao lado). */
+:root { --fonte-titulo: "Instrument Serif", "Playfair Display", Georgia, "Times New Roman", serif; }  /* base: sem Times */
+.escuro .secundario { color: rgba(255,255,255,.66); }                                   /* base: .68 */
+.titulo { font: var(--weight-black) clamp(34px, 5.4vw, 62px)/1.1 var(--font-display); margin: 18px 0 0; }     /* base: 32–58px/1.08, 16px */
+.titulo-md { font: var(--weight-black) clamp(28px, 3.8vw, 44px)/1.1 var(--font-display); margin: 16px 0 0; }  /* base: 26–40px, 14px */
+.numeros { padding: clamp(22px, 3vw, 34px) 0 clamp(60px, 6vw, 76px); }                  /* base: 32px no teto de cima */
+.numeros .item { min-width: auto; }                                                     /* base: 0 */
+.cabeca { margin-bottom: clamp(30px, 4vw, 48px); }                                      /* base: 28–44px */
+.cabeca .apoio { max-width: 50ch; }                                                     /* base: 52ch */
+.campo .ajuda { color: rgba(255,255,255,.5); }                                          /* base: .54 */
+.trilho { scroll-padding-left: 0; }                                                     /* base: não declara */
 
-  --pagina: #ECEDEF;
-  --raio-bloco: 32px;
-  --respiro: clamp(12px, 1.2vw, 18px);
-  --coluna: 1240px;
-  --pad-bloco: clamp(24px, 5vw, 76px);
-}
-
-* { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  margin: 0;
-  background: var(--pagina);
-  color: var(--text-primary);
-  font: var(--type-body);
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-
-img { display: block; max-width: 100%; }
-/* controles nao herdam fonte por padrao: sem isto os botoes circulares e o
-   hamburguer caem no Arial do navegador */
-button, input, select, textarea { font-family: inherit; }
-a { color: inherit; text-decoration: none; }
-
-:where(a, button, input, select, textarea):focus-visible {
-  outline: 3px solid var(--ink-950);
-  outline-offset: 3px;
-  border-radius: 6px;
-}
-.escuro :where(a, button, input, select, textarea):focus-visible { outline-color: var(--atto-yellow); }
-
-/* ── blocos ─────────────────────────────────────────────────────────────── */
-.bloco {
-  margin: var(--respiro);
-  border-radius: var(--raio-bloco);
-  padding: var(--pad-bloco);
-  overflow: hidden;
-  position: relative;
-}
-.bloco > .interno { max-width: var(--coluna); margin: 0 auto; }
-.claro { background: var(--white); }
-/* seção que sai da pilha de cartões: o branco vira o fundo da página inteira,
-   e a lista respira sem moldura em volta */
-.sem-cartao {
-  margin: 0;
-  border-radius: 0;
-  padding-block: clamp(44px, 6vw, 86px);
-}
 /* aqui o conteúdo é a roda, não o cabeçalho: no tamanho dos outros blocos os
    dois disputavam a mesma hierarquia e a seção ficava sem foco */
 .sem-cartao .titulo {
   font-size: clamp(26px, 3.1vw, 40px);
   line-height: 1.08;
 }
-.escuro { background: var(--ink-950); color: var(--white); }
-.escuro .secundario { color: rgba(255,255,255,.66); }
-.secundario { color: var(--text-secondary); }
-
-/* ── etiqueta pílula ────────────────────────────────────────────────────── */
-.etiqueta {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 7px 14px;
-  border: 1px solid var(--border-default);
-  border-radius: 999px;
-  font: var(--type-overline);
-  letter-spacing: var(--tracking-overline);
-  text-transform: uppercase;
-  color: var(--ink-600);
-  background: var(--white);
-}
-.escuro .etiqueta {
-  border-color: rgba(255,255,255,.22);
-  color: rgba(255,255,255,.80);
-  background: rgba(255,255,255,.05);
-}
-.etiqueta .ponto { width: 6px; height: 6px; border-radius: 50%; background: var(--atto-yellow); flex: none; }
-
-/* ── títulos ──────────────────────────────────────────────────────────────
-   A serifa tem um peso só, então a presença vem do tamanho e do entrelinhas
-   apertado, não do negrito — e o tracking volta a zero, que negativo em
-   serifa de alto contraste fecha demais o desenho da letra. */
-.titulo {
-  font: var(--weight-black) clamp(34px, 5.4vw, 62px)/1.1 var(--font-display);
-  letter-spacing: var(--tracking-display);
-  margin: 18px 0 0;
-  text-wrap: balance;
-}
-.titulo-md {
-  font: var(--weight-black) clamp(28px, 3.8vw, 44px)/1.1 var(--font-display);
-  letter-spacing: var(--tracking-display);
-  margin: 16px 0 0;
-  text-wrap: balance;
-}
-/* A serifa é acento, não voz do site: entra só na palavra de destaque, como o
-   "Partner" da referência. O resto do título continua na sans da marca.
-   O corpo em itálico é um pouco menor na caixa, daí o leve ganho de tamanho e
-   o tracking solto — a sans fecha mais o espacejamento do que a serifa pede. */
-.realce {
-  color: var(--atto-yellow);
-  font-family: var(--fonte-titulo);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 1.06em;
-  letter-spacing: -0.005em;
-}
-.claro .realce { color: var(--ink-950); -webkit-text-decoration: underline 3px var(--atto-yellow); text-decoration: underline 3px var(--atto-yellow); text-underline-offset: 8px; }
-
-/* ── botões ─────────────────────────────────────────────────────────────── */
-.btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 7px 7px 7px 20px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  font: var(--type-label);
-  cursor: pointer;
-  transition: var(--transition-control, all .18s ease);
-  white-space: nowrap;
-}
-.btn .seta {
-  width: 30px; height: 30px; border-radius: 50%;
-  display: grid; place-items: center; flex: none;
-  transition: transform .18s ease;
-}
-.btn:hover .seta { transform: translate(2px, -2px); }
-.btn-marca { background: var(--atto-yellow); color: var(--ink-1000); }
-.btn-marca .seta { background: var(--ink-1000); color: var(--atto-yellow); }
-.btn-marca:hover { background: var(--atto-yellow-press); }
-.btn-contorno { border-color: var(--border-default); color: var(--ink-950); padding-right: 20px; background: transparent; }
+/* no bloco claro a palavra em serifa fica escura (base); só a home lhe dá o
+   sublinhado amarelo */
+.claro .realce { -webkit-text-decoration: underline 3px var(--atto-yellow); text-decoration: underline 3px var(--atto-yellow); text-underline-offset: 8px; }
 .btn-contorno:hover { background: var(--ink-50); }
-.escuro .btn-contorno { border-color: rgba(255,255,255,.26); color: var(--white); }
-.escuro .btn-contorno:hover { background: rgba(255,255,255,.08); }
 
-.circulo {
-  width: 44px; height: 44px; flex: none;
-  border-radius: 50%;
-  border: 1px solid var(--border-default);
-  background: transparent;
-  color: inherit;
-  display: grid; place-items: center;
-  cursor: pointer;
-  transition: var(--transition-control, all .18s ease);
-}
+/* ── setas do carrossel ─────────────────────────────────────────────────────
+   O círculo da base é o do hambúrguer, sem estado. Aqui ele também é seta de
+   carrossel: ganha transição, hover e o apagado de fim de trilho. A página de
+   ata tem três destas linhas; produtos e quem-somos não têm seta nenhuma. */
+.circulo { transition: var(--transition-control, all .18s ease); }
 .circulo:hover { background: var(--ink-50); }
-.escuro .circulo { border-color: rgba(255,255,255,.26); }
 .escuro .circulo:hover { background: rgba(255,255,255,.1); }
 .circulo:disabled { opacity: .3; cursor: default; }
 .circulo:disabled:hover { background: transparent; }
-
-/* ── topo ───────────────────────────────────────────────────────────────── */
-.barra {
-  display: flex; align-items: center; gap: 20px;
-  position: relative; z-index: 3;
-}
-.barra .marca { height: 30px; width: auto; }
-.menu {
-  display: flex; align-items: center; gap: 2px;
-  padding: 5px;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 999px;
-  backdrop-filter: blur(10px);
-}
-.menu a {
-  padding: 9px 16px; border-radius: 999px;
-  font: var(--type-label); color: rgba(255,255,255,.74);
-  transition: var(--transition-control, all .18s ease);
-}
-.menu a:hover { color: var(--white); background: rgba(255,255,255,.10); }
-.menu a[aria-current] { color: var(--ink-1000); background: var(--white); }
-
-.hamburger { display: none; }
 
 /* ── herói ──────────────────────────────────────────────────────────────── */
 /* A capa sangra até as bordas, do topo da janela até a esteira. Ela deixa de
@@ -296,50 +149,17 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: var(--tracking-display);
 }
 
-/* barra de números */
-.numeros {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: clamp(14px, 2.6vw, 40px);
-  border-top: 1px solid rgba(255,255,255,.14);
-  /* o respiro de baixo é a pista por onde a esteira passa: ela é mais alta que
-     o vão entre os blocos e, sem esta folga, cobria os rótulos dos números */
-  padding: clamp(22px, 3vw, 34px) 0 clamp(60px, 6vw, 76px);
-  position: relative; z-index: 2;
-}
-.numeros .item { display: flex; flex-direction: column; gap: 5px; }
+/* barra de números: o tamanho do número é de cada página */
 .numeros .n {
   font: var(--weight-black) clamp(26px, 3.2vw, 36px)/1 var(--font-display);
   letter-spacing: var(--tracking-display);
 }
-.numeros .r { font: var(--type-body-sm); color: rgba(255,255,255,.58); }
-
-/* ── cabeçalho de seção (rótulo + título à esquerda, apoio à direita) ───── */
-.cabeca {
-  display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr);
-  gap: clamp(20px, 3vw, 56px); align-items: end;
-  margin-bottom: clamp(30px, 4vw, 48px);
-}
-.cabeca .apoio { font: var(--type-body); max-width: 50ch; text-wrap: pretty; }
 
 /* ── sobre ──────────────────────────────────────────────────────────────── */
-.sobre { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: start; }
-.sobre .frase { font: var(--type-body-lg); color: var(--ink-950); margin: 0 0 18px; max-width: 58ch; text-wrap: pretty; }
+/* aqui a frase é seguida de mais um parágrafo; na página de ata ela fecha a coluna */
+.sobre .frase { margin: 0 0 18px; }
 
 /* ── carrossel ──────────────────────────────────────────────────────────── */
-.trilho {
-  display: flex; gap: 18px;
-  overflow-x: auto;
-  /* proximity, nao mandatory: com mandatory o navegador cancela o scroll suave
-     das setas e devolve o trilho para o inicio */
-  scroll-snap-type: x proximity;
-  /* o scroll suave vem do CSS: scrollBy({behavior:"smooth"}) nao anima em
-     container com overflow em alguns motores e devolve o trilho para zero */
-  scroll-behavior: smooth;
-  scrollbar-width: none; -ms-overflow-style: none;
-  padding-bottom: 4px;
-  scroll-padding-left: 0;
-}
-.trilho::-webkit-scrollbar { display: none; }
 /* Com a deriva ligada o encaixe perde sentido — o trilho nunca repousa — e
    daria um salto no instante em que a pessoa passa o cursor e a deriva para. */
 .trilho.deriva { scroll-snap-type: none; }
@@ -518,72 +338,6 @@ a { color: inherit; text-decoration: none; }
   .roda-trilho { scroll-behavior: auto; }
 }
 
-/* ── faixa amarela ──────────────────────────────────────────────────────── */
-/* O amarelo continua sendo a base; a foto entra pela direita e se dissolve
-   antes de chegar ao texto. Quem apaga a foto é a máscara, não uma camada
-   amarela por cima: assim a dissolução acontece no canal alfa e o amarelo do
-   bloco aparece por baixo sem lavar a imagem. O multiply tinge a foto com o
-   próprio amarelo, para ela pertencer ao bloco em vez de ser um retângulo
-   colado. */
-.faixa { background: var(--atto-yellow); color: var(--ink-1000); position: relative; }
-.faixa .foto {
-  position: absolute; top: 0; right: 0; bottom: 0;
-  width: min(58%, 680px); height: 100%;
-  object-fit: cover; object-position: 50% 42%;
-  mix-blend-mode: multiply;
-  opacity: .9;
-  /* o platô transparente cobre a faixa onde o título pode terminar: a foto só
-     começa a aparecer depois do texto, não atrás dele */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
-          mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
-  pointer-events: none;
-}
-.faixa .interno { position: relative; z-index: 1; display: grid; grid-template-columns: 1.4fr auto; gap: 32px; align-items: center; }
-.faixa h2 { font: var(--weight-black) clamp(26px, 3.4vw, 40px)/1.1 var(--font-display); letter-spacing: var(--tracking-display); margin: 0; text-wrap: balance; }
-.faixa p { margin: 12px 0 0; font: var(--type-body); color: rgba(0,0,0,.68); }
-.btn-preto { background: var(--ink-1000); color: var(--white); }
-.btn-preto .seta { background: var(--atto-yellow); color: var(--ink-1000); }
-
-/* ── formulário ─────────────────────────────────────────────────────────── */
-.form-grade { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
-.vantagens { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 14px; }
-.vantagens li { display: flex; gap: 11px; align-items: flex-start; font: var(--type-body); color: rgba(255,255,255,.78); }
-.vantagens svg { flex: none; margin-top: 3px; color: var(--atto-yellow); }
-
-.campos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.campo { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
-.campo.largo { grid-column: 1 / -1; }
-.campo label { font: var(--type-label); color: rgba(255,255,255,.88); }
-.campo .req { color: var(--atto-yellow); margin-left: 3px; }
-.campo input, .campo select, .campo textarea {
-  width: 100%; min-height: 46px; padding: 12px 14px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.18);
-  border-radius: 12px;
-  color: var(--white); font: var(--type-body);
-  transition: var(--transition-control, all .18s ease);
-}
-.campo textarea { resize: vertical; min-height: 104px; line-height: 1.5; }
-.campo select { cursor: pointer; }
-.campo select option { background: var(--ink-900); color: var(--white); }
-.campo input::placeholder, .campo textarea::placeholder { color: rgba(255,255,255,.38); }
-.campo :is(input, select, textarea):focus { border-color: var(--atto-yellow); background: rgba(255,255,255,.1); }
-.campo .ajuda { font: var(--type-caption); color: rgba(255,255,255,.5); margin: 0; }
-.aviso {
-  margin-top: 18px; padding: 14px 16px; border-radius: 12px;
-  font: var(--type-body-sm);
-  background: rgba(217,56,46,.14); border: 1px solid rgba(217,56,46,.4); color: #FFC9C4;
-}
-.aviso.ok { background: rgba(26,164,99,.14); border-color: rgba(26,164,99,.42); color: #BDEBD2; }
-
-/* ── rodapé ─────────────────────────────────────────────────────────────── */
-.rodape { padding-top: clamp(32px, 4vw, 48px); }
-.rodape .topo-rodape { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,.12); }
-.rodape nav { display: flex; flex-wrap: wrap; gap: 8px 22px; font: var(--type-label); }
-.rodape nav a { color: rgba(255,255,255,.7); }
-.rodape nav a:hover { color: var(--white); }
-.legal { font: var(--type-caption); line-height: 1.55; color: rgba(255,255,255,.64); margin: 24px 0 0; max-width: 72ch; text-wrap: pretty; }
-
 /* ── dobra de uniformes ─────────────────────────────────────────────────────
    Título partido em dois lados, com a figura subindo pelo vão central e
    entrando no painel amarelo. Na referência o modelo é recortado com fundo
@@ -727,100 +481,29 @@ a { color: inherit; text-decoration: none; }
 }
 .destaque-cta:hover { background: var(--ink-800); color: var(--white); }
 
-/* ── esteira de termos ──────────────────────────────────────────────────────
-   Duas faixas cruzadas que correm em sentidos opostos. O laço é contínuo
-   porque cada trilho carrega a lista duas vezes e a animação para exatamente
-   em -50%: ao reiniciar, a segunda cópia está no lugar da primeira e não há
-   salto. A cópia repetida sai do leitor de tela com aria-hidden. */
-.esteira {
-  position: relative; z-index: 2;
-  /* o recorte mora aqui: a faixa é mais larga que a tela de propósito, e sem
-     este overflow o transbordo chegava ao documento. O padding vertical dá
-     espaço para os cantos que a rotação levanta, e a margem negativa devolve
-     a faixa para cima do vão entre os blocos. */
-  overflow: hidden;
-  padding: 30px 0;
-  margin: -58px 0 -46px;
-}
-.faixa-mov {
-  overflow: hidden;
-  width: 108%; margin-left: -4%;
-  padding: 13px 0;
-  border-block: 1px solid rgba(0,0,0,.14);
-}
-.faixa-mov.clara { background: var(--atto-yellow); color: var(--ink-1000); transform: rotate(-1.8deg); }
-.faixa-mov.escura {
-  background: var(--ink-950); color: var(--white);
-  transform: rotate(1.6deg); margin-top: -14px;
-  border-color: rgba(255,255,255,.12);
-}
-.trilho-mov {
-  display: flex; width: max-content;
-  animation: correr 44s linear infinite;
-}
-.faixa-mov.escura .trilho-mov { animation-duration: 52s; animation-direction: reverse; }
-.faixa-mov:hover .trilho-mov { animation-play-state: paused; }
-@keyframes correr { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-.trilho-mov .grupo { display: flex; flex: none; }
-.trilho-mov .termo {
-  display: inline-flex; align-items: center; gap: 22px;
-  padding-right: 22px;
-  font: var(--weight-bold) clamp(12px, 1.25vw, 15px)/1 var(--font-sans);
-  letter-spacing: .13em; text-transform: uppercase;
-  white-space: nowrap;
-}
-.trilho-mov .losango { font-size: .72em; opacity: .55; }
-.faixa-mov.escura .losango { color: var(--atto-yellow); opacity: 1; }
-
-@media (prefers-reduced-motion: reduce) {
-  /* sem movimento automático: a faixa vira uma régua de termos que a pessoa
-     arrasta, em vez de sumir da página */
-  .trilho-mov { animation: none; }
-  .faixa-mov { overflow-x: auto; scrollbar-width: none; }
-  .faixa-mov::-webkit-scrollbar { display: none; }
-}
-
-/* ── entrada por rolagem ────────────────────────────────────────────────────
-   As classes são postas pelo script, nunca no HTML: sem JS nada fica oculto. */
-.rev, .rev-f { opacity: 0; will-change: opacity, transform; }
-.rev {
-  transform: translateY(20px);
-  transition: opacity .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms),
-              transform .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms);
-}
-.rev.vis { opacity: 1; transform: none; }
-
-/* o card tem transform e cor próprios no hover: aqui entra só a opacidade, e a
-   transição é redeclarada inteira para o reveal não engolir as do hover */
+/* ── entrada por rolagem: a variante do card ────────────────────────────────
+   .rev vem da base. O card do carrossel tem transform e cor próprios no hover:
+   nele entra só a opacidade (.rev-f), e a transição é redeclarada inteira para
+   o reveal não engolir as do hover. */
+.rev-f { opacity: 0; will-change: opacity, transform; }
 .carta.rev-f {
   transition: opacity .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms),
               transform .3s ease, background .45s ease, color .45s ease;
 }
-.rev-f.vis { opacity: 1; }
-.vis { will-change: auto; }
+.rev-f.vis { opacity: 1; will-change: auto; }
 
 /* ── responsivo ─────────────────────────────────────────────────────────── */
 @media (max-width: 960px) {
-  :root { --raio-bloco: 24px; }
-  .heroi-grade, .sobre, .cabeca, .faixa .interno, .form-grade { grid-template-columns: 1fr; }
-  .cabeca { align-items: start; }
+  .heroi-grade { grid-template-columns: 1fr; }
   /* no retrato o véu escurece a foto inteira: o texto deixa de disputar espaço */
   .heroi-veu { background: linear-gradient(to bottom, rgba(16,16,18,.90) 0%, rgba(16,16,18,.62) 38%, rgba(16,16,18,.88) 76%, var(--ink-950) 100%); }
   .heroi-fundo img { object-position: 58% 40%; }
   .heroi-texto { max-width: none; }
   .cartao-flutuante { justify-self: stretch; max-width: 340px; }
-  .numeros { grid-template-columns: 1fr 1fr; gap: 22px; }
-  .menu { display: none; }
-  .menu.aberto {
-    display: flex; flex-direction: column; align-items: stretch;
-    position: absolute; top: 58px; left: 0; right: 0;
-    background: var(--ink-900); border-radius: 18px; padding: 10px;
-  }
-  .hamburger { display: grid; }
+  /* onde a home difere da base, como no bloco do topo deste <style> */
+  .menu.aberto { z-index: auto; }                                                       /* base: 5 */
   .barra .espaco { flex: 1; }
   .cartao-flutuante { left: 0; bottom: -16px; }
-  .campos { grid-template-columns: 1fr; }
   /* A dobra vira uma coluna. A figura continua saindo pelo topo do painel,
      mas por outro caminho: empilhada ela é a primeira linha e está no fluxo
      normal, então margem negativa move de verdade — no desktop não movia,
@@ -873,61 +556,15 @@ a { color: inherit; text-decoration: none; }
   .destaque-nome, .destaque-sub { text-align: left; margin: 0; }
   .destaque-cta { margin-top: 6px; }
 
-  /* empilhado não há coluna à direita para a foto ocupar: ela vira uma tira no
-     rodapé do bloco, dissolvendo para cima, e o conteúdo ganha folga embaixo */
-  .faixa { padding-bottom: 150px; }
-  .faixa .foto {
-    top: auto; bottom: 0; right: 0; left: 0;
-    width: 100%; height: 172px;
-    -webkit-mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%);
-            mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%);
-  }
-
-  /* no retrato a barra de números fica logo acima: a faixa não pode subir
-     tanto, senão cobre o último número */
-  /* empilhados, os números já terminam longe da faixa: aqui a folga é menor */
+  /* a base já encolhe esta folga no retrato, mas o padding da home (no bloco
+     do topo deste <style>) vem depois dela e venceria também aqui: repete-se */
   .numeros { padding-bottom: 36px; }
-  .esteira { margin: -26px 0 -24px; padding: 26px 0; }
-  .faixa-mov.clara { transform: rotate(-2.4deg); }
-  .faixa-mov.escura { transform: rotate(2.2deg); margin-top: -10px; }
-  .faixa-mov { width: 122%; margin-left: -11%; }
-}
-@media (max-width: 560px) {
-  .numeros { grid-template-columns: 1fr; }
-  .barra .cta-topo { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  /* a esteira vira régua arrastável (base); aqui some também a barra do WebKit */
+  .faixa-mov::-webkit-scrollbar { display: none; }
   .trilho { scroll-behavior: auto; }
-}
-
-/* ── WhatsApp flutuante ─────────────────────────────────────────────────────
-   Acompanha a página inteira, no canto inferior direito. Verde da própria
-   marca: é o que torna o botão reconhecível sem precisar de rótulo, e não
-   disputa com o amarelo, que aqui sempre significa "ação do site".
-   56px de alvo, acima do mínimo de 44 da WCAG 2.2.                          */
-.zap {
-  position: fixed;
-  right: clamp(14px, 3vw, 28px);
-  bottom: clamp(14px, 3vw, 28px);
-  z-index: 20;
-  display: grid; place-items: center;
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  background: #25D366; color: #fff;
-  box-shadow: 0 6px 20px rgba(16, 16, 18, .26);
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-.zap:hover, .zap:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(16, 16, 18, .34);
-}
-.zap svg { width: 29px; height: 29px; display: block; }
-@media (prefers-reduced-motion: reduce) {
-  .zap { transition: none; }
-  .zap:hover, .zap:focus-visible { transform: none; }
 }
 </style>
 </head>
@@ -1304,6 +941,8 @@ a { color: inherit; text-decoration: none; }
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
+<!-- menu móvel, ano do rodapé, esteira, entrada por rolagem e envio do
+     formulário: assets/base.js, no <head> -->
 <script>
 /* ─── Dados ──────────────────────────────────────────────────────────────── */
 // [categoria, título, descrição, imagem, slug da ata]
@@ -1350,17 +989,8 @@ const FRENTES = [
   ["Tecnologias", "Laboratório móvel", 8, "notebooks-tablets"]
 ];
 
-/* ─── Destino das solicitações ─────────────────────────────────────────── */
-// O FormSubmit entrega o formulário por e-mail sem servidor nosso e sem chave:
-// o endereço de destino é o próprio endpoint. A caixa precisa confirmar uma vez,
-// no primeiro envio. Se o envio falhar, cai no caminho alternativo abaixo.
-const EMAIL_CONTATO = "attoportal@gmail.com";
-const ENDPOINT_FORMULARIO = `https://formsubmit.co/ajax/${EMAIL_CONTATO}`;
-
 /* ─── Montagem ───────────────────────────────────────────────────────────── */
-const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
-  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
-));
+const { esc } = Atto;
 
 const SETA_CANTO = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>';
 
@@ -1552,7 +1182,7 @@ addEventListener("resize", medirCartas);
 if (document.fonts?.ready) document.fonts.ready.then(medirCartas);
 
 /* ─── Esteira de termos ──────────────────────────────────────────────────── */
-const TERMOS = {
+Atto.esteira({
   frentes: ["Mobiliário escolar", "Sala sensorial", "Playground", "Piso modular",
             "Uniformes escolares", "Laboratório Maker", "Tecnologia educacional",
             "Kit escolar", "Cultura de paz", "Uniformes profissionais",
@@ -1560,20 +1190,7 @@ const TERMOS = {
   garantias: ["Compra por adesão", "Lei 14.133/2021", "24 atas vigentes",
               "541 itens registrados", "Ficha técnica pronta", "Entrega, montagem e treinamento",
               "Projeto sem custo"]
-};
-
-for (const trilho of document.querySelectorAll(".trilho-mov")) {
-  const lista = TERMOS[trilho.dataset.termos] || [];
-  const grupo = lista
-    .map((t) => `<span class="termo">${esc(t)}<span class="losango" aria-hidden="true">&#9670;</span></span>`)
-    .join("");
-  // a segunda cópia é o que fecha o laço; para o leitor de tela ela não existe
-  trilho.innerHTML =
-    `<span class="grupo">${grupo}</span>` +
-    `<span class="grupo" aria-hidden="true">${grupo}</span>`;
-}
-
-document.getElementById("ano").textContent = new Date().getFullYear();
+});
 
 /* ─── Carrossel ──────────────────────────────────────────────────────────── */
 const trilho = document.getElementById("trilho");
@@ -1703,86 +1320,25 @@ const adiantarComFreio = () => {
 trilho.addEventListener("scroll", adiantarComFreio, { passive: true });
 adiantar();
 
-/* ─── Menu móvel ─────────────────────────────────────────────────────────── */
-const btnMenu = document.getElementById("btn-menu");
-const menu = document.getElementById("menu");
-btnMenu.addEventListener("click", () => {
-  const aberto = menu.classList.toggle("aberto");
-  btnMenu.setAttribute("aria-expanded", String(aberto));
-  btnMenu.setAttribute("aria-label", aberto ? "Fechar menu" : "Abrir menu");
-});
-menu.addEventListener("click", (e) => {
-  if (e.target.tagName === "A") {
-    menu.classList.remove("aberto");
-    btnMenu.setAttribute("aria-expanded", "false");
-  }
-});
-
 /* ─── Entrada por rolagem ─────────────────────────────────────────────────
-   Cada grupo entra escalonado, uma vez só. Quem pediu menos movimento no
-   sistema não recebe classe nenhuma e vê a página inteira de imediato.      */
-const semMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-if (!semMovimento && "IntersectionObserver" in window) {
-  // [seletor, classe, atraso entre irmãos em ms]
-  const GRUPOS = [
-    [".heroi-texto > *", "rev", 90],
-    [".cartao-flutuante", "rev", 0],
-    [".numeros .item", "rev", 80],
-    [".sobre > *", "rev", 110],
-    ["#atas .cabeca > *", "rev", 110],
+   O mecanismo é Atto.revelar, em base.js; aqui ficam os grupos desta página
+   e a contagem dos números da capa, que só a home tem.                      */
+if (!Atto.semMovimento && "IntersectionObserver" in window) {
+  // [seletor, atraso entre irmãos em ms, classe — "rev" quando não vem]
+  Atto.revelar([
+    [".heroi-texto > *", 90],
+    [".cartao-flutuante", 0],
+    [".numeros .item", 80],
+    [".sobre > *", 110],
+    ["#atas .cabeca > *", 110],
     // a cópia do trilho não entra: sem ninguém para observá-la ela ficaria
     // invisível para sempre e abriria um buraco no laço da deriva
-    [".carta:not([data-copia])", "rev-f", 70],
-    [".bloco.claro .cabeca > *", "rev", 110],
-    [".roda-detalhe > *", "rev", 90],
-    [".faixa .interno > *", "rev", 110],
-    ["#contato .form-grade > *", "rev", 130]
-  ];
-
-  const pendentes = new Set();
-
-  for (const [seletor, classe, passo] of GRUPOS) {
-    document.querySelectorAll(seletor).forEach((el, i) => {
-      if (el.classList.contains("rev") || el.classList.contains("rev-f")) return;
-      el.classList.add(classe);
-      // o escalonamento para no sexto: além disso a espera fica perceptível
-      el.style.setProperty("--atraso", `${Math.min(i, 5) * passo}ms`);
-      pendentes.add(el);
-    });
-  }
-
-  /* Varredura por posição, e não IntersectionObserver: o observer entrega o
-     callback de forma assíncrona e, numa rolagem rápida ou num salto de
-     âncora, o elemento já saiu da vista quando a entrega acontece — ele é
-     reportado como fora de tela e o conteúdo ficaria oculto para sempre.
-     Comparar a posição cobre também tudo que ficou para trás.             */
-  let agendado = false;
-
-  const varrer = () => {
-    agendado = false;
-    const linha = innerHeight * 0.92;
-    for (const el of pendentes) {
-      if (el.getBoundingClientRect().top < linha) {
-        el.classList.add("vis");
-        pendentes.delete(el);
-      }
-    }
-    if (!pendentes.size) {
-      removeEventListener("scroll", aoMover);
-      removeEventListener("resize", aoMover);
-    }
-  };
-
-  const aoMover = () => {
-    if (agendado) return;
-    agendado = true;
-    requestAnimationFrame(varrer);
-  };
-
-  addEventListener("scroll", aoMover, { passive: true });
-  addEventListener("resize", aoMover);
-  varrer();
+    [".carta:not([data-copia])", 70, "rev-f"],
+    [".bloco.claro .cabeca > *", 110],
+    [".roda-detalhe > *", 90],
+    [".faixa .interno > *", 110],
+    ["#contato .form-grade > *", 130]
+  ]);
 
   // os números da capa sobem do zero quando a barra aparece
   const contar = (el) => {
@@ -1812,66 +1368,11 @@ if (!semMovimento && "IntersectionObserver" in window) {
 }
 
 /* ─── Envio ──────────────────────────────────────────────────────────────── */
-const form = document.getElementById("form");
-const retorno = document.getElementById("retorno");
-const btnEnviar = document.getElementById("btn-enviar");
-
-const dizer = (texto, ok) => {
-  retorno.innerHTML = `<p class="aviso${ok ? " ok" : ""}">${esc(texto)}</p>`;
-};
-
-const ASSUNTO = "Solicitação de projeto pelo site";
-
-const ROTULOS = {
-  nome: "Nome", email: "E-mail", telefone: "Telefone",
-  municipio: "Município", cargo: "Cargo", mensagem: "Demanda"
-};
-
-// Quando o envio falha, a solicitação não pode sumir em silêncio: mostramos o
-// endereço por extenso e um link que abre o e-mail já preenchido. Como link e
-// não como redirecionamento — em máquina sem cliente de e-mail configurado, o
-// redirecionamento não faz nada e o visitante fica sem saber o que houve.
-const dizerFalha = (dados) => {
-  const linhas = [];
-  for (const [k, v] of dados.entries()) {
-    if (v && ROTULOS[k]) linhas.push(`${ROTULOS[k]}: ${v}`);
-  }
-  const link = `mailto:${EMAIL_CONTATO}?subject=${encodeURIComponent(ASSUNTO)}`
-             + `&body=${encodeURIComponent(linhas.join("\n"))}`;
-  retorno.innerHTML = `<p class="aviso">Não foi possível enviar pelo site e sua solicitação
-    não foi registrada. Escreva para <strong>${esc(EMAIL_CONTATO)}</strong> ou
-    <a href="${link}" style="color:inherit">abra o e-mail já preenchido</a>.</p>`;
-};
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  if (!form.reportValidity()) return;
-
-  const dados = new FormData(form);
-  if (dados.get("_honey")) return;
-
-  dados.set("_subject", ASSUNTO);
-  dados.set("_template", "table");
-  dados.set("_captcha", "false");
-  dados.set("_replyto", dados.get("email") || "");
-
-  btnEnviar.disabled = true;
-  dizer("Enviando…", true);
-  try {
-    const r = await fetch(ENDPOINT_FORMULARIO, {
-      method: "POST",
-      headers: { Accept: "application/json" },
-      body: dados
-    });
-    const resposta = await r.json().catch(() => ({}));
-    if (!r.ok || String(resposta.success) === "false") throw new Error(resposta.message || r.status);
-    form.reset();
-    dizer("Solicitação recebida. A equipe responde com a ata compatível e a minuta de adesão.", true);
-  } catch {
-    dizerFalha(dados);
-  } finally {
-    btnEnviar.disabled = false;
+Atto.formulario({
+  assunto: () => "Solicitação de projeto pelo site",
+  rotulos: {
+    nome: "Nome", email: "E-mail", telefone: "Telefone",
+    municipio: "Município", cargo: "Cargo", mensagem: "Demanda"
   }
 });
 </script>

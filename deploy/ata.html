@@ -30,74 +30,19 @@
 
 <script src="assets/atas-dados.js"></script>
 
+<!-- o que é comum às quatro páginas; o script fica aqui no <head> para chegar
+     antes da primeira pintura (ver o cabeçalho de base.js) -->
+<link rel="stylesheet" href="assets/base.css">
+<script src="assets/base.js"></script>
 <style>
 /* ══ Página de ata ═══════════════════════════════════════════════
    Mesma gramática da home: pilha de blocos arredondados sobre cinza, capa
    escura sangrada, serifa só como acento. O conteúdo das 25 atas vem de
    assets/atas-dados.js, o mesmo arquivo que o ata.html lê.
 
-   O CSS de base ainda está duplicado entre as páginas. É o próximo
-   passo: extrair para assets/base.css quando o desenho estabilizar — enquanto
-   muda a cada rodada, arquivo compartilhado atrapalha mais do que ajuda.  */
+   O que é comum às quatro páginas mora em assets/base.css. Aqui fica só o
+   que é desta página.                                                     */
 
-:root {
-  --fonte-titulo: "Instrument Serif", "Playfair Display", Georgia, serif;
-  --pagina: #ECEDEF;
-  --raio-bloco: 32px;
-  --respiro: clamp(12px, 1.2vw, 18px);
-  --coluna: 1240px;
-  --pad-bloco: clamp(24px, 5vw, 76px);
-
-  --text-body-lg: 18px;
-  --text-body: 16px;
-  --text-body-sm: 14px;
-  --text-caption: 13px;
-  --text-overline: 12px;
-}
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  margin: 0; background: var(--pagina); color: var(--text-primary);
-  font: var(--type-body); -webkit-font-smoothing: antialiased; overflow-x: hidden;
-}
-img { display: block; max-width: 100%; }
-a { color: inherit; text-decoration: none; }
-button, input, select, textarea { font-family: inherit; }
-
-:where(a, button, input, select, textarea):focus-visible {
-  outline: 3px solid var(--ink-950); outline-offset: 3px; border-radius: 6px;
-}
-.escuro :where(a, button, input, select, textarea):focus-visible { outline-color: var(--atto-yellow); }
-
-/* ── blocos ─────────────────────────────────────────────────────────────── */
-.bloco { margin: var(--respiro); border-radius: var(--raio-bloco); padding: var(--pad-bloco); overflow: hidden; position: relative; }
-.bloco > .interno { max-width: var(--coluna); margin: 0 auto; }
-.claro { background: var(--white); }
-.escuro { background: var(--ink-950); color: var(--white); }
-.escuro .secundario { color: rgba(255,255,255,.68); }
-.secundario { color: var(--text-secondary); }
-.sem-cartao { margin: 0; border-radius: 0; padding-block: clamp(44px, 6vw, 86px); }
-
-/* ── etiqueta ───────────────────────────────────────────────────────────── */
-.etiqueta {
-  display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px;
-  border: 1px solid var(--border-default); border-radius: 999px;
-  font: var(--type-overline); letter-spacing: var(--tracking-overline);
-  text-transform: uppercase; color: var(--ink-600); background: var(--white);
-}
-.escuro .etiqueta { border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.80); background: rgba(255,255,255,.05); }
-.etiqueta .ponto { width: 6px; height: 6px; border-radius: 50%; background: var(--atto-yellow); flex: none; }
-
-/* ── títulos ────────────────────────────────────────────────────────────── */
-.titulo {
-  font: var(--weight-black) clamp(32px, 4.8vw, 58px)/1.08 var(--font-display);
-  letter-spacing: var(--tracking-display); margin: 16px 0 0; text-wrap: balance;
-}
-.titulo-md {
-  font: var(--weight-black) clamp(26px, 3.4vw, 40px)/1.1 var(--font-display);
-  letter-spacing: var(--tracking-display); margin: 14px 0 0; text-wrap: balance;
-}
 /* a serifa é acento: entra no nome da ata, acima da manchete */
 .kicker {
   display: block; margin: 18px 0 2px;
@@ -105,57 +50,19 @@ button, input, select, textarea { font-family: inherit; }
   font-style: italic; color: var(--atto-yellow); letter-spacing: -0.005em;
 }
 
-/* ── botões ─────────────────────────────────────────────────────────────── */
-.btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 7px 7px 7px 20px; border-radius: 999px; border: 1px solid transparent;
-  font: var(--type-label); cursor: pointer; white-space: nowrap;
-  transition: var(--transition-control, all .18s ease);
-}
-.btn .seta { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; flex: none; transition: transform .18s ease; }
-.btn:hover .seta { transform: translate(2px, -2px); }
-.btn-marca { background: var(--atto-yellow); color: var(--ink-1000); }
-.btn-marca .seta { background: var(--ink-1000); color: var(--atto-yellow); }
-.btn-marca:hover { background: var(--atto-yellow-press); }
-.btn-preto { background: var(--ink-1000); color: var(--white); }
-.btn-preto .seta { background: var(--atto-yellow); color: var(--ink-1000); }
-.btn-contorno { border-color: var(--border-default); color: var(--ink-950); padding-right: 20px; background: transparent; }
-.escuro .btn-contorno { border-color: rgba(255,255,255,.26); color: var(--white); }
-.escuro .btn-contorno:hover { background: rgba(255,255,255,.08); }
-
-.circulo {
-  width: 44px; height: 44px; flex: none; border-radius: 50%;
-  border: 1px solid var(--border-default); background: transparent; color: inherit;
-  display: grid; place-items: center; cursor: pointer;
-  transition: var(--transition-control, all .18s ease);
-}
-.escuro .circulo { border-color: rgba(255,255,255,.26); }
+/* ── setas da galeria ───────────────────────────────────────────────────────
+   O círculo da base é o do hambúrguer, sem estado. Aqui ele também é seta de
+   carrossel: ganha transição, hover e o apagado de fim de trilho. A home tem
+   as mesmas três linhas; produtos e quem-somos não têm seta nenhuma. */
+.circulo { transition: var(--transition-control, all .18s ease); }
 .escuro .circulo:hover { background: rgba(255,255,255,.1); }
 .circulo:disabled { opacity: .3; cursor: default; }
 
-/* ── topo ───────────────────────────────────────────────────────────────── */
-.barra { display: flex; align-items: center; gap: 20px; position: relative; z-index: 3; }
-.barra .marca { height: 30px; width: auto; }
-.menu {
-  display: flex; align-items: center; gap: 2px; padding: 5px;
-  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
-  border-radius: 999px; backdrop-filter: blur(10px);
-}
-.menu a { padding: 9px 16px; border-radius: 999px; font: var(--type-label); color: rgba(255,255,255,.74); transition: var(--transition-control, all .18s ease); }
-.menu a:hover { color: var(--white); background: rgba(255,255,255,.10); }
-.menu a[aria-current] { color: var(--ink-1000); background: var(--white); }
-.hamburger { display: none; }
-
 /* ── capa ───────────────────────────────────────────────────────────────── */
-.capa {
-  margin: 0; border-radius: 0;
-  padding: clamp(18px, 3vw, 34px) var(--pad-bloco) 0;
-}
-.capa-fundo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
-.capa-fundo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; }
+/* enquadramento e véu desta foto; a estrutura da capa vem da base */
+.capa-fundo img { object-position: 50% 42%; }
 .capa-veu {
-  position: absolute; inset: 0;
-  background:
+  --capa-veu:
     linear-gradient(100deg, rgba(16,16,18,.97) 0%, rgba(16,16,18,.93) 28%, rgba(16,16,18,.60) 46%, rgba(16,16,18,.30) 62%, rgba(16,16,18,.55) 100%),
     linear-gradient(to bottom, rgba(16,16,18,.92) 0%, rgba(16,16,18,.30) 20%, rgba(16,16,18,.22) 54%, rgba(16,16,18,.88) 86%, var(--ink-950) 100%);
 }
@@ -167,8 +74,7 @@ button, input, select, textarea { font-family: inherit; }
   position: relative; z-index: 2;
 }
 .capa-texto { max-width: min(660px, 100%); }
-.capa p.lead { font: var(--type-body-lg); color: rgba(255,255,255,.80); margin: 20px 0 0; max-width: 50ch; text-wrap: pretty; }
-.capa .acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.capa p.lead { max-width: 50ch; }
 
 .selos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
 .selo {
@@ -186,43 +92,13 @@ button, input, select, textarea { font-family: inherit; }
 }
 .cartao-capa .n { font: var(--weight-black) 34px/1 var(--font-display); letter-spacing: var(--tracking-display); }
 
-.numeros {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: clamp(14px, 2.6vw, 40px);
-  border-top: 1px solid rgba(255,255,255,.14);
-  padding: clamp(22px, 3vw, 32px) 0 clamp(60px, 6vw, 76px);
-  position: relative; z-index: 2;
-}
-.numeros .item { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+/* ── dados da ata ───────────────────────────────────────────────────────────
+   Na barra desta página o rótulo vem em caixa alta e o valor é texto, não
+   número grande como nas outras. */
 .numeros .r { font: var(--type-overline); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: rgba(255,255,255,.50); }
 .numeros .v { font: var(--weight-bold) var(--text-body)/1.35 var(--font-sans); color: var(--white); text-wrap: pretty; }
 
-/* ── esteira ────────────────────────────────────────────────────────────── */
-.esteira { position: relative; z-index: 2; overflow: hidden; padding: 30px 0; margin: -58px 0 -46px; }
-.faixa-mov { overflow: hidden; width: 108%; margin-left: -4%; padding: 13px 0; border-block: 1px solid rgba(0,0,0,.14); }
-.faixa-mov.clara { background: var(--atto-yellow); color: var(--ink-1000); transform: rotate(-1.8deg); }
-.faixa-mov.escura { background: var(--ink-950); color: var(--white); transform: rotate(1.6deg); margin-top: -14px; border-color: rgba(255,255,255,.12); }
-.trilho-mov { display: flex; width: max-content; animation: correr 44s linear infinite; }
-.faixa-mov.escura .trilho-mov { animation-duration: 52s; animation-direction: reverse; }
-.faixa-mov:hover .trilho-mov { animation-play-state: paused; }
-@keyframes correr { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.trilho-mov .grupo { display: flex; flex: none; }
-.trilho-mov .termo {
-  display: inline-flex; align-items: center; gap: 22px; padding-right: 22px;
-  font: var(--weight-bold) clamp(12px, 1.25vw, 15px)/1 var(--font-sans);
-  letter-spacing: .13em; text-transform: uppercase; white-space: nowrap;
-}
-.trilho-mov .losango { font-size: .72em; opacity: .55; }
-.faixa-mov.escura .losango { color: var(--atto-yellow); opacity: 1; }
-
-/* ── cabeçalho de seção ─────────────────────────────────────────────────── */
-.cabeca { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr); gap: clamp(20px, 3vw, 56px); align-items: end; margin-bottom: clamp(28px, 4vw, 44px); }
-.cabeca .apoio { font: var(--type-body); max-width: 52ch; text-wrap: pretty; }
-
 /* ── o que entra ────────────────────────────────────────────────────────── */
-.sobre { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: start; }
-.sobre .frase { font: var(--type-body-lg); color: var(--ink-950); margin: 0; max-width: 58ch; text-wrap: pretty; }
-
 .blocos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: clamp(16px, 2.4vw, 28px); margin-top: clamp(30px, 4vw, 50px); }
 .blocos article { border-top: 2px solid var(--ink-950); padding-top: 16px; }
 .blocos .rotulo {
@@ -234,12 +110,6 @@ button, input, select, textarea { font-family: inherit; }
 .blocos p { font: var(--type-body-sm); color: var(--ink-600); margin: 0; text-wrap: pretty; }
 
 /* ── galeria ────────────────────────────────────────────────────────────── */
-.trilho {
-  display: flex; gap: 18px; overflow-x: auto;
-  scroll-snap-type: x proximity; scroll-behavior: smooth;
-  scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 4px;
-}
-.trilho::-webkit-scrollbar { display: none; }
 .foto-gal {
   flex: 0 0 clamp(260px, 30vw, 400px); scroll-snap-align: start;
   aspect-ratio: 4 / 3; object-fit: cover; border-radius: 18px;
@@ -266,115 +136,11 @@ button, input, select, textarea { font-family: inherit; }
 .etapas h3 { font: var(--type-h4); margin: 10px 0 6px; text-wrap: pretty; }
 .etapas p { font: var(--type-body-sm); color: rgba(255,255,255,.62); margin: 0; text-wrap: pretty; }
 
-/* ── faixa amarela ──────────────────────────────────────────────────────── */
-.faixa { background: var(--atto-yellow); color: var(--ink-1000); position: relative; }
-.faixa .foto {
-  position: absolute; top: 0; right: 0; bottom: 0;
-  width: min(58%, 680px); height: 100%; object-fit: cover; object-position: 50% 42%;
-  mix-blend-mode: multiply; opacity: .9; pointer-events: none;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
-          mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
-}
-.faixa .interno { position: relative; z-index: 1; display: grid; grid-template-columns: 1.4fr auto; gap: 32px; align-items: center; }
-.faixa h2 { font: var(--weight-black) clamp(26px, 3.4vw, 40px)/1.1 var(--font-display); letter-spacing: var(--tracking-display); margin: 0; text-wrap: balance; }
-.faixa p { margin: 12px 0 0; font: var(--type-body); color: rgba(0,0,0,.68); }
-
-/* ── formulário ─────────────────────────────────────────────────────────── */
-.form-grade { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
-.vantagens { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 14px; }
-.vantagens li { display: flex; gap: 11px; align-items: flex-start; font: var(--type-body); color: rgba(255,255,255,.78); }
-.vantagens svg { flex: none; margin-top: 3px; color: var(--atto-yellow); }
-.campos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.campo { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
-.campo.largo { grid-column: 1 / -1; }
-.campo label { font: var(--type-label); color: rgba(255,255,255,.88); }
-.campo .req { color: var(--atto-yellow); margin-left: 3px; }
-.campo input, .campo textarea {
-  width: 100%; min-height: 46px; padding: 12px 14px;
-  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.18);
-  border-radius: 12px; color: var(--white); font: var(--type-body);
-  transition: var(--transition-control, all .18s ease);
-}
-.campo textarea { resize: vertical; min-height: 104px; line-height: 1.5; }
-.campo input::placeholder, .campo textarea::placeholder { color: rgba(255,255,255,.38); }
-.campo :is(input, textarea):focus { border-color: var(--atto-yellow); background: rgba(255,255,255,.1); }
-.campo .ajuda { font: var(--type-caption); color: rgba(255,255,255,.54); margin: 0; }
-.aviso { margin-top: 18px; padding: 14px 16px; border-radius: 12px; font: var(--type-body-sm); background: rgba(217,56,46,.14); border: 1px solid rgba(217,56,46,.4); color: #FFC9C4; }
-.aviso.ok { background: rgba(26,164,99,.14); border-color: rgba(26,164,99,.42); color: #BDEBD2; }
-
-/* ── rodapé ─────────────────────────────────────────────────────────────── */
-.rodape { padding-top: clamp(32px, 4vw, 48px); }
-.rodape .topo-rodape { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,.12); }
-.rodape nav { display: flex; flex-wrap: wrap; gap: 8px 22px; font: var(--type-label); }
-.rodape nav a { color: rgba(255,255,255,.7); }
-.rodape nav a:hover { color: var(--white); }
-.legal { font: var(--type-caption); line-height: 1.55; color: rgba(255,255,255,.64); margin: 24px 0 0; max-width: 72ch; text-wrap: pretty; }
-
-/* ── entrada por rolagem ────────────────────────────────────────────────── */
-.rev { opacity: 0; transform: translateY(20px); will-change: opacity, transform;
-  transition: opacity .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms), transform .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms); }
-.rev.vis { opacity: 1; transform: none; will-change: auto; }
-
 /* ── responsivo ─────────────────────────────────────────────────────────── */
 @media (max-width: 960px) {
-  :root { --raio-bloco: 24px; }
-  .capa-grade, .sobre, .cabeca, .faixa .interno, .form-grade { grid-template-columns: 1fr; }
-  .cabeca { align-items: start; }
-  .capa-veu { background: linear-gradient(to bottom, rgba(16,16,18,.90) 0%, rgba(16,16,18,.62) 38%, rgba(16,16,18,.88) 76%, var(--ink-950) 100%); }
+  .capa-grade { grid-template-columns: 1fr; }
   .capa-texto { max-width: none; }
   .cartao-capa { justify-self: stretch; max-width: 340px; }
-  .numeros { grid-template-columns: 1fr 1fr; gap: 22px; padding-bottom: 36px; }
-  .menu { display: none; }
-  .menu.aberto { display: flex; flex-direction: column; align-items: stretch; position: absolute; top: 58px; left: 0; right: 0; background: var(--ink-900); border-radius: 18px; padding: 10px; z-index: 5; }
-  .hamburger { display: grid; }
-  .esteira { margin: -26px 0 -24px; padding: 26px 0; }
-  .faixa-mov.clara { transform: rotate(-2.4deg); }
-  .faixa-mov.escura { transform: rotate(2.2deg); margin-top: -10px; }
-  .faixa-mov { width: 122%; margin-left: -11%; }
-  .faixa { padding-bottom: 150px; }
-  .faixa .foto { top: auto; bottom: 0; right: 0; left: 0; width: 100%; height: 172px;
-    -webkit-mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%);
-            mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%); }
-  .campos { grid-template-columns: 1fr; }
-}
-@media (max-width: 560px) {
-  .numeros { grid-template-columns: 1fr; }
-  .barra .cta-topo { display: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-  .trilho-mov { animation: none; }
-  .faixa-mov { overflow-x: auto; scrollbar-width: none; }
-  .rev { opacity: 1; transform: none; }
-}
-
-/* ── WhatsApp flutuante ─────────────────────────────────────────────────────
-   Acompanha a página inteira, no canto inferior direito. Verde da própria
-   marca: é o que torna o botão reconhecível sem precisar de rótulo, e não
-   disputa com o amarelo, que aqui sempre significa "ação do site".
-   56px de alvo, acima do mínimo de 44 da WCAG 2.2.                          */
-.zap {
-  position: fixed;
-  right: clamp(14px, 3vw, 28px);
-  bottom: clamp(14px, 3vw, 28px);
-  z-index: 20;
-  display: grid; place-items: center;
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  background: #25D366; color: #fff;
-  box-shadow: 0 6px 20px rgba(16, 16, 18, .26);
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-.zap:hover, .zap:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(16, 16, 18, .34);
-}
-.zap svg { width: 29px; height: 29px; display: block; }
-@media (prefers-reduced-motion: reduce) {
-  .zap { transition: none; }
-  .zap:hover, .zap:focus-visible { transform: none; }
 }
 </style>
 </head>
@@ -633,17 +399,10 @@ button, input, select, textarea { font-family: inherit; }
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
+<!-- menu móvel, ano do rodapé, esteira, entrada por rolagem e envio do
+     formulário: assets/base.js, no <head> -->
 <script>
-/* ─── Destino das solicitações ───────────────────────────────────────────── */
-// O FormSubmit entrega o formulário por e-mail sem servidor nosso e sem chave:
-// o endereço de destino é o próprio endpoint. A caixa precisa confirmar uma vez,
-// no primeiro envio. Se o envio falhar, cai no caminho alternativo abaixo.
-const EMAIL_CONTATO = "attoportal@gmail.com";
-const ENDPOINT_FORMULARIO = `https://formsubmit.co/ajax/${EMAIL_CONTATO}`;
-
-const esc = (s) => String(s).replace(/[&<>"']/g, (c) => (
-  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
-));
+const { esc } = Atto;
 
 /* ─── Qual ata ─────────────────────────────────────────────────────────── */
 let slug = new URLSearchParams(location.search).get("ata") || ORDEM[0];
@@ -749,8 +508,6 @@ document.getElementById("form-solucao").value = a.titulo;
   zap.href = `${zap.href.split("?")[0]}?text=${encodeURIComponent(texto)}`;
 }
 
-document.getElementById("ano").textContent = new Date().getFullYear();
-
 /* ─── Galeria: setas ───────────────────────────────────────────────────── */
 const galAnt = document.getElementById("gal-ant");
 const galProx = document.getElementById("gal-prox");
@@ -774,130 +531,39 @@ addEventListener("resize", limitesGal);
 limitesGal();
 
 /* ─── Esteira ──────────────────────────────────────────────────────────── */
-const TERMOS = {
+Atto.esteira({
   itens: a.itens,
   garantias: ["Compra por adesão", "Lei 14.133/2021", "Ficha técnica pronta",
               "Entrega, montagem e treinamento", "Projeto sem custo", a.categoria]
-};
-for (const trilho of document.querySelectorAll(".trilho-mov")) {
-  const grupo = (TERMOS[trilho.dataset.termos] || [])
-    .map((t) => `<span class="termo">${esc(t)}<span class="losango" aria-hidden="true">&#9670;</span></span>`)
-    .join("");
-  // a segunda cópia é o que fecha o laço; para o leitor de tela ela não existe
-  trilho.innerHTML = `<span class="grupo">${grupo}</span><span class="grupo" aria-hidden="true">${grupo}</span>`;
-}
-
-/* ─── Menu ─────────────────────────────────────────────────────────────── */
-const btnMenu = document.getElementById("btn-menu");
-const menu = document.getElementById("menu");
-btnMenu.addEventListener("click", () => {
-  const aberto = menu.classList.toggle("aberto");
-  btnMenu.setAttribute("aria-expanded", String(aberto));
-  btnMenu.setAttribute("aria-label", aberto ? "Fechar menu" : "Abrir menu");
-});
-menu.addEventListener("click", (e) => {
-  if (e.target.tagName === "A") { menu.classList.remove("aberto"); btnMenu.setAttribute("aria-expanded", "false"); }
 });
 
 /* ─── Entrada por rolagem ──────────────────────────────────────────────── */
-const semMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
-if (!semMovimento) {
-  const GRUPOS = [
-    [".capa-texto > *", "rev", 80],
-    [".cartao-capa", "rev", 0],
-    [".numeros .item", "rev", 70],
-    [".sobre > *", "rev", 110],
-    [".blocos article", "rev", 90],
-    ["#galeria-secao .cabeca > *", "rev", 110],
-    [".sem-cartao .cabeca > *", "rev", 110],
-    ["#como-aderir .cabeca > *", "rev", 110],
-    [".etapas article", "rev", 50],
-    [".faixa .interno > *", "rev", 110],
-    ["#contato .form-grade > *", "rev", 130]
-  ];
-  const pendentes = new Set();
-  for (const [sel, cls, passo] of GRUPOS) {
-    document.querySelectorAll(sel).forEach((el, i) => {
-      if (el.classList.contains("rev")) return;
-      el.classList.add(cls);
-      el.style.setProperty("--atraso", `${Math.min(i, 5) * passo}ms`);
-      pendentes.add(el);
-    });
-  }
-  /* Varredura por posição, e não IntersectionObserver: numa rolagem rápida o
-     observer entrega o callback quando o elemento já saiu da vista, e o
-     conteúdo ficaria oculto para sempre. */
-  let agendado = false;
-  const varrer = () => {
-    agendado = false;
-    const linha = innerHeight * 0.92;
-    for (const el of pendentes) {
-      if (el.getBoundingClientRect().top < linha) { el.classList.add("vis"); pendentes.delete(el); }
-    }
-    if (!pendentes.size) { removeEventListener("scroll", aoMover); removeEventListener("resize", aoMover); }
-  };
-  const aoMover = () => { if (!agendado) { agendado = true; requestAnimationFrame(varrer); } };
-  addEventListener("scroll", aoMover, { passive: true });
-  addEventListener("resize", aoMover);
-  varrer();
-}
+// [seletor, atraso entre irmãos em ms]
+Atto.revelar([
+  [".capa-texto > *", 80],
+  [".cartao-capa", 0],
+  [".numeros .item", 70],
+  [".sobre > *", 110],
+  [".blocos article", 90],
+  ["#galeria-secao .cabeca > *", 110],
+  [".sem-cartao .cabeca > *", 110],
+  ["#como-aderir .cabeca > *", 110],
+  [".etapas article", 50],
+  [".faixa .interno > *", 110],
+  ["#contato .form-grade > *", 130]
+]);
 
 /* ─── Envio ────────────────────────────────────────────────────────────── */
-const form = document.getElementById("form");
-const retorno = document.getElementById("retorno");
-const btnEnviar = document.getElementById("btn-enviar");
-const dizer = (texto, ok) => { retorno.innerHTML = `<p class="aviso${ok ? " ok" : ""}">${esc(texto)}</p>`; };
-
-const ROTULOS = {
-  solucao: "Ata", nome: "Nome", email: "E-mail", telefone: "Telefone",
-  municipio: "Município", cargo: "Cargo", mensagem: "Demanda"
-};
-
-// O assunto carrega a ata para a caixa já chegar classificada.
-const assuntoDaMensagem = () => {
-  const ata = document.getElementById("form-solucao").value;
-  return ata ? `Solicitação pelo site — ${ata}` : "Solicitação de projeto pelo site";
-};
-
-// Quando o envio falha, a solicitação não pode sumir em silêncio: mostramos o
-// endereço por extenso e um link que abre o e-mail já preenchido. Como link e
-// não como redirecionamento — em máquina sem cliente de e-mail configurado, o
-// redirecionamento não faz nada e o visitante fica sem saber o que houve.
-const dizerFalha = (dados) => {
-  const linhas = [];
-  for (const [k, v] of dados.entries()) {
-    if (v && ROTULOS[k]) linhas.push(`${ROTULOS[k]}: ${v}`);
+Atto.formulario({
+  // O assunto carrega a ata para a caixa já chegar classificada.
+  assunto: () => {
+    const ata = document.getElementById("form-solucao").value;
+    return ata ? `Solicitação pelo site — ${ata}` : "Solicitação de projeto pelo site";
+  },
+  rotulos: {
+    solucao: "Ata", nome: "Nome", email: "E-mail", telefone: "Telefone",
+    municipio: "Município", cargo: "Cargo", mensagem: "Demanda"
   }
-  const link = `mailto:${EMAIL_CONTATO}?subject=${encodeURIComponent(assuntoDaMensagem())}`
-             + `&body=${encodeURIComponent(linhas.join("\n"))}`;
-  retorno.innerHTML = `<p class="aviso">Não foi possível enviar pelo site e sua solicitação
-    não foi registrada. Escreva para <strong>${esc(EMAIL_CONTATO)}</strong> ou
-    <a href="${link}" style="color:inherit">abra o e-mail já preenchido</a>.</p>`;
-};
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  if (!form.reportValidity()) return;
-
-  const dados = new FormData(form);
-  if (dados.get("_honey")) return;
-
-  dados.set("_subject", assuntoDaMensagem());
-  dados.set("_template", "table");
-  dados.set("_captcha", "false");
-  dados.set("_replyto", dados.get("email") || "");
-
-  btnEnviar.disabled = true;
-  dizer("Enviando…", true);
-  try {
-    const r = await fetch(ENDPOINT_FORMULARIO, { method: "POST", headers: { Accept: "application/json" }, body: dados });
-    const resposta = await r.json().catch(() => ({}));
-    if (!r.ok || String(resposta.success) === "false") throw new Error(resposta.message || r.status);
-    form.reset();
-    dizer("Solicitação recebida. A equipe responde com a ata compatível e a minuta de adesão.", true);
-  } catch {
-    dizerFalha(dados);
-  } finally { btnEnviar.disabled = false; }
 });
 </script>
 </body>

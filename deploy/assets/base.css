@@ -1,0 +1,451 @@
+/* ══ Portal Atto — base ═══════════════════════════════════════════════════════
+   O que as páginas têm em comum: tokens, tipografia, botões, blocos, topo,
+   capa, esteira, faixa amarela, formulário, rodapé, entrada por rolagem e os
+   pontos de quebra. Cada página carrega este arquivo antes do próprio <style>
+   e fica só com o que é dela.
+
+   Duas regras para mexer aqui sem quebrar página:
+
+   1. O <style> da página vem depois deste arquivo e vence no empate. Uma página
+      que ajusta um componente daqui redeclara só a propriedade que muda.
+   2. Empate inclui media query: se a página redeclara fora de @media uma
+      propriedade que este arquivo muda dentro de @media, a versão da página
+      vence também no celular. Nesse caso a página repete o ajuste no @media
+      dela (é o que a home faz com o padding de .numeros).                    */
+
+:root {
+  /* Serifa de destaque, usada só na palavra em evidência de cada título (.realce).
+     Archivo segue como a voz do site — títulos, cards, listas e interface —
+     porque é ela que puxa a letra do logotipo. Duas famílias no total. */
+  --fonte-titulo: "Instrument Serif", "Playfair Display", Georgia, serif;
+
+  --pagina: #ECEDEF;
+  --raio-bloco: 32px;
+  --respiro: clamp(12px, 1.2vw, 18px);
+  --coluna: 1240px;
+  --pad-bloco: clamp(24px, 5vw, 76px);
+
+  /* Escala corrigida para o padrão de leitura em tela. O design system fixa o
+     corpo em 15px e o auxiliar em 13px — abaixo dos 16px de base e do piso de
+     14px para texto corrido. Redefinir os tokens de tamanho basta: os pares
+     --type-* do design system são compostos com var(), que só resolve na hora
+     do uso, então toda a página acompanha sem reescrever regra por regra. */
+  --text-body-lg: 18px;   /* era 17 — linha de apoio da capa e do "como funciona" */
+  --text-body: 16px;      /* era 15 — base de leitura */
+  --text-body-sm: 14px;   /* era 13 — descrição de card, rótulos de interface */
+  --text-caption: 13px;   /* era 12 — microcopy: ajuda de campo, aviso legal */
+  --text-overline: 12px;  /* era 11 — etiquetas em caixa alta */
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--pagina);
+  color: var(--text-primary);
+  font: var(--type-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+/* controles não herdam fonte por padrão: sem isto os botões circulares e o
+   hambúrguer caem no Arial do navegador */
+button, input, select, textarea { font-family: inherit; }
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--ink-950);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.escuro :where(a, button, input, select, textarea):focus-visible { outline-color: var(--atto-yellow); }
+
+/* ── blocos ─────────────────────────────────────────────────────────────── */
+.bloco {
+  margin: var(--respiro);
+  border-radius: var(--raio-bloco);
+  padding: var(--pad-bloco);
+  overflow: hidden;
+  position: relative;
+}
+.bloco > .interno { max-width: var(--coluna); margin: 0 auto; }
+.claro { background: var(--white); }
+.escuro { background: var(--ink-950); color: var(--white); }
+.escuro .secundario { color: rgba(255,255,255,.68); }
+.secundario { color: var(--text-secondary); }
+/* seção que sai da pilha de cartões: o branco vira o fundo da página inteira,
+   e a lista respira sem moldura em volta */
+.sem-cartao {
+  margin: 0;
+  border-radius: 0;
+  padding-block: clamp(44px, 6vw, 86px);
+}
+
+/* ── etiqueta pílula ────────────────────────────────────────────────────── */
+.etiqueta {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 14px;
+  border: 1px solid var(--border-default);
+  border-radius: 999px;
+  font: var(--type-overline);
+  letter-spacing: var(--tracking-overline);
+  text-transform: uppercase;
+  color: var(--ink-600);
+  background: var(--white);
+}
+.escuro .etiqueta {
+  border-color: rgba(255,255,255,.22);
+  color: rgba(255,255,255,.80);
+  background: rgba(255,255,255,.05);
+}
+.etiqueta .ponto { width: 6px; height: 6px; border-radius: 50%; background: var(--atto-yellow); flex: none; }
+
+/* ── títulos ────────────────────────────────────────────────────────────── */
+.titulo {
+  font: var(--weight-black) clamp(32px, 4.8vw, 58px)/1.08 var(--font-display);
+  letter-spacing: var(--tracking-display);
+  margin: 16px 0 0;
+  text-wrap: balance;
+}
+.titulo-md {
+  font: var(--weight-black) clamp(26px, 3.4vw, 40px)/1.1 var(--font-display);
+  letter-spacing: var(--tracking-display);
+  margin: 14px 0 0;
+  text-wrap: balance;
+}
+/* A serifa é acento, não voz do site: entra só na palavra de destaque. O resto
+   do título continua na sans da marca. O corpo em itálico é um pouco menor na
+   caixa, daí o leve ganho de tamanho e o tracking solto — a sans fecha mais o
+   espacejamento do que a serifa pede. */
+.realce {
+  color: var(--atto-yellow);
+  font-family: var(--fonte-titulo);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.06em;
+  letter-spacing: -0.005em;
+}
+.claro .realce { color: var(--ink-950); }
+
+/* ── botões ─────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 7px 7px 7px 20px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font: var(--type-label);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-control, all .18s ease);
+}
+.btn .seta {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center; flex: none;
+  transition: transform .18s ease;
+}
+.btn:hover .seta { transform: translate(2px, -2px); }
+.btn-marca { background: var(--atto-yellow); color: var(--ink-1000); }
+.btn-marca .seta { background: var(--ink-1000); color: var(--atto-yellow); }
+.btn-marca:hover { background: var(--atto-yellow-press); }
+.btn-preto { background: var(--ink-1000); color: var(--white); }
+.btn-preto .seta { background: var(--atto-yellow); color: var(--ink-1000); }
+.btn-contorno { border-color: var(--border-default); color: var(--ink-950); padding-right: 20px; background: transparent; }
+.escuro .btn-contorno { border-color: rgba(255,255,255,.26); color: var(--white); }
+.escuro .btn-contorno:hover { background: rgba(255,255,255,.08); }
+
+.circulo {
+  width: 44px; height: 44px; flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--border-default);
+  background: transparent;
+  color: inherit;
+  display: grid; place-items: center;
+  cursor: pointer;
+}
+.escuro .circulo { border-color: rgba(255,255,255,.26); }
+
+/* ── topo ───────────────────────────────────────────────────────────────── */
+.barra {
+  display: flex; align-items: center; gap: 20px;
+  position: relative; z-index: 3;
+}
+.barra .marca { height: 30px; width: auto; }
+.menu {
+  display: flex; align-items: center; gap: 2px;
+  padding: 5px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+}
+.menu a {
+  padding: 9px 16px; border-radius: 999px;
+  font: var(--type-label); color: rgba(255,255,255,.74);
+  transition: var(--transition-control, all .18s ease);
+}
+.menu a:hover { color: var(--white); background: rgba(255,255,255,.10); }
+.menu a[aria-current] { color: var(--ink-1000); background: var(--white); }
+
+.hamburger { display: none; }
+
+/* ── capa das páginas internas ──────────────────────────────────────────────
+   A capa sangra até as bordas, do topo da janela até a esteira: deixa de ser
+   mais um cartão na pilha e vira o fundo de onde a pilha emerge.
+   O seletor pede .bloco junto porque a home usa .capa para outra coisa — a
+   foto dos cards do carrossel — e não pode herdar este padding.
+   Cada página dá o véu da própria foto em --capa-veu (o degradê do desktop) e
+   o enquadramento em object-position; o véu do retrato é um só, mais abaixo. */
+.bloco.capa {
+  margin: 0;
+  border-radius: 0;
+  padding: clamp(18px, 3vw, 34px) var(--pad-bloco) 0;
+}
+.capa-fundo { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.capa-fundo img { width: 100%; height: 100%; object-fit: cover; }
+.capa-veu { position: absolute; inset: 0; background: var(--capa-veu); }
+.capa p.lead {
+  font: var(--type-body-lg); color: rgba(255,255,255,.80);
+  margin: 20px 0 0; max-width: 52ch; text-wrap: pretty;
+}
+.capa .acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+
+/* ── barra de números ───────────────────────────────────────────────────── */
+.numeros {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: clamp(14px, 2.6vw, 40px);
+  border-top: 1px solid rgba(255,255,255,.14);
+  /* o respiro de baixo é a pista por onde a esteira passa: ela é mais alta que
+     o vão entre os blocos e, sem esta folga, cobria os rótulos dos números */
+  padding: clamp(22px, 3vw, 32px) 0 clamp(60px, 6vw, 76px);
+  position: relative; z-index: 2;
+}
+.numeros .item { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.numeros .r { font: var(--type-body-sm); color: rgba(255,255,255,.58); }
+
+/* ── cabeçalho de seção (rótulo + título à esquerda, apoio à direita) ───── */
+.cabeca {
+  display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr);
+  gap: clamp(20px, 3vw, 56px); align-items: end;
+  margin-bottom: clamp(28px, 4vw, 44px);
+}
+.cabeca .apoio { font: var(--type-body); max-width: 52ch; text-wrap: pretty; }
+
+/* ── sobre ──────────────────────────────────────────────────────────────── */
+.sobre { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: start; }
+.sobre .frase { font: var(--type-body-lg); color: var(--ink-950); margin: 0; max-width: 58ch; text-wrap: pretty; }
+
+/* ── trilho de rolagem lateral (carrossel da home, galeria da ata) ──────── */
+.trilho {
+  display: flex; gap: 18px;
+  overflow-x: auto;
+  /* proximity, não mandatory: com mandatory o navegador cancela o scroll suave
+     das setas e devolve o trilho para o início */
+  scroll-snap-type: x proximity;
+  /* o scroll suave vem do CSS: scrollBy({behavior:"smooth"}) não anima em
+     container com overflow em alguns motores e devolve o trilho para zero */
+  scroll-behavior: smooth;
+  scrollbar-width: none; -ms-overflow-style: none;
+  padding-bottom: 4px;
+}
+.trilho::-webkit-scrollbar { display: none; }
+
+/* ── faixa amarela ──────────────────────────────────────────────────────── */
+/* O amarelo continua sendo a base; a foto entra pela direita e se dissolve
+   antes de chegar ao texto. Quem apaga a foto é a máscara, não uma camada
+   amarela por cima: assim a dissolução acontece no canal alfa e o amarelo do
+   bloco aparece por baixo sem lavar a imagem. O multiply tinge a foto com o
+   próprio amarelo, para ela pertencer ao bloco em vez de ser um retângulo
+   colado. */
+.faixa { background: var(--atto-yellow); color: var(--ink-1000); position: relative; }
+.faixa .foto {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: min(58%, 680px); height: 100%;
+  object-fit: cover; object-position: 50% 42%;
+  mix-blend-mode: multiply;
+  opacity: .9;
+  pointer-events: none;
+  /* o platô transparente cobre a faixa onde o título pode terminar: a foto só
+     começa a aparecer depois do texto, não atrás dele */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
+          mask-image: linear-gradient(to right, transparent 0%, transparent 40%, rgba(0,0,0,.26) 58%, rgba(0,0,0,.70) 76%, #000 94%);
+}
+.faixa .interno { position: relative; z-index: 1; display: grid; grid-template-columns: 1.4fr auto; gap: 32px; align-items: center; }
+.faixa h2 { font: var(--weight-black) clamp(26px, 3.4vw, 40px)/1.1 var(--font-display); letter-spacing: var(--tracking-display); margin: 0; text-wrap: balance; }
+.faixa p { margin: 12px 0 0; font: var(--type-body); color: rgba(0,0,0,.68); }
+
+/* ── formulário ─────────────────────────────────────────────────────────── */
+.form-grade { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
+.vantagens { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 14px; }
+.vantagens li { display: flex; gap: 11px; align-items: flex-start; font: var(--type-body); color: rgba(255,255,255,.78); }
+.vantagens svg { flex: none; margin-top: 3px; color: var(--atto-yellow); }
+
+.campos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.campo { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.campo.largo { grid-column: 1 / -1; }
+.campo label { font: var(--type-label); color: rgba(255,255,255,.88); }
+.campo .req { color: var(--atto-yellow); margin-left: 3px; }
+.campo input, .campo select, .campo textarea {
+  width: 100%; min-height: 46px; padding: 12px 14px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 12px;
+  color: var(--white); font: var(--type-body);
+  transition: var(--transition-control, all .18s ease);
+}
+.campo textarea { resize: vertical; min-height: 104px; line-height: 1.5; }
+.campo select { cursor: pointer; }
+.campo select option { background: var(--ink-900); color: var(--white); }
+.campo input::placeholder, .campo textarea::placeholder { color: rgba(255,255,255,.38); }
+.campo :is(input, select, textarea):focus { border-color: var(--atto-yellow); background: rgba(255,255,255,.1); }
+.campo .ajuda { font: var(--type-caption); color: rgba(255,255,255,.54); margin: 0; }
+.aviso {
+  margin-top: 18px; padding: 14px 16px; border-radius: 12px;
+  font: var(--type-body-sm);
+  background: rgba(217,56,46,.14); border: 1px solid rgba(217,56,46,.4); color: #FFC9C4;
+}
+.aviso.ok { background: rgba(26,164,99,.14); border-color: rgba(26,164,99,.42); color: #BDEBD2; }
+
+/* ── rodapé ─────────────────────────────────────────────────────────────── */
+.rodape { padding-top: clamp(32px, 4vw, 48px); }
+.rodape .topo-rodape { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,.12); }
+.rodape nav { display: flex; flex-wrap: wrap; gap: 8px 22px; font: var(--type-label); }
+.rodape nav a { color: rgba(255,255,255,.7); }
+.rodape nav a:hover { color: var(--white); }
+.legal { font: var(--type-caption); line-height: 1.55; color: rgba(255,255,255,.64); margin: 24px 0 0; max-width: 72ch; text-wrap: pretty; }
+
+/* ── esteira de termos ──────────────────────────────────────────────────────
+   Duas faixas cruzadas que correm em sentidos opostos. O laço é contínuo
+   porque cada trilho carrega a lista duas vezes e a animação para exatamente
+   em -50%: ao reiniciar, a segunda cópia está no lugar da primeira e não há
+   salto. A cópia repetida sai do leitor de tela com aria-hidden. */
+.esteira {
+  position: relative; z-index: 2;
+  /* o recorte mora aqui: a faixa é mais larga que a tela de propósito, e sem
+     este overflow o transbordo chegava ao documento. O padding vertical dá
+     espaço para os cantos que a rotação levanta, e a margem negativa devolve
+     a faixa para cima do vão entre os blocos. */
+  overflow: hidden;
+  padding: 30px 0;
+  margin: -58px 0 -46px;
+}
+.faixa-mov {
+  overflow: hidden;
+  width: 108%; margin-left: -4%;
+  padding: 13px 0;
+  border-block: 1px solid rgba(0,0,0,.14);
+}
+.faixa-mov.clara { background: var(--atto-yellow); color: var(--ink-1000); transform: rotate(-1.8deg); }
+.faixa-mov.escura {
+  background: var(--ink-950); color: var(--white);
+  transform: rotate(1.6deg); margin-top: -14px;
+  border-color: rgba(255,255,255,.12);
+}
+.trilho-mov {
+  display: flex; width: max-content;
+  animation: correr 44s linear infinite;
+}
+.faixa-mov.escura .trilho-mov { animation-duration: 52s; animation-direction: reverse; }
+.faixa-mov:hover .trilho-mov { animation-play-state: paused; }
+@keyframes correr { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+.trilho-mov .grupo { display: flex; flex: none; }
+.trilho-mov .termo {
+  display: inline-flex; align-items: center; gap: 22px;
+  padding-right: 22px;
+  font: var(--weight-bold) clamp(12px, 1.25vw, 15px)/1 var(--font-sans);
+  letter-spacing: .13em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.trilho-mov .losango { font-size: .72em; opacity: .55; }
+.faixa-mov.escura .losango { color: var(--atto-yellow); opacity: 1; }
+
+/* ── entrada por rolagem ────────────────────────────────────────────────────
+   As classes são postas pelo script (Atto.revelar, em base.js), nunca no HTML:
+   sem JS nada fica oculto. */
+.rev {
+  opacity: 0; transform: translateY(20px); will-change: opacity, transform;
+  transition: opacity .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms),
+              transform .65s cubic-bezier(.4,0,.2,1) var(--atraso, 0ms);
+}
+.rev.vis { opacity: 1; transform: none; will-change: auto; }
+
+/* ── responsivo ─────────────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  :root { --raio-bloco: 24px; }
+  .sobre, .cabeca, .faixa .interno, .form-grade { grid-template-columns: 1fr; }
+  .cabeca { align-items: start; }
+  /* no retrato o véu escurece a foto inteira: o texto deixa de disputar espaço */
+  .capa-veu { background: linear-gradient(to bottom, rgba(16,16,18,.90) 0%, rgba(16,16,18,.62) 38%, rgba(16,16,18,.88) 76%, var(--ink-950) 100%); }
+  /* empilhados, os números já terminam longe da esteira: aqui a folga é menor */
+  .numeros { grid-template-columns: 1fr 1fr; gap: 22px; padding-bottom: 36px; }
+  .menu { display: none; }
+  .menu.aberto {
+    display: flex; flex-direction: column; align-items: stretch;
+    position: absolute; top: 58px; left: 0; right: 0;
+    background: var(--ink-900); border-radius: 18px; padding: 10px;
+    z-index: 5;
+  }
+  .hamburger { display: grid; }
+  .campos { grid-template-columns: 1fr; }
+
+  /* empilhado não há coluna à direita para a foto ocupar: ela vira uma tira no
+     rodapé do bloco, dissolvendo para cima, e o conteúdo ganha folga embaixo */
+  .faixa { padding-bottom: 150px; }
+  .faixa .foto {
+    top: auto; bottom: 0; right: 0; left: 0;
+    width: 100%; height: 172px;
+    -webkit-mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 34%, rgba(0,0,0,.55) 62%, transparent 100%);
+  }
+
+  /* no retrato a barra de números fica logo acima: a esteira não pode subir
+     tanto, senão cobre o último número */
+  .esteira { margin: -26px 0 -24px; padding: 26px 0; }
+  .faixa-mov.clara { transform: rotate(-2.4deg); }
+  .faixa-mov.escura { transform: rotate(2.2deg); margin-top: -10px; }
+  .faixa-mov { width: 122%; margin-left: -11%; }
+}
+@media (max-width: 560px) {
+  .numeros { grid-template-columns: 1fr; }
+  .barra .cta-topo { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  /* sem movimento automático: a esteira vira uma régua de termos que a pessoa
+     arrasta, em vez de sumir da página */
+  .trilho-mov { animation: none; }
+  .faixa-mov { overflow-x: auto; scrollbar-width: none; }
+  .rev { opacity: 1; transform: none; }
+}
+
+/* ── WhatsApp flutuante ─────────────────────────────────────────────────────
+   Acompanha a página inteira, no canto inferior direito. Verde da própria
+   marca: é o que torna o botão reconhecível sem precisar de rótulo, e não
+   disputa com o amarelo, que aqui sempre significa "ação do site".
+   56px de alvo, acima do mínimo de 44 da WCAG 2.2.                          */
+.zap {
+  position: fixed;
+  right: clamp(14px, 3vw, 28px);
+  bottom: clamp(14px, 3vw, 28px);
+  z-index: 20;
+  display: grid; place-items: center;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: #25D366; color: #fff;
+  box-shadow: 0 6px 20px rgba(16, 16, 18, .26);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.zap:hover, .zap:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(16, 16, 18, .34);
+}
+.zap svg { width: 29px; height: 29px; display: block; }
+@media (prefers-reduced-motion: reduce) {
+  .zap { transition: none; }
+  .zap:hover, .zap:focus-visible { transform: none; }
+}
